@@ -1,0 +1,144 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "UUID",
+ "creation": "2025-04-25 15:24:21.789824",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_kbpb",
+  "lft",
+  "rgt",
+  "is_group",
+  "old_parent",
+  "parent_contract_item",
+  "section_break_rycj",
+  "codigo",
+  "descricao",
+  "quantidade",
+  "valorunitario",
+  "column_break_hvpm",
+  "contrato"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_kbpb",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "lft",
+   "fieldtype": "Int",
+   "hidden": 1,
+   "label": "Left",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "rgt",
+   "fieldtype": "Int",
+   "hidden": 1,
+   "label": "Right",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "is_group",
+   "fieldtype": "Check",
+   "label": "Is Group"
+  },
+  {
+   "fieldname": "old_parent",
+   "fieldtype": "Link",
+   "label": "Old Parent",
+   "options": "Contract Item"
+  },
+  {
+   "fieldname": "parent_contract_item",
+   "fieldtype": "Link",
+   "ignore_user_permissions": 1,
+   "label": "Parent Contract Item",
+   "options": "Contract Item"
+  },
+  {
+   "fieldname": "section_break_rycj",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "codigo",
+   "fieldtype": "Data",
+   "in_filter": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "C\u00f3digo",
+   "length": 30,
+   "reqd": 1
+  },
+  {
+   "fieldname": "descricao",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "label": "Descri\u00e7\u00e3o",
+   "length": 120,
+   "reqd": 1
+  },
+  {
+   "fieldname": "quantidade",
+   "fieldtype": "Float",
+   "label": "Quantidade",
+   "precision": "6",
+   "reqd": 1
+  },
+  {
+   "fieldname": "valorunitario",
+   "fieldtype": "Currency",
+   "label": "Valor unit\u00e1rio",
+   "precision": "2",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_hvpm",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "contrato",
+   "fieldtype": "Link",
+   "label": "Contrato",
+   "mandatory_depends_on": "doc.is_group===false;",
+   "options": "Contract",
+   "reqd": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_tree": 1,
+ "links": [],
+ "modified": "2025-04-25 15:44:50.941922",
+ "modified_by": "Administrator",
+ "module": "Arteris",
+ "name": "Contract Item",
+ "naming_rule": "UUID",
+ "nsm_parent_field": "parent_contract_item",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "codigo",
+ "track_changes": 1
+}
