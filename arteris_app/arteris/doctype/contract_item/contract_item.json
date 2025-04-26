@@ -1,28 +1,30 @@
 {
  "actions": [],
- "allow_rename": 1,
  "autoname": "UUID",
- "creation": "2025-04-25 15:24:21.789824",
+ "creation": "2025-04-25 20:38:39.262402",
+ "default_view": "Tree",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "section_break_kbpb",
+  "section_break_udxk",
   "lft",
   "rgt",
   "is_group",
   "old_parent",
   "parent_contract_item",
-  "section_break_rycj",
   "codigo",
   "descricao",
   "quantidade",
   "valorunitario",
-  "column_break_hvpm",
-  "contrato"
+  "contrato",
+  "cidades_section",
+  "listacidades",
+  "pedidos_sap_section",
+  "lista"
  ],
  "fields": [
   {
-   "fieldname": "section_break_kbpb",
+   "fieldname": "section_break_udxk",
    "fieldtype": "Section Break"
   },
   {
@@ -61,24 +63,20 @@
    "options": "Contract Item"
   },
   {
-   "fieldname": "section_break_rycj",
-   "fieldtype": "Section Break"
-  },
-  {
    "fieldname": "codigo",
    "fieldtype": "Data",
    "in_filter": 1,
    "in_list_view": 1,
+   "in_preview": 1,
    "in_standard_filter": 1,
    "label": "C\u00f3digo",
    "length": 30,
-   "reqd": 1
+   "reqd": 1,
+   "sticky": 1
   },
   {
    "fieldname": "descricao",
    "fieldtype": "Data",
-   "in_list_view": 1,
-   "in_preview": 1,
    "label": "Descri\u00e7\u00e3o",
    "length": 120,
    "reqd": 1
@@ -87,34 +85,49 @@
    "fieldname": "quantidade",
    "fieldtype": "Float",
    "label": "Quantidade",
-   "precision": "6",
-   "reqd": 1
+   "precision": "6"
   },
   {
    "fieldname": "valorunitario",
    "fieldtype": "Currency",
    "label": "Valor unit\u00e1rio",
-   "precision": "2",
-   "reqd": 1
-  },
-  {
-   "fieldname": "column_break_hvpm",
-   "fieldtype": "Column Break"
+   "precision": "2"
   },
   {
    "fieldname": "contrato",
    "fieldtype": "Link",
-   "label": "Contrato",
-   "mandatory_depends_on": "doc.is_group===false;",
-   "options": "Contract",
-   "reqd": 1
+   "label": "N\u00ba do contrato",
+   "options": "Contract"
+  },
+  {
+   "fieldname": "cidades_section",
+   "fieldtype": "Section Break",
+   "label": "Cidades"
+  },
+  {
+   "fieldname": "listacidades",
+   "fieldtype": "Table",
+   "label": "Lista",
+   "options": "Contract Item City"
+  },
+  {
+   "fieldname": "pedidos_sap_section",
+   "fieldtype": "Section Break",
+   "label": "Pedidos SAP"
+  },
+  {
+   "fieldname": "lista",
+   "fieldtype": "Table",
+   "label": "Lista",
+   "options": "Contract Item Order"
   }
  ],
+ "force_re_route_to_default_view": 1,
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_tree": 1,
  "links": [],
- "modified": "2025-04-25 15:44:50.941922",
+ "modified": "2025-04-25 22:26:50.292227",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Item",
@@ -136,9 +149,9 @@
   }
  ],
  "row_format": "Dynamic",
+ "show_title_field_in_link": 1,
  "sort_field": "creation",
  "sort_order": "DESC",
  "states": [],
- "title_field": "codigo",
- "track_changes": 1
+ "title_field": "descricao"
 }

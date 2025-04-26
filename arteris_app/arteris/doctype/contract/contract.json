@@ -1,6 +1,5 @@
 {
  "actions": [],
- "allow_rename": 1,
  "autoname": "UUID",
  "creation": "2025-04-25 14:49:07.193437",
  "doctype": "DocType",
@@ -20,7 +19,10 @@
   "inicioservicos",
   "column_break_gnpt",
   "terminoservicosprevisto",
-  "terminoservicos"
+  "terminoservicos",
+  "reg_esp_de_incentivos_para_o_des_da_infraestrutura_reidi_section",
+  "percentualreidi",
+  "column_break_rcsn"
  ],
  "fields": [
   {
@@ -29,6 +31,7 @@
    "label": "Cabe\u00e7alho"
   },
   {
+   "columns": 1,
    "fieldname": "contrato",
    "fieldtype": "Data",
    "in_filter": 1,
@@ -37,11 +40,17 @@
    "in_standard_filter": 1,
    "label": "N\u00ba do Contrato",
    "length": 30,
-   "reqd": 1
+   "reqd": 1,
+   "sticky": 1
   },
   {
+   "columns": 4,
    "fieldname": "contratada",
    "fieldtype": "Link",
+   "in_filter": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
    "label": "Contratada",
    "options": "Contracted Company",
    "reqd": 1
@@ -49,12 +58,18 @@
   {
    "fieldname": "datainicial",
    "fieldtype": "Date",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
    "label": "Data inicial do contrato",
    "reqd": 1
   },
   {
    "fieldname": "datafinal",
    "fieldtype": "Date",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
    "label": "Data final do contrato",
    "reqd": 1
   },
@@ -65,6 +80,9 @@
   {
    "fieldname": "obra",
    "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
    "label": "Obra",
    "reqd": 1
   },
@@ -76,7 +94,10 @@
   {
    "fieldname": "valortotal",
    "fieldtype": "Currency",
+   "in_list_view": 1,
+   "in_preview": 1,
    "label": "Valor total do contrato",
+   "non_negative": 1,
    "reqd": 1
   },
   {
@@ -107,12 +128,27 @@
    "fieldname": "terminoservicos",
    "fieldtype": "Date",
    "label": "T\u00e9rmino previsto dos servi\u00e7os"
+  },
+  {
+   "fieldname": "reg_esp_de_incentivos_para_o_des_da_infraestrutura_reidi_section",
+   "fieldtype": "Section Break",
+   "label": "Reg. Esp. de Incentivos para o Des. da Infraestrutura (REIDI)"
+  },
+  {
+   "fieldname": "percentualreidi",
+   "fieldtype": "Float",
+   "label": "Percentual",
+   "non_negative": 1
+  },
+  {
+   "fieldname": "column_break_rcsn",
+   "fieldtype": "Column Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-04-25 15:13:00.113374",
+ "modified": "2025-04-25 23:05:54.884789",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract",
@@ -133,6 +169,7 @@
   }
  ],
  "row_format": "Dynamic",
+ "show_title_field_in_link": 1,
  "sort_field": "creation",
  "sort_order": "DESC",
  "states": [],
