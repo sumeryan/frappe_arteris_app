@@ -1,0 +1,81 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "UUID",
+ "creation": "2025-04-26 15:13:16.390473",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "funcao",
+  "quantidade",
+  "column_break_zkup",
+  "pagamentohora",
+  "valorporhora",
+  "valortotalmensal"
+ ],
+ "fields": [
+  {
+   "fieldname": "funcao",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Fun\u00e7\u00e3o",
+   "options": "Work Role",
+   "reqd": 1
+  },
+  {
+   "default": "1",
+   "fieldname": "quantidade",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Quantidade",
+   "non_negative": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_zkup",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "pagamentohora",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Pagamento por hora"
+  },
+  {
+   "default": "0",
+   "depends_on": "eval:doc.pagamentohora != 0",
+   "fieldname": "valorporhora",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Valor por hora",
+   "non_negative": 1,
+   "precision": "2"
+  },
+  {
+   "default": "0",
+   "depends_on": "eval:doc.pagamentohora == 0",
+   "fieldname": "valortotalmensal",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Valor total mensal",
+   "precision": "2"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-04-26 16:02:45.387815",
+ "modified_by": "Administrator",
+ "module": "Arteris",
+ "name": "Contract Item Work Role",
+ "naming_rule": "UUID",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}
