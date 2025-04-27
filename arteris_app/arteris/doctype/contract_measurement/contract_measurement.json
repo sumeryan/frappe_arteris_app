@@ -1,25 +1,104 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "UUID",
  "creation": "2025-04-27 15:59:48.952948",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "section_break_3ilb"
+  "contrato_section",
+  "contrato",
+  "contratada",
+  "column_break_trnr",
+  "data_ejak",
+  "data_final_do_contrato",
+  "obra",
+  "m\u00e3o_de_obra_tab",
+  "table_iqgd",
+  "maq_equip_e_ve\u00edculos_tab",
+  "table_juun"
  ],
  "fields": [
   {
-   "fieldname": "section_break_3ilb",
-   "fieldtype": "Section Break"
+   "fieldname": "contrato_section",
+   "fieldtype": "Section Break",
+   "label": "Contrato"
+  },
+  {
+   "fetch_from": "contrato.contratada",
+   "fieldname": "contratada",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Contratada",
+   "options": "Contracted Company",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_trnr",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "contrato",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "N\u00ba do contrato",
+   "options": "Contract",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "contrato.datainicial",
+   "fetch_if_empty": 1,
+   "fieldname": "data_ejak",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Data inicial do contrato",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "contrato.datafinal",
+   "fetch_if_empty": 1,
+   "fieldname": "data_final_do_contrato",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Data final do contrato"
+  },
+  {
+   "fetch_from": "contrato.obra",
+   "fieldname": "obra",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Obra",
+   "read_only": 1
+  },
+  {
+   "fieldname": "m\u00e3o_de_obra_tab",
+   "fieldtype": "Tab Break",
+   "label": "M\u00e3o de obra"
+  },
+  {
+   "fieldname": "table_iqgd",
+   "fieldtype": "Table",
+   "options": "Contract Measurement Work Role"
+  },
+  {
+   "fieldname": "maq_equip_e_ve\u00edculos_tab",
+   "fieldtype": "Tab Break",
+   "label": "Maq., equip. e ve\u00edculos"
+  },
+  {
+   "fieldname": "table_juun",
+   "fieldtype": "Table",
+   "options": "Contract Measurement Asset"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-04-27 15:59:48.952948",
+ "modified": "2025-04-27 16:50:56.961049",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Measurement",
+ "naming_rule": "UUID",
  "owner": "Administrator",
  "permissions": [
   {
@@ -36,7 +115,10 @@
   }
  ],
  "row_format": "Dynamic",
+ "show_title_field_in_link": 1,
  "sort_field": "creation",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "title_field": "contrato",
+ "track_changes": 1
 }

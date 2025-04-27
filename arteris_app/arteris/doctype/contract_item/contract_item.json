@@ -173,7 +173,7 @@
  "index_web_pages_for_search": 1,
  "is_tree": 1,
  "links": [],
- "modified": "2025-04-27 15:55:30.354985",
+ "modified": "2025-04-27 16:29:41.796858",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Item",
@@ -199,5 +199,6 @@
  "sort_field": "creation",
  "sort_order": "DESC",
  "states": [],
- "title_field": "descricao"
+ "title_field": "descricao",
+ "track_changes": 1
 }
