@@ -1,0 +1,109 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "UUID",
+ "creation": "2025-04-30 11:45:05.078994",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "contrato_section",
+  "contrato",
+  "contratada",
+  "column_break_fbqa",
+  "datainicial",
+  "datafinal",
+  "obra",
+  "reajustes_section",
+  "tabelareajustes"
+ ],
+ "fields": [
+  {
+   "fieldname": "contrato_section",
+   "fieldtype": "Section Break",
+   "label": "Contrato"
+  },
+  {
+   "fieldname": "contrato",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "N\u00ba do contrato",
+   "options": "Contract",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "contrato.contratada",
+   "fieldname": "contratada",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Contratada",
+   "options": "Contracted Company",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_fbqa",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "contrato.datainicial",
+   "fieldname": "datainicial",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Data inicial do contrato",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "contrato.datafinal",
+   "fieldname": "datafinal",
+   "fieldtype": "Date",
+   "label": "Data final do contrato",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "contrato.obra",
+   "fieldname": "obra",
+   "fieldtype": "Data",
+   "label": "Obra",
+   "read_only": 1
+  },
+  {
+   "fieldname": "reajustes_section",
+   "fieldtype": "Section Break",
+   "label": "Reajustes"
+  },
+  {
+   "fieldname": "tabelareajustes",
+   "fieldtype": "Table",
+   "options": "Contract Adjustment Data"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-04-30 11:45:05.078994",
+ "modified_by": "Administrator",
+ "module": "Arteris",
+ "name": "Contract Adjustment",
+ "naming_rule": "UUID",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "show_title_field_in_link": 1,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "contrato",
+ "track_changes": 1
+}

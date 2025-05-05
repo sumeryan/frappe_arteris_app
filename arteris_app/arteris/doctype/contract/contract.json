@@ -10,6 +10,7 @@
   "contratada",
   "datainicial",
   "datafinal",
+  "subsidiaria",
   "column_break_ripf",
   "obra",
   "descricao",
@@ -22,11 +23,7 @@
   "terminoservicos",
   "reg_esp_de_incentivos_para_o_des_da_infraestrutura_reidi_section",
   "percentualreidi",
-  "column_break_rcsn",
-  "orders_tab",
-  "f\u00f3rmula_para_medi\u00e7\u00e3o_do_pedido_sap_section",
-  "modeloformula",
-  "f_calculopedidosap"
+  "column_break_rcsn"
  ],
  "fields": [
   {
@@ -93,7 +90,7 @@
   {
    "fieldname": "descricao",
    "fieldtype": "Small Text",
-   "label": "Descri\u00e7\u00e3o"
+   "label": "Objeto"
   },
   {
    "fieldname": "valortotal",
@@ -149,33 +146,17 @@
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "orders_tab",
-   "fieldtype": "Tab Break",
-   "label": "Orders"
-  },
-  {
-   "fieldname": "f\u00f3rmula_para_medi\u00e7\u00e3o_do_pedido_sap_section",
-   "fieldtype": "Section Break",
-   "label": "F\u00f3rmula para medi\u00e7\u00e3o do pedido SAP"
-  },
-  {
-   "fieldname": "modeloformula",
+   "fieldname": "subsidiaria",
    "fieldtype": "Link",
-   "label": "Modelo de f\u00f3rmula",
-   "options": "Formula Template"
-  },
-  {
-   "fetch_from": "modeloformula.formula",
-   "fetch_if_empty": 1,
-   "fieldname": "f_calculopedidosap",
-   "fieldtype": "Long Text",
-   "label": "F\u00f3rmula"
+   "label": "Subsidiaria",
+   "options": "Subsidiary",
+   "reqd": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-04-26 22:43:18.636412",
+ "modified": "2025-04-29 15:14:19.924887",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract",

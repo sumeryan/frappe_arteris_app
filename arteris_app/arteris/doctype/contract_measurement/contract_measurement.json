@@ -16,7 +16,17 @@
   "m\u00e3o_de_obra_tab",
   "table_iqgd",
   "maq_equip_e_ve\u00edculos_tab",
-  "table_juun"
+  "table_juun",
+  "pedido_sap_tab",
+  "pedidossap",
+  "reten\u00e7\u00f5es_tab",
+  "table_husa",
+  "itens_calculados_tab",
+  "table_ropr",
+  "faturamento_direto_tab",
+  "table_pqev",
+  "municipios_tab",
+  "table_oijn"
  ],
  "fields": [
   {
@@ -89,12 +99,62 @@
    "fieldname": "table_juun",
    "fieldtype": "Table",
    "options": "Contract Measurement Asset"
+  },
+  {
+   "fieldname": "pedido_sap_tab",
+   "fieldtype": "Tab Break",
+   "label": "Pedido SAP"
+  },
+  {
+   "fieldname": "pedidossap",
+   "fieldtype": "Table",
+   "options": "Contract Measurement SAP Order"
+  },
+  {
+   "fieldname": "reten\u00e7\u00f5es_tab",
+   "fieldtype": "Tab Break",
+   "label": "Reten\u00e7\u00f5es"
+  },
+  {
+   "fieldname": "table_husa",
+   "fieldtype": "Table",
+   "options": "Contract Measurement Retention"
+  },
+  {
+   "fieldname": "itens_calculados_tab",
+   "fieldtype": "Tab Break",
+   "label": "Itens calculados"
+  },
+  {
+   "fieldname": "table_ropr",
+   "fieldtype": "Table",
+   "options": "Contract Measurement Result"
+  },
+  {
+   "fieldname": "faturamento_direto_tab",
+   "fieldtype": "Tab Break",
+   "label": "Faturamento direto"
+  },
+  {
+   "fieldname": "table_pqev",
+   "fieldtype": "Table",
+   "options": "Contract Measurement FTD"
+  },
+  {
+   "fieldname": "municipios_tab",
+   "fieldtype": "Tab Break",
+   "label": "Municipios"
+  },
+  {
+   "fieldname": "table_oijn",
+   "fieldtype": "Table",
+   "options": "Contract Measurement City"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-04-27 16:50:56.961049",
+ "modified": "2025-04-30 10:43:27.064916",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Measurement",

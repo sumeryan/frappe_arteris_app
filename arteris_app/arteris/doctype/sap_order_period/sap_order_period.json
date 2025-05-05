@@ -1,0 +1,88 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "UUID",
+ "creation": "2025-04-29 11:31:58.302709",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "datainicial",
+  "datafinal",
+  "linhapedido",
+  "column_break_uuby",
+  "valor_para_o_periodo",
+  "valormedido",
+  "saldo"
+ ],
+ "fields": [
+  {
+   "fieldname": "datainicial",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "label": "Data incial",
+   "reqd": 1
+  },
+  {
+   "fieldname": "datafinal",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "label": "Data final",
+   "reqd": 1
+  },
+  {
+   "fieldname": "valor_para_o_periodo",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "label": "Valor para o per\u00edodo",
+   "precision": "2",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_uuby",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "valormedido",
+   "fieldtype": "Currency",
+   "in_standard_filter": 1,
+   "is_virtual": 1,
+   "label": "Valor medido",
+   "precision": "2"
+  },
+  {
+   "fieldname": "saldo",
+   "fieldtype": "Currency",
+   "in_standard_filter": 1,
+   "is_virtual": 1,
+   "label": "Saldo",
+   "precision": "2"
+  },
+  {
+   "fieldname": "linhapedido",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Linha do pedido",
+   "non_negative": 1,
+   "reqd": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-04-29 12:01:59.064833",
+ "modified_by": "Administrator",
+ "module": "Arteris",
+ "name": "SAP Order Period",
+ "naming_rule": "UUID",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

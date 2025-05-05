@@ -8,13 +8,18 @@
   "pedido_section",
   "numeropedido",
   "centrocusto",
-  "valortotal"
+  "column_break_fuml",
+  "valortotal",
+  "valortotalmedido",
+  "saldo",
+  "per\u00eddos_section",
+  "table_dscc"
  ],
  "fields": [
   {
    "fieldname": "pedido_section",
    "fieldtype": "Section Break",
-   "label": "Pedido"
+   "label": "Linha de pedido SAP"
   },
   {
    "fieldname": "numeropedido",
@@ -40,16 +45,44 @@
    "fieldtype": "Currency",
    "in_list_view": 1,
    "in_preview": 1,
-   "label": "Valor total",
+   "label": "Valor total para a linha do pedido",
    "non_negative": 1,
    "precision": "2",
    "reqd": 1
+  },
+  {
+   "fieldname": "column_break_fuml",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "valortotalmedido",
+   "fieldtype": "Currency",
+   "is_virtual": 1,
+   "label": "Valor total medido",
+   "precision": "2"
+  },
+  {
+   "fieldname": "saldo",
+   "fieldtype": "Currency",
+   "is_virtual": 1,
+   "label": "Saldo",
+   "precision": "2"
+  },
+  {
+   "fieldname": "per\u00eddos_section",
+   "fieldtype": "Section Break",
+   "label": "Per\u00eddos"
+  },
+  {
+   "fieldname": "table_dscc",
+   "fieldtype": "Table",
+   "options": "SAP Order Period"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-04-25 22:19:01.901852",
+ "modified": "2025-04-29 11:44:09.676437",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "SAP Order",

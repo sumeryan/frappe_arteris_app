@@ -161,7 +161,7 @@
    "options": "Formula Template"
   },
   {
-   "fetch_from": "modeloformula.formula",
+   "fetch_from": "fm_modeloformula.formula",
    "fetch_if_empty": 1,
    "fieldname": "f_calculomedicaoservico",
    "fieldtype": "Long Text",
@@ -173,7 +173,7 @@
  "index_web_pages_for_search": 1,
  "is_tree": 1,
  "links": [],
- "modified": "2025-04-27 16:29:41.796858",
+ "modified": "2025-04-28 12:09:52.672299",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Item",
