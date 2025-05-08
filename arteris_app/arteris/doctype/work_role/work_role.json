@@ -1,5 +1,6 @@
 {
  "actions": [],
+ "allow_import": 1,
  "allow_rename": 1,
  "autoname": "UUID",
  "creation": "2025-04-26 14:50:49.075341",
@@ -23,7 +24,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-04-26 14:53:20.644889",
+ "modified": "2025-05-05 10:33:33.049012",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Work Role",

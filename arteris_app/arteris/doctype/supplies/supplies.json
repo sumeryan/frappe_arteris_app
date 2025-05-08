@@ -1,5 +1,6 @@
 {
  "actions": [],
+ "allow_import": 1,
  "allow_rename": 1,
  "creation": "2025-04-28 13:49:38.394791",
  "doctype": "DocType",
@@ -16,7 +17,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-04-28 13:49:38.394791",
+ "modified": "2025-05-05 10:31:40.978515",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Supplies",

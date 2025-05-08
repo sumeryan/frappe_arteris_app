@@ -1,62 +1,55 @@
 {
  "actions": [],
  "allow_import": 1,
+ "allow_rename": 1,
  "autoname": "UUID",
- "creation": "2025-04-25 14:35:03.858372",
+ "creation": "2025-05-06 09:42:29.666057",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "fornecedor_section",
+  "dados_1_section",
   "nome",
-  "razaosocial",
-  "cnpj",
-  "endereco"
+  "itemcontrato",
+  "valoritem",
+  "column_break_vhfg"
  ],
  "fields": [
   {
-   "fieldname": "fornecedor_section",
+   "fieldname": "dados_1_section",
    "fieldtype": "Section Break",
-   "label": "Fornecedor"
+   "label": "Dados 1"
   },
   {
    "fieldname": "nome",
    "fieldtype": "Data",
-   "in_filter": 1,
-   "in_list_view": 1,
-   "in_preview": 1,
-   "in_standard_filter": 1,
    "label": "Nome",
-   "length": 120,
-   "reqd": 1
+   "length": 60
   },
   {
-   "fieldname": "razaosocial",
+   "fieldname": "itemcontrato",
+   "fieldtype": "Link",
+   "label": "Item",
+   "options": "Contract Item"
+  },
+  {
+   "fetch_from": "itemcontrato.quantidade",
+   "fieldname": "valoritem",
    "fieldtype": "Data",
-   "in_filter": 1,
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Raz\u00e3o Social",
-   "length": 120,
-   "width": "50"
+   "label": "Valor item",
+   "read_only": 1
   },
   {
-   "fieldname": "cnpj",
-   "fieldtype": "Data",
-   "label": "CNPJ"
-  },
-  {
-   "fieldname": "endereco",
-   "fieldtype": "Small Text",
-   "label": "Endere\u00e7o"
+   "fieldname": "column_break_vhfg",
+   "fieldtype": "Column Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-05 10:45:12.726628",
+ "modified": "2025-05-06 09:51:40.898557",
  "modified_by": "Administrator",
  "module": "Arteris",
- "name": "Contracted Company",
+ "name": "Contract Test",
  "naming_rule": "UUID",
  "owner": "Administrator",
  "permissions": [
@@ -71,14 +64,24 @@
    "role": "System Manager",
    "share": 1,
    "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Administrator",
+   "share": 1,
+   "write": 1
   }
  ],
  "row_format": "Dynamic",
- "search_fields": "nome",
  "show_title_field_in_link": 1,
  "sort_field": "creation",
  "sort_order": "DESC",
  "states": [],
- "title_field": "nome",
- "track_changes": 1
+ "title_field": "nome"
 }

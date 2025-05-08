@@ -3,28 +3,61 @@
  "allow_import": 1,
  "allow_rename": 1,
  "autoname": "UUID",
- "creation": "2025-04-28 10:38:35.590194",
+ "creation": "2025-05-06 14:36:14.854863",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "descricao"
+  "descricao",
+  "mensal",
+  "column_break_nvhz",
+  "diainicial",
+  "diafinal"
  ],
  "fields": [
   {
    "fieldname": "descricao",
    "fieldtype": "Data",
    "in_list_view": 1,
+   "in_preview": 1,
    "label": "Descri\u00e7\u00e3o",
-   "reqd": 1
+   "length": 60
+  },
+  {
+   "default": "0",
+   "fieldname": "mensal",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "label": "Fechamento mensal"
+  },
+  {
+   "fieldname": "column_break_nvhz",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "diainicial",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "label": "Dia inicial",
+   "read_only_depends_on": "eval:mensal.value!=0"
+  },
+  {
+   "fieldname": "diafinal",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "label": "Dia final",
+   "read_only_depends_on": "eval:mensal.value!=0"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-05 10:32:01.750312",
+ "modified": "2025-05-06 16:16:21.209596",
  "modified_by": "Administrator",
  "module": "Arteris",
- "name": "Retention Type",
+ "name": "Depth Period Setting",
  "naming_rule": "UUID",
  "owner": "Administrator",
  "permissions": [

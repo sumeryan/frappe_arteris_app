@@ -1,62 +1,64 @@
 {
  "actions": [],
  "allow_import": 1,
+ "allow_rename": 1,
  "autoname": "UUID",
- "creation": "2025-04-25 14:35:03.858372",
+ "creation": "2025-05-05 11:17:17.841260",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "fornecedor_section",
   "nome",
-  "razaosocial",
-  "cnpj",
-  "endereco"
+  "departamento",
+  "column_break_qsrn",
+  "email",
+  "telefone"
  ],
  "fields": [
   {
-   "fieldname": "fornecedor_section",
-   "fieldtype": "Section Break",
-   "label": "Fornecedor"
-  },
-  {
    "fieldname": "nome",
    "fieldtype": "Data",
-   "in_filter": 1,
    "in_list_view": 1,
    "in_preview": 1,
-   "in_standard_filter": 1,
    "label": "Nome",
    "length": 120,
    "reqd": 1
   },
   {
-   "fieldname": "razaosocial",
+   "fieldname": "departamento",
    "fieldtype": "Data",
-   "in_filter": 1,
    "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Raz\u00e3o Social",
-   "length": 120,
-   "width": "50"
+   "in_preview": 1,
+   "label": "Departamento",
+   "length": 60
   },
   {
-   "fieldname": "cnpj",
+   "fieldname": "column_break_qsrn",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "email",
    "fieldtype": "Data",
-   "label": "CNPJ"
+   "in_list_view": 1,
+   "in_preview": 1,
+   "label": "Email",
+   "length": 120
   },
   {
-   "fieldname": "endereco",
-   "fieldtype": "Small Text",
-   "label": "Endere\u00e7o"
+   "fieldname": "telefone",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "label": "Telefone/Celular",
+   "length": 15
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-05 10:45:12.726628",
+ "modified": "2025-05-06 10:36:47.450285",
  "modified_by": "Administrator",
  "module": "Arteris",
- "name": "Contracted Company",
+ "name": "Person",
  "naming_rule": "UUID",
  "owner": "Administrator",
  "permissions": [
@@ -74,7 +76,6 @@
   }
  ],
  "row_format": "Dynamic",
- "search_fields": "nome",
  "show_title_field_in_link": 1,
  "sort_field": "creation",
  "sort_order": "DESC",

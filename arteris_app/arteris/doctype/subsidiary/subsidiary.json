@@ -1,5 +1,6 @@
 {
  "actions": [],
+ "allow_import": 1,
  "allow_rename": 1,
  "autoname": "UUID",
  "creation": "2025-04-25 14:22:17.802637",
@@ -24,7 +25,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-04-28 08:07:07.509303",
+ "modified": "2025-05-05 10:48:54.462410",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Subsidiary",

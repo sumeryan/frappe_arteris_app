@@ -1,5 +1,6 @@
 {
  "actions": [],
+ "allow_import": 1,
  "allow_rename": 1,
  "autoname": "UUID",
  "creation": "2025-04-30 11:45:05.078994",
@@ -79,7 +80,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-04-30 11:45:05.078994",
+ "modified": "2025-05-05 10:30:55.459982",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Adjustment",

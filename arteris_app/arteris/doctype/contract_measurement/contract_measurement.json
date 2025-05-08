@@ -1,5 +1,6 @@
 {
  "actions": [],
+ "allow_import": 1,
  "allow_rename": 1,
  "autoname": "UUID",
  "creation": "2025-04-27 15:59:48.952948",
@@ -154,7 +155,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-04-30 10:43:27.064916",
+ "modified": "2025-05-05 10:32:49.892676",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Measurement",

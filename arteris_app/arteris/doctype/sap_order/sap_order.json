@@ -1,5 +1,6 @@
 {
  "actions": [],
+ "allow_import": 1,
  "autoname": "UUID",
  "creation": "2025-04-25 21:24:13.804249",
  "doctype": "DocType",
@@ -7,7 +8,6 @@
  "field_order": [
   "pedido_section",
   "numeropedido",
-  "centrocusto",
   "column_break_fuml",
   "valortotal",
   "valortotalmedido",
@@ -31,14 +31,6 @@
    "length": 30,
    "reqd": 1,
    "sticky": 1
-  },
-  {
-   "fieldname": "centrocusto",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "in_preview": 1,
-   "label": "Centro de custo",
-   "length": 30
   },
   {
    "fieldname": "valortotal",
@@ -82,7 +74,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-04-29 11:44:09.676437",
+ "modified": "2025-05-08 14:22:30.657235",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "SAP Order",

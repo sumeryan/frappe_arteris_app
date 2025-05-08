@@ -1,46 +1,31 @@
 {
  "actions": [],
  "allow_import": 1,
- "autoname": "format:{municipio}-{uf}",
- "creation": "2025-04-25 21:04:26.145470",
+ "allow_rename": 1,
+ "autoname": "format:{descricao}",
+ "creation": "2025-05-07 10:41:06.619030",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "uf",
-  "municipio",
-  "iss"
+  "descricao"
  ],
  "fields": [
   {
-   "fieldname": "uf",
+   "fieldname": "descricao",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "UF",
-   "reqd": 1
-  },
-  {
-   "fieldname": "municipio",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "Munic\u00edpio",
-   "reqd": 1
-  },
-  {
-   "fieldname": "iss",
-   "fieldtype": "Float",
-   "label": "ISS",
-   "non_negative": 1,
-   "precision": "2",
+   "label": "Descri\u00e7ao",
+   "length": 60,
    "reqd": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-05 10:34:15.814080",
+ "modified": "2025-05-07 10:45:03.319779",
  "modified_by": "Administrator",
  "module": "Arteris",
- "name": "City",
+ "name": "Vertical",
  "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
@@ -58,8 +43,10 @@
   }
  ],
  "row_format": "Dynamic",
+ "show_title_field_in_link": 1,
  "sort_field": "creation",
  "sort_order": "DESC",
  "states": [],
+ "title_field": "descricao",
  "track_changes": 1
 }

@@ -8,7 +8,10 @@
  "field_order": [
   "cidade",
   "iss",
-  "participacaopercentual"
+  "participacaopercentual",
+  "kminicial",
+  "kmfinal",
+  "extensao"
  ],
  "fields": [
   {
@@ -35,13 +38,34 @@
    "non_negative": 1,
    "precision": "3",
    "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "extensao",
+   "fieldtype": "Float",
+   "label": "Extens\u00e3o (km)",
+   "precision": "2"
+  },
+  {
+   "fieldname": "kminicial",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "label": "KM Inicial"
+  },
+  {
+   "fieldname": "kmfinal",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "label": "KM Final"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-04-25 21:20:40.039737",
+ "modified": "2025-05-08 12:23:03.911653",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Item City",
