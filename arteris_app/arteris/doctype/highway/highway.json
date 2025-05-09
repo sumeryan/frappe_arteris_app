@@ -1,0 +1,74 @@
+{
+ "actions": [],
+ "allow_import": 1,
+ "allow_rename": 1,
+ "autoname": "format:{sigla}-{nome}",
+ "creation": "2025-05-08 15:29:12.762937",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "sigla",
+  "nome",
+  "cidades_section",
+  "cidades"
+ ],
+ "fields": [
+  {
+   "fieldname": "sigla",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Sigla",
+   "length": 10,
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "nome",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Nome",
+   "length": 120,
+   "reqd": 1
+  },
+  {
+   "fieldname": "cidades_section",
+   "fieldtype": "Section Break",
+   "label": "Cidades"
+  },
+  {
+   "fieldname": "cidades",
+   "fieldtype": "Table",
+   "options": "Highway City"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-05-08 16:43:29.892929",
+ "modified_by": "Administrator",
+ "module": "Arteris",
+ "name": "Highway",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "show_title_field_in_link": 1,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "sigla",
+ "track_changes": 1
+}

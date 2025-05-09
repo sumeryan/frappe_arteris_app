@@ -27,6 +27,8 @@
   "tablemaodeobra",
   "maquinas_equipamentos_e_ve\u00edculos_section",
   "tableassets",
+  "rodovias_section",
+  "rodovias",
   "measurement_tab",
   "fm_modeloformula",
   "f_calculomedicaoservico"
@@ -170,6 +172,16 @@
    "fieldtype": "Link",
    "label": "Unidade",
    "options": "Unit"
+  },
+  {
+   "fieldname": "rodovias_section",
+   "fieldtype": "Section Break",
+   "label": "Rodovias"
+  },
+  {
+   "fieldname": "rodovias",
+   "fieldtype": "Table",
+   "options": "Contract Item Highway"
   }
  ],
  "force_re_route_to_default_view": 1,
@@ -177,7 +189,7 @@
  "index_web_pages_for_search": 1,
  "is_tree": 1,
  "links": [],
- "modified": "2025-05-08 10:56:44.806103",
+ "modified": "2025-05-08 16:15:43.755734",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Item",
