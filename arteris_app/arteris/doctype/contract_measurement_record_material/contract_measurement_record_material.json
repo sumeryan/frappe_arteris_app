@@ -1,41 +1,36 @@
 {
  "actions": [],
  "allow_rename": 1,
- "creation": "2025-05-08 15:31:37.943495",
+ "creation": "2025-05-10 14:59:08.605719",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "cidade",
-  "kminicial",
-  "kmfinal"
+  "codigomaterial",
+  "material",
+  "quantidade"
  ],
  "fields": [
   {
-   "fieldname": "cidade",
+   "fieldname": "codigomaterial",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "in_preview": 1,
-   "label": "Cidade",
-   "options": "City",
+   "label": "C\u00f3digo do material",
+   "options": "Material",
    "reqd": 1
   },
   {
-   "fieldname": "kminicial",
-   "fieldtype": "Float",
-   "in_list_view": 1,
-   "in_preview": 1,
-   "label": "KM Inicial",
-   "non_negative": 1,
-   "precision": "3",
-   "reqd": 1
+   "fetch_from": "codigomaterial.descricao",
+   "fieldname": "material",
+   "fieldtype": "Data",
+   "label": "Material",
+   "read_only": 1
   },
   {
-   "fieldname": "kmfinal",
+   "fieldname": "quantidade",
    "fieldtype": "Float",
    "in_list_view": 1,
-   "in_preview": 1,
-   "label": "KM Final",
+   "label": "Quantidade",
    "non_negative": 1,
    "precision": "3",
    "reqd": 1
@@ -45,10 +40,10 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-05-09 16:10:06.461051",
+ "modified": "2025-05-10 15:00:34.896129",
  "modified_by": "Administrator",
  "module": "Arteris",
- "name": "Highway City",
+ "name": "Contract Measurement Record Material",
  "owner": "Administrator",
  "permissions": [],
  "row_format": "Dynamic",

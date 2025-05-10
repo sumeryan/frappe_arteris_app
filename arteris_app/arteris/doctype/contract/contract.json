@@ -30,7 +30,10 @@
   "column_break_rcsn",
   "medicaopormes",
   "medicaoinicio",
-  "medicaofim"
+  "medicaofim",
+  "integrations_tab",
+  "kartado",
+  "uuidkartado"
  ],
  "fields": [
   {
@@ -194,12 +197,35 @@
    "fieldname": "medicaofim",
    "fieldtype": "Data",
    "label": "Dia final"
+  },
+  {
+   "fieldname": "integrations_tab",
+   "fieldtype": "Tab Break",
+   "label": "Integrations"
+  },
+  {
+   "fieldname": "kartado",
+   "fieldtype": "Section Break",
+   "label": "Kartado"
+  },
+  {
+   "fieldname": "uuidkartado",
+   "fieldtype": "Data",
+   "label": "Chave",
+   "length": 36,
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
- "links": [],
- "modified": "2025-05-07 15:09:45.605557",
+ "links": [
+  {
+   "group": "Medi\u00e7\u00f5es",
+   "link_doctype": "Contract Measurement",
+   "link_fieldname": "contrato"
+  }
+ ],
+ "modified": "2025-05-09 16:16:00.879855",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract",

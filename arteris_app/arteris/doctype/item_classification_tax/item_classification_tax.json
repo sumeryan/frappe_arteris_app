@@ -2,44 +2,41 @@
  "actions": [],
  "allow_rename": 1,
  "autoname": "UUID",
- "creation": "2025-04-25 22:25:45.461924",
- "default_view": "List",
+ "creation": "2025-05-09 12:40:45.691469",
  "doctype": "DocType",
- "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "pedidosap",
-  "valortotal"
+  "cidade",
+  "iss"
  ],
  "fields": [
   {
-   "fieldname": "pedidosap",
+   "fieldname": "cidade",
    "fieldtype": "Link",
    "in_list_view": 1,
    "in_preview": 1,
-   "label": "N\u00ba do pedido SAP",
-   "options": "SAP Order",
+   "label": "Cidade",
+   "options": "City",
    "reqd": 1
   },
   {
-   "fetch_from": "pedidosap.valortotal",
-   "fieldname": "valortotal",
-   "fieldtype": "Currency",
+   "fieldname": "iss",
+   "fieldtype": "Float",
    "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Valor total",
-   "precision": "2",
-   "read_only": 1
+   "in_preview": 1,
+   "label": "ISS",
+   "non_negative": 1,
+   "reqd": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-05-09 16:11:58.719546",
+ "modified": "2025-05-09 12:45:24.727703",
  "modified_by": "Administrator",
  "module": "Arteris",
- "name": "Contract Item Order",
+ "name": "Item Classification Tax",
  "naming_rule": "UUID",
  "owner": "Administrator",
  "permissions": [],

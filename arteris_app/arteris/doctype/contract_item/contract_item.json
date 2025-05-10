@@ -176,7 +176,7 @@
   {
    "fieldname": "rodovias_section",
    "fieldtype": "Section Break",
-   "label": "Rodovias"
+   "label": "Rodovias (Delimita\u00e7\u00e3o do servi\u00e7o)"
   },
   {
    "fieldname": "rodovias",
@@ -189,7 +189,7 @@
  "index_web_pages_for_search": 1,
  "is_tree": 1,
  "links": [],
- "modified": "2025-05-08 16:15:43.755734",
+ "modified": "2025-05-10 10:38:21.672074",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Item",

@@ -1,0 +1,161 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "UUID",
+ "creation": "2025-05-10 16:43:37.513736",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "datainicial",
+  "datafinal",
+  "contrato",
+  "boletimmedicao",
+  "rodovia",
+  "kminicial",
+  "kmfinal",
+  "origem",
+  "m\u00e3o_de_obra_tab",
+  "table_ktkj",
+  "maq_equip_e_ve\u00edculos_tab",
+  "table_lsrc",
+  "materiais_tab",
+  "table_lfhu",
+  "registro_de_horas_tab",
+  "table_rtgv"
+ ],
+ "fields": [
+  {
+   "fieldname": "datainicial",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "label": "Data inicial",
+   "reqd": 1
+  },
+  {
+   "fieldname": "datafinal",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "label": "Data final",
+   "reqd": 1
+  },
+  {
+   "fieldname": "contrato",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "label": "Contrato",
+   "options": "Contract",
+   "reqd": 1
+  },
+  {
+   "fieldname": "boletimmedicao",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Boletim de medi\u00e7\u00e3o",
+   "options": "Contract Measurement",
+   "reqd": 1
+  },
+  {
+   "fieldname": "rodovia",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Rodovia",
+   "options": "Highway",
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "kminicial",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "KM inicial",
+   "non_negative": 1,
+   "precision": "2",
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "kmfinal",
+   "fieldtype": "Float",
+   "label": "KM final",
+   "non_negative": 1,
+   "precision": "2",
+   "reqd": 1
+  },
+  {
+   "fieldname": "origem",
+   "fieldtype": "Data",
+   "label": "Origem"
+  },
+  {
+   "fieldname": "m\u00e3o_de_obra_tab",
+   "fieldtype": "Tab Break",
+   "label": "M\u00e3o de obra"
+  },
+  {
+   "fieldname": "table_ktkj",
+   "fieldtype": "Table",
+   "options": "Contract Measurement Record Work Role"
+  },
+  {
+   "fieldname": "maq_equip_e_ve\u00edculos_tab",
+   "fieldtype": "Tab Break",
+   "label": "Maq., equip. e ve\u00edculos"
+  },
+  {
+   "fieldname": "table_lsrc",
+   "fieldtype": "Table",
+   "options": "Contract Measurement Record Asset"
+  },
+  {
+   "fieldname": "materiais_tab",
+   "fieldtype": "Tab Break",
+   "label": "Materiais"
+  },
+  {
+   "fieldname": "table_lfhu",
+   "fieldtype": "Table",
+   "options": "Contract Measurement Record Material"
+  },
+  {
+   "fieldname": "registro_de_horas_tab",
+   "fieldtype": "Tab Break",
+   "label": "Registro de horas"
+  },
+  {
+   "fieldname": "table_rtgv",
+   "fieldtype": "Table",
+   "options": "Contract Measurement Record Time"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-05-10 16:49:33.411210",
+ "modified_by": "Administrator",
+ "module": "Arteris",
+ "name": "Contract Measurement Record",
+ "naming_rule": "UUID",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

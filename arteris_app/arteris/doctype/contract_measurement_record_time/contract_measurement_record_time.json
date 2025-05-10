@@ -1,0 +1,61 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-05-10 16:46:23.848586",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "funcao",
+  "quantidade",
+  "horainicial",
+  "horafinal"
+ ],
+ "fields": [
+  {
+   "fieldname": "funcao",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Fun\u00e7\u00e3o",
+   "options": "Work Role",
+   "reqd": 1
+  },
+  {
+   "fieldname": "quantidade",
+   "fieldtype": "Int",
+   "label": "Quantidade",
+   "length": 4,
+   "non_negative": 1,
+   "options": "1"
+  },
+  {
+   "fieldname": "horainicial",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Hora inicial",
+   "length": 8,
+   "reqd": 1
+  },
+  {
+   "fieldname": "horafinal",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Hora final",
+   "reqd": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-05-10 16:48:48.450110",
+ "modified_by": "Administrator",
+ "module": "Arteris",
+ "name": "Contract Measurement Record Time",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

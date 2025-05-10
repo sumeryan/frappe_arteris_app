@@ -7,10 +7,17 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "datadesconto",
+  "n\u00ba_pedido_sap",
   "nf_n\u00ba",
   "data",
+  "fornecedor",
+  "descricaonota",
+  "quantidade",
+  "unidade",
   "valor",
-  "descricaonota"
+  "linhasap",
+  "elementopep"
  ],
  "fields": [
   {
@@ -24,7 +31,7 @@
    "fieldname": "data",
    "fieldtype": "Date",
    "in_list_view": 1,
-   "label": "Data",
+   "label": "Data emiss\u00e3o",
    "reqd": 1
   },
   {
@@ -39,14 +46,59 @@
   {
    "fieldname": "descricaonota",
    "fieldtype": "Small Text",
-   "label": "Descri\u00e7\u00e3o"
+   "label": "Material ou projeto"
+  },
+  {
+   "fieldname": "datadesconto",
+   "fieldtype": "Date",
+   "label": "Desconto em (Informe o primeiro dia do m\u00eas de desconto)",
+   "reqd": 1
+  },
+  {
+   "fieldname": "n\u00ba_pedido_sap",
+   "fieldtype": "Data",
+   "label": "N\u00ba pedido SAP"
+  },
+  {
+   "fieldname": "fornecedor",
+   "fieldtype": "Data",
+   "label": "Fornecedor",
+   "length": 120,
+   "reqd": 1
+  },
+  {
+   "default": "1",
+   "fieldname": "quantidade",
+   "fieldtype": "Float",
+   "label": "Quantidade",
+   "precision": "6"
+  },
+  {
+   "fieldname": "unidade",
+   "fieldtype": "Link",
+   "label": "Unidade",
+   "options": "Unit",
+   "reqd": 1
+  },
+  {
+   "fieldname": "linhasap",
+   "fieldtype": "Int",
+   "label": "Linha SAP",
+   "non_negative": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "elementopep",
+   "fieldtype": "Data",
+   "label": "Elemento PEP",
+   "reqd": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-05-06 14:18:13.215565",
+ "modified": "2025-05-10 11:23:29.495617",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Measurement FTD",

@@ -10,10 +10,29 @@
   "contrato_section",
   "contrato",
   "contratada",
+  "datainicialmedicao",
+  "datafinalmedicao",
   "column_break_trnr",
   "data_ejak",
   "data_final_do_contrato",
   "obra",
+  "valorcontrato",
+  "total_da_medi\u00e7\u00e3o_section",
+  "medicaoatual",
+  "faturamentodireto",
+  "medicaoatualdescontoftd",
+  "descontoreidi",
+  "medicaoliquida",
+  "medicaoequivalente",
+  "caucaocontratual",
+  "column_break_povo",
+  "valortotalvigente",
+  "ftdacumulado",
+  "totalvigentemenosftd",
+  "medicaoacumulada",
+  "saldoanterior",
+  "saldo",
+  "saldopercentual",
   "m\u00e3o_de_obra_tab",
   "table_iqgd",
   "maq_equip_e_ve\u00edculos_tab",
@@ -22,8 +41,6 @@
   "pedidossap",
   "reten\u00e7\u00f5es_tab",
   "table_husa",
-  "itens_calculados_tab",
-  "table_ropr",
   "faturamento_direto_tab",
   "table_pqev",
   "municipios_tab",
@@ -32,8 +49,7 @@
  "fields": [
   {
    "fieldname": "contrato_section",
-   "fieldtype": "Section Break",
-   "label": "Contrato"
+   "fieldtype": "Section Break"
   },
   {
    "fetch_from": "contrato.contratada",
@@ -122,16 +138,6 @@
    "options": "Contract Measurement Retention"
   },
   {
-   "fieldname": "itens_calculados_tab",
-   "fieldtype": "Tab Break",
-   "label": "Itens calculados"
-  },
-  {
-   "fieldname": "table_ropr",
-   "fieldtype": "Table",
-   "options": "Contract Measurement Result"
-  },
-  {
    "fieldname": "faturamento_direto_tab",
    "fieldtype": "Tab Break",
    "label": "Faturamento direto"
@@ -150,12 +156,137 @@
    "fieldname": "table_oijn",
    "fieldtype": "Table",
    "options": "Contract Measurement City"
+  },
+  {
+   "fetch_from": "contrato.valortotal",
+   "fetch_if_empty": 1,
+   "fieldname": "valorcontrato",
+   "fieldtype": "Currency",
+   "label": "Valor do contrato",
+   "precision": "2",
+   "read_only": 1
+  },
+  {
+   "fieldname": "saldoanterior",
+   "fieldtype": "Currency",
+   "label": "Saldo contratual anterior (R$)",
+   "precision": "2"
+  },
+  {
+   "fieldname": "saldo",
+   "fieldtype": "Currency",
+   "label": "Saldo Contratual (R$)",
+   "precision": "2"
+  },
+  {
+   "fieldname": "total_da_medi\u00e7\u00e3o_section",
+   "fieldtype": "Section Break",
+   "label": "Total da medi\u00e7\u00e3o"
+  },
+  {
+   "fieldname": "medicaoatual",
+   "fieldtype": "Currency",
+   "label": "Medi\u00e7\u00e3o atual (A)",
+   "non_negative": 1,
+   "precision": "2"
+  },
+  {
+   "fieldname": "faturamentodireto",
+   "fieldtype": "Currency",
+   "label": "Faturamento direto (FTD) na fase atual",
+   "non_negative": 1,
+   "precision": "2"
+  },
+  {
+   "fieldname": "medicaoatualdescontoftd",
+   "fieldtype": "Currency",
+   "label": "Medi\u00e7\u00e3o atual com desconto de FTD (B)",
+   "non_negative": 1,
+   "precision": "2"
+  },
+  {
+   "fieldname": "descontoreidi",
+   "fieldtype": "Currency",
+   "label": "Desconto do REIDI [C] = -3,65% . [B]",
+   "non_negative": 1,
+   "precision": "2"
+  },
+  {
+   "fieldname": "medicaoliquida",
+   "fieldtype": "Currency",
+   "label": "Medi\u00e7\u00e3o l\u00edquida do REIDI (Vl. bruto NF) [D] = [B]+[C]",
+   "non_negative": 1,
+   "precision": "2"
+  },
+  {
+   "fieldname": "medicaoequivalente",
+   "fieldtype": "Currency",
+   "label": "Medi\u00e7\u00e3o equivalente l\u00edquida do REIDI [F] = [A]+(E)",
+   "non_negative": 1,
+   "precision": "2"
+  },
+  {
+   "fieldname": "caucaocontratual",
+   "fieldtype": "Currency",
+   "label": "Cau\u00e7\u00e3o Contratual [G] =  5% . [F]",
+   "non_negative": 1,
+   "precision": "2"
+  },
+  {
+   "fieldname": "column_break_povo",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "valortotalvigente",
+   "fieldtype": "Currency",
+   "label": "Valor Total Vigente",
+   "non_negative": 1,
+   "precision": "2"
+  },
+  {
+   "fieldname": "ftdacumulado",
+   "fieldtype": "Currency",
+   "label": "Faturamento direto (FTD) acumulado ",
+   "precision": "2"
+  },
+  {
+   "fieldname": "totalvigentemenosftd",
+   "fieldtype": "Currency",
+   "label": "Valor total vigente com desconto de FTD",
+   "non_negative": 1,
+   "precision": "2"
+  },
+  {
+   "fieldname": "medicaoacumulada",
+   "fieldtype": "Currency",
+   "label": "Medi\u00e7\u00e3o acumulada atual",
+   "non_negative": 1,
+   "precision": "2"
+  },
+  {
+   "fieldname": "saldopercentual",
+   "fieldtype": "Float",
+   "label": "Saldo Contratual (%)",
+   "non_negative": 1,
+   "precision": "3"
+  },
+  {
+   "fieldname": "datainicialmedicao",
+   "fieldtype": "Date",
+   "label": "Data inicial medi\u00e7\u00e3o",
+   "reqd": 1
+  },
+  {
+   "fieldname": "datafinalmedicao",
+   "fieldtype": "Date",
+   "label": "Data final medi\u00e7\u00e3o",
+   "reqd": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-05 10:32:49.892676",
+ "modified": "2025-05-10 16:52:38.988101",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Measurement",
