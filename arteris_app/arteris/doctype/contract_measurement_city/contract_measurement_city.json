@@ -6,20 +6,12 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "data",
   "pedidosap",
   "municipio",
   "valor",
   "valoriss"
  ],
  "fields": [
-  {
-   "fieldname": "data",
-   "fieldtype": "Date",
-   "in_list_view": 1,
-   "label": "Data",
-   "reqd": 1
-  },
   {
    "fieldname": "municipio",
    "fieldtype": "Link",
@@ -32,7 +24,7 @@
    "fieldname": "valor",
    "fieldtype": "Currency",
    "in_list_view": 1,
-   "label": "Valor",
+   "label": "Valor total",
    "non_negative": 1,
    "precision": "2",
    "reqd": 1
@@ -59,7 +51,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-05-06 14:18:27.317310",
+ "modified": "2025-05-12 01:58:17.485638",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Measurement City",

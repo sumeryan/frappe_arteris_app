@@ -28,10 +28,7 @@
   "maquinas_equipamentos_e_ve\u00edculos_section",
   "tableassets",
   "rodovias_section",
-  "rodovias",
-  "measurement_tab",
-  "fm_modeloformula",
-  "f_calculomedicaoservico"
+  "rodovias"
  ],
  "fields": [
   {
@@ -109,11 +106,6 @@
    "options": "Contract"
   },
   {
-   "fieldname": "measurement_tab",
-   "fieldtype": "Tab Break",
-   "label": "Measurement Formula"
-  },
-  {
    "fieldname": "listapedidossap",
    "fieldtype": "Section Break",
    "label": "Pedidos SAP"
@@ -155,19 +147,6 @@
    "options": "Contract Item Asset"
   },
   {
-   "fieldname": "fm_modeloformula",
-   "fieldtype": "Link",
-   "label": "Modelo de f\u00f3rmula",
-   "options": "Formula Template"
-  },
-  {
-   "fetch_from": "fm_modeloformula.formula",
-   "fetch_if_empty": 1,
-   "fieldname": "f_calculomedicaoservico",
-   "fieldtype": "Long Text",
-   "label": "F\u00f3rmula"
-  },
-  {
    "fieldname": "unidade",
    "fieldtype": "Link",
    "label": "Unidade",
@@ -189,7 +168,7 @@
  "index_web_pages_for_search": 1,
  "is_tree": 1,
  "links": [],
- "modified": "2025-05-10 10:38:21.672074",
+ "modified": "2025-05-12 01:17:02.371929",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Item",

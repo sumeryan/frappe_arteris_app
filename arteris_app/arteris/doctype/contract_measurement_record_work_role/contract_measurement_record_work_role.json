@@ -7,24 +7,15 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "data_e_hora",
   "item",
   "funcao",
   "quantidade_medida",
+  "valortotal",
   "section_break_vvyv",
   "column_break_wfgx",
   "funcaoitem"
  ],
  "fields": [
-  {
-   "fieldname": "data_e_hora",
-   "fieldtype": "Datetime",
-   "in_filter": 1,
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Data e hora",
-   "reqd": 1
-  },
   {
    "fieldname": "item",
    "fieldtype": "Link",
@@ -64,13 +55,21 @@
    "fieldtype": "Link",
    "label": "Fun\u00e7\u00e3o do item",
    "options": "Contract Item Work Role"
+  },
+  {
+   "fieldname": "valortotal",
+   "fieldtype": "Currency",
+   "label": "Valor total",
+   "non_negative": 1,
+   "precision": "2",
+   "reqd": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-05-10 14:54:41.078200",
+ "modified": "2025-05-12 02:17:59.119329",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Measurement Record Work Role",

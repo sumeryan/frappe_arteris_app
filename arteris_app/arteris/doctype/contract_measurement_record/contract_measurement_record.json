@@ -14,6 +14,9 @@
   "kminicial",
   "kmfinal",
   "origem",
+  "section_break_kubv",
+  "medicaovigente",
+  "column_break_jsaj",
   "m\u00e3o_de_obra_tab",
   "table_ktkj",
   "maq_equip_e_ve\u00edculos_tab",
@@ -128,12 +131,27 @@
    "fieldname": "table_rtgv",
    "fieldtype": "Table",
    "options": "Contract Measurement Record Time"
+  },
+  {
+   "fieldname": "section_break_kubv",
+   "fieldtype": "Section Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "medicaovigente",
+   "fieldtype": "Check",
+   "label": "Medi\u00e7\u00e3o vigente",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_jsaj",
+   "fieldtype": "Column Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-10 16:49:33.411210",
+ "modified": "2025-05-12 03:21:53.326527",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Measurement Record",

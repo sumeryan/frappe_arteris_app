@@ -12,18 +12,18 @@ EXTRA_TEST_RECORD_DEPENDENCIES = []  # eg. ["User"]
 IGNORE_TEST_RECORD_DEPENDENCIES = []  # eg. ["User"]
 
 
-class UnitTestMeasurementReport(UnitTestCase):
+class UnitTestFormulaFields(UnitTestCase):
 	"""
-	Unit tests for MeasurementReport.
+	Unit tests for FormulaFields.
 	Use this class for testing individual functions and methods.
 	"""
 
 	pass
 
 
-class IntegrationTestMeasurementReport(IntegrationTestCase):
+class IntegrationTestFormulaFields(IntegrationTestCase):
 	"""
-	Integration tests for MeasurementReport.
+	Integration tests for FormulaFields.
 	Use this class for testing interactions between multiple components.
 	"""
 

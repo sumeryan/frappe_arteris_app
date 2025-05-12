@@ -8,8 +8,13 @@
  "field_order": [
   "funcao",
   "quantidade",
-  "horainicial",
-  "horafinal"
+  "horanormal",
+  "horanormalda",
+  "compensacoes",
+  "horaextra60",
+  "horaextra100",
+  "quantidadeequivalente",
+  "valortotal"
  ],
  "fields": [
   {
@@ -29,18 +34,60 @@
    "options": "1"
   },
   {
-   "fieldname": "horainicial",
-   "fieldtype": "Data",
+   "fieldname": "horanormal",
+   "fieldtype": "Float",
    "in_list_view": 1,
-   "label": "Hora inicial",
+   "label": "Hora normal (Dias \u00fateis)",
    "length": 8,
+   "precision": "3",
    "reqd": 1
   },
   {
-   "fieldname": "horafinal",
-   "fieldtype": "Data",
+   "fieldname": "horanormalda",
+   "fieldtype": "Float",
    "in_list_view": 1,
-   "label": "Hora final",
+   "label": "Hora normal desc. e acr\u00e9s.",
+   "precision": "3",
+   "reqd": 1
+  },
+  {
+   "fieldname": "compensacoes",
+   "fieldtype": "Float",
+   "label": "Compensa\u00e7\u00f5es",
+   "non_negative": 1,
+   "precision": "3",
+   "reqd": 1
+  },
+  {
+   "fieldname": "horaextra60",
+   "fieldtype": "Float",
+   "label": "Hora extra 60% (S\u00e1b. e dias \u00fateis)",
+   "non_negative": 1,
+   "precision": "3",
+   "reqd": 1
+  },
+  {
+   "fieldname": "horaextra100",
+   "fieldtype": "Float",
+   "label": "Hora extra 100% (Dom. e feriados)",
+   "non_negative": 1,
+   "precision": "3",
+   "reqd": 1
+  },
+  {
+   "fieldname": "quantidadeequivalente",
+   "fieldtype": "Float",
+   "label": "Quantidade equivalente",
+   "non_negative": 1,
+   "precision": "3",
+   "reqd": 1
+  },
+  {
+   "fieldname": "valortotal",
+   "fieldtype": "Float",
+   "label": "Valor total",
+   "non_negative": 1,
+   "precision": "2",
    "reqd": 1
   }
  ],
@@ -48,7 +95,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-05-10 16:48:48.450110",
+ "modified": "2025-05-12 02:14:11.491099",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Measurement Record Time",

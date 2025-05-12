@@ -1,0 +1,60 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "UUID",
+ "creation": "2025-05-12 03:04:28.556252",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "formulafield",
+  "modulo",
+  "formula",
+  "editarformula"
+ ],
+ "fields": [
+  {
+   "fieldname": "formulafield",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Campo",
+   "options": "Formula Fields",
+   "reqd": 1
+  },
+  {
+   "fieldname": "editarformula",
+   "fieldtype": "Button",
+   "in_list_view": 1,
+   "label": "\u270f\ufe0f Editar f\u00f3mula"
+  },
+  {
+   "fetch_from": "formulafield.doctypeptbr",
+   "fieldname": "modulo",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "M\u00f3dulo",
+   "read_only": 1
+  },
+  {
+   "default": "2*2",
+   "fieldname": "formula",
+   "fieldtype": "Long Text",
+   "label": "F\u00f3rmula"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-05-12 04:33:26.845863",
+ "modified_by": "Administrator",
+ "module": "Arteris",
+ "name": "Formula Group Field",
+ "naming_rule": "UUID",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

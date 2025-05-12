@@ -5,5 +5,5 @@
 from frappe.model.document import Document
 
 
-class ContractMeasurementResult(Document):
+class FormulaFields(Document):
 	pass

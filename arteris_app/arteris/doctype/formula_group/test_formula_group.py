@@ -12,18 +12,18 @@ EXTRA_TEST_RECORD_DEPENDENCIES = []  # eg. ["User"]
 IGNORE_TEST_RECORD_DEPENDENCIES = []  # eg. ["User"]
 
 
-class UnitTestContractTest(UnitTestCase):
+class UnitTestFormulaGroup(UnitTestCase):
 	"""
-	Unit tests for ContractTest.
+	Unit tests for FormulaGroup.
 	Use this class for testing individual functions and methods.
 	"""
 
 	pass
 
 
-class IntegrationTestContractTest(IntegrationTestCase):
+class IntegrationTestFormulaGroup(IntegrationTestCase):
 	"""
-	Integration tests for ContractTest.
+	Integration tests for FormulaGroup.
 	Use this class for testing interactions between multiple components.
 	"""
 

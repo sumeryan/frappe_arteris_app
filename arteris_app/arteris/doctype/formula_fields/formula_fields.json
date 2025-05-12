@@ -1,0 +1,76 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "format:{doctypeptbr}\u25b6\ufe0e{fieldnamelabel}",
+ "creation": "2025-05-12 01:29:37.631110",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "doctypeenus",
+  "doctypeptbr",
+  "fieldnamedoctype",
+  "fieldnamelabel"
+ ],
+ "fields": [
+  {
+   "fieldname": "doctypeenus",
+   "fieldtype": "Data",
+   "label": "Doctype (en-US)",
+   "length": 120,
+   "reqd": 1
+  },
+  {
+   "fieldname": "doctypeptbr",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Doctype (pt-BR)",
+   "length": 120,
+   "reqd": 1
+  },
+  {
+   "fieldname": "fieldnamedoctype",
+   "fieldtype": "Data",
+   "label": "Fieldname",
+   "length": 120,
+   "reqd": 1
+  },
+  {
+   "fieldname": "fieldnamelabel",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Fieldname label",
+   "length": 120,
+   "reqd": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-05-12 04:37:02.375787",
+ "modified_by": "Administrator",
+ "module": "Arteris",
+ "name": "Formula Fields",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "show_title_field_in_link": 1,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "fieldnamelabel",
+ "track_changes": 1
+}

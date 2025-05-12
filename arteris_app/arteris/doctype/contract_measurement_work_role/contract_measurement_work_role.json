@@ -7,7 +7,6 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "data_e_hora",
   "item",
   "funcao",
   "quantidade_medida",
@@ -16,15 +15,6 @@
   "funcaoitem"
  ],
  "fields": [
-  {
-   "fieldname": "data_e_hora",
-   "fieldtype": "Datetime",
-   "in_filter": 1,
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Data e hora",
-   "reqd": 1
-  },
   {
    "fieldname": "item",
    "fieldtype": "Link",
@@ -70,7 +60,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-04-27 18:38:24.325895",
+ "modified": "2025-05-11 23:05:14.002848",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Measurement Work Role",
