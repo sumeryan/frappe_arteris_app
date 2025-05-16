@@ -29,9 +29,15 @@
   "percentualreidi",
   "column_break_rcsn",
   "medicaopormes",
-  "medicaoinicio",
-  "medicaofim",
+  "medicaodiainicial",
+  "medicaodiafinal",
+  "cau\u00e7\u00e3o_section",
+  "percentualcalcao",
+  "column_break_jwpm",
+  "regracaucao",
   "integrations_tab",
+  "grupo_de_f\u00f3rmulas_section",
+  "grupoformulas",
   "kartado",
   "uuidkartado"
  ],
@@ -109,6 +115,7 @@
    "in_preview": 1,
    "label": "Valor total do contrato",
    "non_negative": 1,
+   "precision": "2",
    "reqd": 1
   },
   {
@@ -148,7 +155,7 @@
   {
    "fieldname": "percentualreidi",
    "fieldtype": "Float",
-   "label": "Percentual",
+   "label": "Percentual REIDI",
    "non_negative": 1
   },
   {
@@ -189,19 +196,9 @@
    "label": "Medi\u00e7\u00e3o m\u00eas cheio"
   },
   {
-   "fieldname": "medicaoinicio",
-   "fieldtype": "Data",
-   "label": "Dia inicial"
-  },
-  {
-   "fieldname": "medicaofim",
-   "fieldtype": "Data",
-   "label": "Dia final"
-  },
-  {
    "fieldname": "integrations_tab",
    "fieldtype": "Tab Break",
-   "label": "Integrations"
+   "label": "Configura\u00e7\u00f5es"
   },
   {
    "fieldname": "kartado",
@@ -214,6 +211,50 @@
    "label": "Chave",
    "length": 36,
    "read_only": 1
+  },
+  {
+   "fieldname": "grupo_de_f\u00f3rmulas_section",
+   "fieldtype": "Section Break",
+   "label": "Grupo de f\u00f3rmulas"
+  },
+  {
+   "fieldname": "grupoformulas",
+   "fieldtype": "Link",
+   "label": "Grupo",
+   "options": "Formula Group"
+  },
+  {
+   "fieldname": "cau\u00e7\u00e3o_section",
+   "fieldtype": "Section Break",
+   "label": "Cau\u00e7\u00e3o"
+  },
+  {
+   "fieldname": "percentualcalcao",
+   "fieldtype": "Float",
+   "label": "Percentual",
+   "non_negative": 1
+  },
+  {
+   "fieldname": "column_break_jwpm",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "regracaucao",
+   "fieldtype": "Data",
+   "label": "Descri\u00e7\u00e3o da regra do cau\u00e7\u00e3o",
+   "length": 120
+  },
+  {
+   "fieldname": "medicaodiainicial",
+   "fieldtype": "Int",
+   "label": "Dia inicial",
+   "non_negative": 1
+  },
+  {
+   "fieldname": "medicaodiafinal",
+   "fieldtype": "Int",
+   "label": "Dia final",
+   "non_negative": 1
   }
  ],
  "grid_page_length": 50,
@@ -225,7 +266,7 @@
    "link_fieldname": "contrato"
   }
  ],
- "modified": "2025-05-09 16:16:00.879855",
+ "modified": "2025-05-15 20:11:29.981105",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract",

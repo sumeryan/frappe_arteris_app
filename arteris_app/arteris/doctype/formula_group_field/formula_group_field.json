@@ -10,7 +10,9 @@
   "formulafield",
   "modulo",
   "formula",
-  "editarformula"
+  "editarformula",
+  "groupfielddoctype",
+  "groupfieldfieldname"
  ],
  "fields": [
   {
@@ -40,13 +42,25 @@
    "fieldname": "formula",
    "fieldtype": "Long Text",
    "label": "F\u00f3rmula"
+  },
+  {
+   "fetch_from": "formulafield.doctypeenus",
+   "fieldname": "groupfielddoctype",
+   "fieldtype": "Data",
+   "label": "Doctype"
+  },
+  {
+   "fetch_from": "formulafield.fieldnamedoctype",
+   "fieldname": "groupfieldfieldname",
+   "fieldtype": "Data",
+   "label": "Fieldname"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-05-12 04:33:26.845863",
+ "modified": "2025-05-13 12:16:10.573840",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Formula Group Field",

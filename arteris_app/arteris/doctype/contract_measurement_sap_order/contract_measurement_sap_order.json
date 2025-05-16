@@ -36,6 +36,7 @@
   {
    "fieldname": "acumuladoanterior",
    "fieldtype": "Currency",
+   "in_list_view": 1,
    "label": "Medi\u00e7\u00e3o acum. anterior",
    "non_negative": 1,
    "precision": "2"
@@ -43,6 +44,7 @@
   {
    "fieldname": "acumuladoatual",
    "fieldtype": "Currency",
+   "in_list_view": 1,
    "label": "Medi\u00e7\u00e3o acum. atual",
    "non_negative": 1,
    "precision": "2"
@@ -86,7 +88,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-05-12 02:51:00.556047",
+ "modified": "2025-05-13 07:01:06.105831",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Measurement SAP Order",
