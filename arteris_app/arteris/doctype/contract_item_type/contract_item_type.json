@@ -1,33 +1,32 @@
 {
  "actions": [],
- "allow_import": 1,
  "allow_rename": 1,
- "autoname": "UUID",
- "creation": "2025-04-25 14:22:17.802637",
+ "autoname": "field:tipo",
+ "creation": "2025-05-21 10:53:37.500767",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "nome",
-  "integrations_tab",
+  "tipo",
+  "tipoaux",
+  "descricao",
+  "configura\u00e7\u00f5es_tab",
   "kartado_section",
-  "uuidkartado"
+  "kartadotipoitem"
  ],
  "fields": [
   {
-   "fieldname": "nome",
+   "fieldname": "tipo",
    "fieldtype": "Data",
-   "in_filter": 1,
    "in_list_view": 1,
-   "in_preview": 1,
-   "in_standard_filter": 1,
-   "label": "Subsidi\u00e1ria ",
+   "label": "Tipo",
+   "length": 30,
    "reqd": 1,
-   "sticky": 1
+   "unique": 1
   },
   {
-   "fieldname": "integrations_tab",
+   "fieldname": "configura\u00e7\u00f5es_tab",
    "fieldtype": "Tab Break",
-   "label": "Integrations"
+   "label": "Configura\u00e7\u00f5es"
   },
   {
    "fieldname": "kartado_section",
@@ -35,21 +34,33 @@
    "label": "Kartado"
   },
   {
-   "fieldname": "uuidkartado",
+   "fieldname": "kartadotipoitem",
    "fieldtype": "Data",
-   "label": "Chave",
-   "length": 36,
-   "read_only": 1
+   "label": "Tipo do item",
+   "length": 30
+  },
+  {
+   "description": "Informa\u00e7\u00f5es sobre o tipo do item",
+   "fieldname": "descricao",
+   "fieldtype": "Data",
+   "label": "Descri\u00e7\u00e3o",
+   "length": 120
+  },
+  {
+   "fieldname": "tipoaux",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_preview": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-21 10:26:42.736900",
+ "modified": "2025-05-21 11:45:16.175505",
  "modified_by": "Administrator",
  "module": "Arteris",
- "name": "Subsidiary",
- "naming_rule": "UUID",
+ "name": "Contract Item Type",
+ "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {
@@ -70,6 +81,6 @@
  "sort_field": "creation",
  "sort_order": "DESC",
  "states": [],
- "title_field": "nome",
+ "title_field": "tipo",
  "track_changes": 1
 }

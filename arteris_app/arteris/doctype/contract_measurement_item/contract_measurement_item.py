@@ -5,5 +5,5 @@
 from frappe.model.document import Document
 
 
-class Teste(Document):
+class ContractMeasurementItem(Document):
 	pass

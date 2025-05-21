@@ -1,9 +1,11 @@
 # Copyright (c) 2025, Renoir and contributors
 # For license information, please see license.txt
 
-# import frappe
 from frappe.model.document import Document
+from frappe import _
 
 
-class TesteButton(Document):
-	pass
+class ContractItemType(Document):
+	@property
+	def hook_tipovirtual(self):
+		return "TESTE"

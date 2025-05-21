@@ -43,7 +43,9 @@
   "breakmaodeobra",
   "tablemaodeobra",
   "breakativos",
-  "tableativos"
+  "tableativos",
+  "itens_tab",
+  "tabitenscontatrato"
  ],
  "fields": [
   {
@@ -248,12 +250,23 @@
   {
    "fieldname": "column_break_ppvu",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "itens_tab",
+   "fieldtype": "Tab Break",
+   "label": "Itens"
+  },
+  {
+   "fieldname": "tabitenscontatrato",
+   "fieldtype": "Table",
+   "label": "Itens do contrato",
+   "options": "Contract Measurement Item"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-16 12:48:40.570678",
+ "modified": "2025-05-21 10:32:02.218510",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Measurement",

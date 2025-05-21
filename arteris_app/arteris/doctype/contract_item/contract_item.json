@@ -19,6 +19,7 @@
   "valorunitario",
   "contrato",
   "unidade",
+  "tipodoitem",
   "listapedidossap",
   "tablepedidossap",
   "cidades_section",
@@ -38,6 +39,7 @@
   {
    "fieldname": "lft",
    "fieldtype": "Int",
+   "hidden": 1,
    "label": "Left",
    "no_copy": 1,
    "read_only": 1
@@ -45,6 +47,7 @@
   {
    "fieldname": "rgt",
    "fieldtype": "Int",
+   "hidden": 1,
    "label": "Right",
    "no_copy": 1,
    "read_only": 1
@@ -58,12 +61,14 @@
   {
    "fieldname": "old_parent",
    "fieldtype": "Link",
+   "hidden": 1,
    "label": "Old Parent",
    "options": "Contract Item"
   },
   {
    "fieldname": "parent_contract_item",
    "fieldtype": "Link",
+   "hidden": 1,
    "ignore_user_permissions": 1,
    "label": "Parent Contract Item",
    "options": "Contract Item"
@@ -91,19 +96,24 @@
    "fieldname": "quantidade",
    "fieldtype": "Float",
    "label": "Quantidade",
-   "precision": "6"
+   "non_negative": 1,
+   "precision": "6",
+   "reqd": 1
   },
   {
    "fieldname": "valorunitario",
    "fieldtype": "Currency",
    "label": "Valor unit\u00e1rio",
-   "precision": "2"
+   "non_negative": 1,
+   "precision": "2",
+   "reqd": 1
   },
   {
    "fieldname": "contrato",
    "fieldtype": "Link",
    "label": "N\u00ba do contrato",
-   "options": "Contract"
+   "options": "Contract",
+   "reqd": 1
   },
   {
    "fieldname": "listapedidossap",
@@ -150,7 +160,8 @@
    "fieldname": "unidade",
    "fieldtype": "Link",
    "label": "Unidade",
-   "options": "Unit"
+   "options": "Unit",
+   "reqd": 1
   },
   {
    "fieldname": "rodovias_section",
@@ -161,6 +172,12 @@
    "fieldname": "rodovias",
    "fieldtype": "Table",
    "options": "Contract Item Highway"
+  },
+  {
+   "fieldname": "tipodoitem",
+   "fieldtype": "Link",
+   "label": "Tipo",
+   "options": "Contract Item Type"
   }
  ],
  "force_re_route_to_default_view": 1,
@@ -168,7 +185,7 @@
  "index_web_pages_for_search": 1,
  "is_tree": 1,
  "links": [],
- "modified": "2025-05-12 01:17:02.371929",
+ "modified": "2025-05-21 11:03:11.371442",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Item",

@@ -15,7 +15,7 @@
    "fieldtype": "Date",
    "in_list_view": 1,
    "in_preview": 1,
-   "label": "Data",
+   "label": "Data ",
    "reqd": 1
   },
   {
@@ -37,7 +37,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-10 11:11:52.580884",
+ "modified": "2025-05-21 09:56:07.086651",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Holiday",
