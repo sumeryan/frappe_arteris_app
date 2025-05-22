@@ -1,0 +1,35 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-05-21 13:23:58.497578",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "descricaokartado"
+ ],
+ "fields": [
+  {
+   "fieldname": "descricaokartado",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Descri\u00e7\u00e3o Kartado",
+   "length": 120,
+   "reqd": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-05-21 13:24:31.970690",
+ "modified_by": "Administrator",
+ "module": "Arteris",
+ "name": "Work Role Config Kartado",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

@@ -209,8 +209,7 @@
    "fieldname": "uuidkartado",
    "fieldtype": "Data",
    "label": "Chave",
-   "length": 36,
-   "read_only": 1
+   "length": 36
   },
   {
    "fieldname": "grupo_de_f\u00f3rmulas_section",
@@ -266,7 +265,7 @@
    "link_fieldname": "contrato"
   }
  ],
- "modified": "2025-05-15 20:11:29.981105",
+ "modified": "2025-05-21 12:55:09.116485",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract",

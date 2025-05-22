@@ -266,12 +266,21 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-21 10:32:02.218510",
+ "modified": "2025-05-21 12:46:36.797019",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Measurement",
  "owner": "Administrator",
  "permissions": [
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1
+  },
   {
    "create": 1,
    "delete": 1,
@@ -280,7 +289,7 @@
    "print": 1,
    "read": 1,
    "report": 1,
-   "role": "System Manager",
+   "role": "Global Administrator",
    "share": 1,
    "write": 1
   }

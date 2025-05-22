@@ -1,27 +1,60 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "field:tipo",
- "creation": "2025-05-21 10:53:37.500767",
+ "autoname": "field:codigo",
+ "creation": "2025-05-21 12:59:02.502614",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "tipo",
-  "tipoaux",
+  "codigo",
   "descricao",
+  "grupo",
+  "subgrupo",
+  "column_break_ycro",
+  "observacaoes",
   "configura\u00e7\u00f5es_tab",
   "kartado_section",
-  "kartadotipoitem"
+  "tabkartado"
  ],
  "fields": [
   {
-   "fieldname": "tipo",
+   "description": "O c\u00f3digo \u00e9 informado pelo usu\u00e1rio",
+   "fieldname": "codigo",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Tipo",
+   "label": "C\u00f3digo",
    "length": 30,
    "reqd": 1,
    "unique": 1
+  },
+  {
+   "fieldname": "descricao",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Descri\u00e7\u00e3o",
+   "length": 120,
+   "reqd": 1
+  },
+  {
+   "fieldname": "grupo",
+   "fieldtype": "Link",
+   "label": "Grupo",
+   "options": "Item Group"
+  },
+  {
+   "fieldname": "subgrupo",
+   "fieldtype": "Link",
+   "label": "Sub-grupo",
+   "options": "Item Sub Group"
+  },
+  {
+   "fieldname": "column_break_ycro",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "observacaoes",
+   "fieldtype": "Text",
+   "label": "Observa\u00e7\u00f5es"
   },
   {
    "fieldname": "configura\u00e7\u00f5es_tab",
@@ -34,34 +67,18 @@
    "label": "Kartado"
   },
   {
-   "fieldname": "kartadotipoitem",
-   "fieldtype": "Data",
-   "label": "Tipo do item",
-   "length": 30
-  },
-  {
-   "description": "Informa\u00e7\u00f5es sobre o tipo do item",
-   "fieldname": "descricao",
-   "fieldtype": "Data",
-   "label": "Descri\u00e7\u00e3o",
-   "length": 120
-  },
-  {
-   "fieldname": "tipoaux",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "is_virtual": 1,
-   "label": "Tipo"
+   "fieldname": "tabkartado",
+   "fieldtype": "Table",
+   "options": "Item Config Kartado"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-21 12:30:19.304688",
+ "modified": "2025-05-21 13:09:34.311515",
  "modified_by": "Administrator",
  "module": "Arteris",
- "name": "Contract Item Type",
+ "name": "Item",
  "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
@@ -83,6 +100,6 @@
  "sort_field": "creation",
  "sort_order": "DESC",
  "states": [],
- "title_field": "tipo",
+ "title_field": "descricao",
  "track_changes": 1
 }
