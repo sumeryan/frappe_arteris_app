@@ -9,7 +9,8 @@
  "field_order": [
   "item",
   "maquina_equipamento_ou_ferramenta",
-  "quantidade_medida"
+  "quantidademedida",
+  "valormedido"
  ],
  "fields": [
   {
@@ -29,10 +30,18 @@
    "reqd": 1
   },
   {
-   "fieldname": "quantidade_medida",
+   "fieldname": "quantidademedida",
    "fieldtype": "Float",
    "in_list_view": 1,
    "label": "Quantidade medida",
+   "reqd": 1
+  },
+  {
+   "fieldname": "valormedido",
+   "fieldtype": "Currency",
+   "label": "Valor medido",
+   "non_negative": 1,
+   "precision": "2",
    "reqd": 1
   }
  ],
@@ -40,7 +49,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-05-11 23:02:43.430513",
+ "modified": "2025-05-28 10:29:34.721173",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Measurement Asset",

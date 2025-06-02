@@ -35,6 +35,9 @@
   "percentualcalcao",
   "column_break_jwpm",
   "regracaucao",
+  "dados_de_encerramento_do_contrato_section",
+  "contratoencerrado",
+  "column_break_kkyj",
   "integrations_tab",
   "grupo_de_f\u00f3rmulas_section",
   "grupoformulas",
@@ -254,18 +257,39 @@
    "fieldtype": "Int",
    "label": "Dia final",
    "non_negative": 1
+  },
+  {
+   "fieldname": "dados_de_encerramento_do_contrato_section",
+   "fieldtype": "Section Break",
+   "label": "Dados de encerramento do contrato"
+  },
+  {
+   "fieldname": "contratoencerrado",
+   "fieldtype": "Datetime",
+   "label": "Contrato encerrado em"
+  },
+  {
+   "fieldname": "column_break_kkyj",
+   "fieldtype": "Column Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [
   {
-   "group": "Medi\u00e7\u00f5es",
    "link_doctype": "Contract Measurement",
+   "link_fieldname": "contrato"
+  },
+  {
+   "link_doctype": "Contract Item",
+   "link_fieldname": "contrato"
+  },
+  {
+   "link_doctype": "Integration Record",
    "link_fieldname": "contrato"
   }
  ],
- "modified": "2025-05-21 12:55:09.116485",
+ "modified": "2025-05-31 16:20:18.537701",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract",

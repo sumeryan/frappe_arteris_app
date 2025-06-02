@@ -6,41 +6,45 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "datainicial",
-  "datafinal",
+  "datacriacao",
+  "dataexecucao",
   "contrato",
   "boletimmedicao",
+  "medicaovigente",
+  "column_break_yodv",
   "rodovia",
   "kminicial",
   "kmfinal",
+  "latitude",
+  "longitude",
+  "section_break_dord",
   "origem",
-  "medicaovigente",
+  "criadopor",
+  "aprovador",
+  "responsavel",
+  "codigordo",
+  "codigorelatorio",
+  "column_break_wird",
+  "climadamanha",
+  "condicoesdamanha",
+  "climadatarde",
+  "condicoesdatarde",
+  "climadanoite",
+  "condicoesdanoite",
+  "observa\u00e7\u00f5es_section",
+  "observacoes",
   "m\u00e3o_de_obra_tab",
-  "table_ktkj",
+  "tabworkrole",
   "maq_equip_e_ve\u00edculos_tab",
-  "table_lsrc",
-  "materiais_tab",
+  "tabasset",
+  "tabmaterial",
   "table_lfhu",
-  "registro_de_horas_tab",
-  "table_rtgv"
+  "tabhour",
+  "table_rtgv",
+  "recursos_tab",
+  "tabrecurso"
  ],
  "fields": [
-  {
-   "fieldname": "datainicial",
-   "fieldtype": "Date",
-   "in_list_view": 1,
-   "in_preview": 1,
-   "label": "Data inicial",
-   "reqd": 1
-  },
-  {
-   "fieldname": "datafinal",
-   "fieldtype": "Date",
-   "in_list_view": 1,
-   "in_preview": 1,
-   "label": "Data final",
-   "reqd": 1
-  },
   {
    "fieldname": "contrato",
    "fieldtype": "Link",
@@ -60,11 +64,10 @@
   },
   {
    "fieldname": "rodovia",
-   "fieldtype": "Link",
+   "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Rodovia",
-   "options": "Highway",
-   "reqd": 1
+   "length": 30
   },
   {
    "default": "0",
@@ -73,8 +76,7 @@
    "in_list_view": 1,
    "label": "KM inicial",
    "non_negative": 1,
-   "precision": "2",
-   "reqd": 1
+   "precision": "2"
   },
   {
    "default": "0",
@@ -82,13 +84,14 @@
    "fieldtype": "Float",
    "label": "KM final",
    "non_negative": 1,
-   "precision": "2",
-   "reqd": 1
+   "precision": "2"
   },
   {
    "fieldname": "origem",
-   "fieldtype": "Data",
-   "label": "Origem"
+   "fieldtype": "Select",
+   "label": "Origem",
+   "length": 38,
+   "options": "Kartado ADM\nKartado RDO\nKartado Outros\nOsiris"
   },
   {
    "fieldname": "m\u00e3o_de_obra_tab",
@@ -96,24 +99,9 @@
    "label": "M\u00e3o de obra"
   },
   {
-   "fieldname": "table_ktkj",
-   "fieldtype": "Table",
-   "options": "Contract Measurement Record Work Role"
-  },
-  {
    "fieldname": "maq_equip_e_ve\u00edculos_tab",
    "fieldtype": "Tab Break",
    "label": "Maq., equip. e ve\u00edculos"
-  },
-  {
-   "fieldname": "table_lsrc",
-   "fieldtype": "Table",
-   "options": "Contract Measurement Record Asset"
-  },
-  {
-   "fieldname": "materiais_tab",
-   "fieldtype": "Tab Break",
-   "label": "Materiais"
   },
   {
    "fieldname": "table_lfhu",
@@ -121,27 +109,168 @@
    "options": "Contract Measurement Record Material"
   },
   {
-   "fieldname": "registro_de_horas_tab",
-   "fieldtype": "Tab Break",
-   "label": "Registro de horas"
-  },
-  {
    "fieldname": "table_rtgv",
    "fieldtype": "Table",
    "options": "Contract Measurement Record Time"
   },
   {
-   "default": "N\u00e3o",
+   "fieldname": "tabworkrole",
+   "fieldtype": "Table",
+   "options": "Contract Measurement Record Work Role"
+  },
+  {
+   "fieldname": "tabasset",
+   "fieldtype": "Table",
+   "options": "Contract Measurement Record Asset"
+  },
+  {
+   "fieldname": "tabmaterial",
+   "fieldtype": "Tab Break",
+   "label": "Materiais"
+  },
+  {
+   "fieldname": "tabhour",
+   "fieldtype": "Tab Break",
+   "label": "Registro de horas"
+  },
+  {
+   "fieldname": "aprovador",
+   "fieldtype": "Data",
+   "label": "Aprovador",
+   "length": 60
+  },
+  {
+   "fieldname": "section_break_dord",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_wird",
+   "fieldtype": "Column Break"
+  },
+  {
    "fieldname": "medicaovigente",
    "fieldtype": "Select",
+   "in_filter": 1,
    "label": "Medi\u00e7\u00e3o vigente",
-   "options": "Sim\nN\u00e3o"
+   "options": "Sim\nN\u00e3o",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_yodv",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "criadopor",
+   "fieldtype": "Data",
+   "label": "Criado por",
+   "length": 60
+  },
+  {
+   "fieldname": "latitude",
+   "fieldtype": "Float",
+   "label": "Latitude",
+   "precision": "6"
+  },
+  {
+   "fieldname": "longitude",
+   "fieldtype": "Float",
+   "label": "Longitude",
+   "precision": "6"
+  },
+  {
+   "fieldname": "climadamanha",
+   "fieldtype": "Data",
+   "label": "Clima da manh\u00e3",
+   "length": 15
+  },
+  {
+   "fieldname": "condicoesdamanha",
+   "fieldtype": "Data",
+   "label": "Condi\u00e7\u00f5es da manh\u00e3",
+   "length": 15
+  },
+  {
+   "fieldname": "climadatarde",
+   "fieldtype": "Data",
+   "label": "Clima da tarde",
+   "length": 15
+  },
+  {
+   "fieldname": "condicoesdatarde",
+   "fieldtype": "Data",
+   "label": "Condi\u00e7\u00f5es da tarde",
+   "length": 15
+  },
+  {
+   "fieldname": "climadanoite",
+   "fieldtype": "Data",
+   "label": "Clima da noite",
+   "length": 15
+  },
+  {
+   "fieldname": "condicoesdanoite",
+   "fieldtype": "Data",
+   "label": "Condi\u00e7\u00f5es da noite",
+   "length": 15
+  },
+  {
+   "fieldname": "codigordo",
+   "fieldtype": "Data",
+   "label": "C\u00f3digo RDO",
+   "length": 36
+  },
+  {
+   "fieldname": "codigorelatorio",
+   "fieldtype": "Data",
+   "label": "C\u00f3digo relat\u00f3rio",
+   "length": 36
+  },
+  {
+   "fieldname": "recursos_tab",
+   "fieldtype": "Tab Break",
+   "label": "Recursos"
+  },
+  {
+   "fieldname": "tabrecurso",
+   "fieldtype": "Table",
+   "options": "Contract Measurement Record Resource"
+  },
+  {
+   "fieldname": "observa\u00e7\u00f5es_section",
+   "fieldtype": "Section Break",
+   "label": "Observa\u00e7\u00f5es"
+  },
+  {
+   "fieldname": "observacoes",
+   "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "datacriacao",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "label": "Data",
+   "reqd": 1
+  },
+  {
+   "fieldname": "dataexecucao",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "label": "Data execu\u00e7\u00e3o",
+   "reqd": 1
+  },
+  {
+   "fieldname": "responsavel",
+   "fieldtype": "Data",
+   "label": "Responsavel",
+   "length": 60
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-12 14:14:12.177773",
+ "modified": "2025-05-31 20:30:37.387826",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Measurement Record",

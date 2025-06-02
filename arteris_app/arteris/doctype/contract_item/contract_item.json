@@ -18,9 +18,12 @@
   "descricao",
   "quantidade",
   "valorunitario",
+  "valortotalvigente",
+  "saldo",
   "contrato",
   "unidade",
   "tipodoitem",
+  "fatorpagamento",
   "listapedidossap",
   "tablepedidossap",
   "cidades_section",
@@ -33,7 +36,7 @@
   "rodovias",
   "configura\u00e7\u00f5es_tab",
   "kartado_section",
-  "chavekartado"
+  "tabconfigkartado"
  ],
  "fields": [
   {
@@ -143,7 +146,7 @@
   {
    "fieldname": "m\u00e3o_de_obra_section",
    "fieldtype": "Section Break",
-   "label": "M\u00e3o de obra"
+   "label": "M\u00e3o de obra (***Aplicar jornada 5x2, ...)"
   },
   {
    "fieldname": "tablemaodeobra",
@@ -193,17 +196,38 @@
    "label": "Kartado"
   },
   {
-   "description": "Verifique a codifica\u00e7\u00e3o do Kartado, ela pode estar com um n\u00edvel a mais, ex: 1.1.1 -> Kartado -> 1.1.1.1",
-   "fieldname": "chavekartado",
-   "fieldtype": "Data",
-   "label": "C\u00f3digo item Kartado",
-   "length": 32
-  },
-  {
    "fieldname": "itempadrao",
    "fieldtype": "Link",
    "label": "Item",
    "options": "Item"
+  },
+  {
+   "fieldname": "tabconfigkartado",
+   "fieldtype": "Table",
+   "label": "Verifique a codifica\u00e7\u00e3o do Kartado, ela pode estar com um n\u00edvel a mais, ex: 1.1.1 -> Kartado -> 1.1.1.1",
+   "options": "Contract Item Config Kartado"
+  },
+  {
+   "fieldname": "valortotalvigente",
+   "fieldtype": "Currency",
+   "label": "Valor total vigente",
+   "non_negative": 1,
+   "precision": "2"
+  },
+  {
+   "fieldname": "saldo",
+   "fieldtype": "Currency",
+   "label": "Saldo atual",
+   "non_negative": 1,
+   "precision": "2"
+  },
+  {
+   "default": "0",
+   "fieldname": "fatorpagamento",
+   "fieldtype": "Float",
+   "label": "Fator de pagamento %",
+   "non_negative": 1,
+   "precision": "3"
   }
  ],
  "force_re_route_to_default_view": 1,
@@ -211,7 +235,7 @@
  "index_web_pages_for_search": 1,
  "is_tree": 1,
  "links": [],
- "modified": "2025-05-22 08:52:24.252619",
+ "modified": "2025-05-31 15:40:40.975431",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Item",

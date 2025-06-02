@@ -9,11 +9,9 @@
  "field_order": [
   "item",
   "funcao",
-  "quantidade_medida",
+  "quantidademedida",
   "valortotal",
-  "section_break_vvyv",
-  "column_break_wfgx",
-  "funcaoitem"
+  "valorcalculado"
  ],
  "fields": [
   {
@@ -29,39 +27,35 @@
   {
    "fieldname": "funcao",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Fun\u00e7\u00e3o",
    "options": "Work Role",
    "reqd": 1
   },
   {
-   "fieldname": "quantidade_medida",
+   "fieldname": "valortotal",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Valor total",
+   "non_negative": 1,
+   "precision": "2",
+   "reqd": 1
+  },
+  {
+   "fieldname": "valorcalculado",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Valor calculado",
+   "non_negative": 1,
+   "precision": "2",
+   "reqd": 1
+  },
+  {
+   "fieldname": "quantidademedida",
    "fieldtype": "Float",
    "in_list_view": 1,
    "label": "Quantidade medida",
    "non_negative": 1,
-   "reqd": 1
-  },
-  {
-   "fieldname": "section_break_vvyv",
-   "fieldtype": "Section Break"
-  },
-  {
-   "fieldname": "column_break_wfgx",
-   "fieldtype": "Column Break",
-   "hidden": 1
-  },
-  {
-   "fieldname": "funcaoitem",
-   "fieldtype": "Link",
-   "label": "Fun\u00e7\u00e3o do item",
-   "options": "Contract Item Work Role"
-  },
-  {
-   "fieldname": "valortotal",
-   "fieldtype": "Currency",
-   "label": "Valor total",
-   "non_negative": 1,
-   "precision": "2",
    "reqd": 1
   }
  ],
@@ -69,7 +63,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-05-12 02:17:59.119329",
+ "modified": "2025-06-02 13:57:43.389608",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Measurement Record Work Role",

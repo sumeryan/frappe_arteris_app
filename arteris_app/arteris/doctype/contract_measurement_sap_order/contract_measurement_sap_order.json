@@ -10,18 +10,18 @@
   "pedido_sap",
   "linhapedido",
   "valortotalvigente",
-  "medicaoacumantpercentual",
   "medicaoatualpercentual",
   "medicaoacumuladaatualpercentual",
-  "acumuladoanterior",
   "valormedido",
-  "acumuladoatual"
+  "acumuladoatual",
+  "column_break_xfem",
+  "medicaoacumantpercentual",
+  "acumuladoanterior"
  ],
  "fields": [
   {
    "fieldname": "pedido_sap",
    "fieldtype": "Link",
-   "in_list_view": 1,
    "label": "Pedido SAP",
    "options": "SAP Order",
    "reqd": 1
@@ -79,16 +79,21 @@
   {
    "fieldname": "linhapedido",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Linha pedido",
    "options": "SAP Order Period",
    "reqd": 1
+  },
+  {
+   "fieldname": "column_break_xfem",
+   "fieldtype": "Column Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-05-13 07:01:06.105831",
+ "modified": "2025-05-29 22:20:54.590435",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Measurement SAP Order",

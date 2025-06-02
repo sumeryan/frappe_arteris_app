@@ -6,6 +6,7 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "item",
   "funcao",
   "quantidade",
   "horanormal",
@@ -28,10 +29,12 @@
   {
    "fieldname": "quantidade",
    "fieldtype": "Int",
+   "in_list_view": 1,
    "label": "Quantidade",
    "length": 4,
    "non_negative": 1,
-   "options": "1"
+   "options": "1",
+   "reqd": 1
   },
   {
    "fieldname": "horanormal",
@@ -85,9 +88,18 @@
   {
    "fieldname": "valortotal",
    "fieldtype": "Float",
+   "in_list_view": 1,
    "label": "Valor total",
    "non_negative": 1,
    "precision": "2",
+   "reqd": 1
+  },
+  {
+   "fieldname": "item",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Item",
+   "options": "Contract Item",
    "reqd": 1
   }
  ],
@@ -95,7 +107,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-05-12 02:14:11.491099",
+ "modified": "2025-05-24 14:46:02.894300",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Measurement Record Time",

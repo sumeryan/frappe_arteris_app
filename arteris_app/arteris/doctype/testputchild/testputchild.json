@@ -1,0 +1,43 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-05-28 14:22:10.589601",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "aimage",
+  "image_jnrg"
+ ],
+ "fields": [
+  {
+   "fieldname": "aimage",
+   "fieldtype": "Attach Image",
+   "label": "aimage"
+  },
+  {
+   "fieldname": "image_jnrg",
+   "fieldtype": "Image",
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "is_virtual": 1,
+   "options": "aimage",
+   "read_only": 1,
+   "sticky": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-05-28 14:37:35.917062",
+ "modified_by": "Administrator",
+ "module": "Arteris",
+ "name": "TestPutChild",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

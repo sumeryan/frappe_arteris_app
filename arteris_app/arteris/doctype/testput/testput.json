@@ -1,0 +1,69 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "UUID",
+ "creation": "2025-05-22 14:32:08.557252",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "descricao",
+  "valor",
+  "quantidade",
+  "html_ljsq",
+  "table_umby"
+ ],
+ "fields": [
+  {
+   "fieldname": "descricao",
+   "fieldtype": "Data",
+   "label": "Descricao"
+  },
+  {
+   "fieldname": "valor",
+   "fieldtype": "Currency",
+   "label": "Valor"
+  },
+  {
+   "fieldname": "quantidade",
+   "fieldtype": "Float",
+   "label": "Quantidade"
+  },
+  {
+   "fieldname": "html_ljsq",
+   "fieldtype": "HTML",
+   "options": "{%- for item in doc.items -%}\n\t\t<tr>\n\t\t    <td>\n\t\t        {{item.image}}\n\t\t    </td>\t\t\t\n\t\t</tr>\n{%- endfor -%}"
+  },
+  {
+   "fieldname": "table_umby",
+   "fieldtype": "Table",
+   "options": "TestPutChild"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-05-28 14:33:25.366467",
+ "modified_by": "Administrator",
+ "module": "Arteris",
+ "name": "TestPut",
+ "naming_rule": "UUID",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

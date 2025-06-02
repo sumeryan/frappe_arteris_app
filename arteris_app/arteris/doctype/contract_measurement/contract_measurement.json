@@ -1,6 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "UUID",
  "creation": "2025-05-13 06:10:27.754993",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -9,12 +10,17 @@
   "contratada",
   "datainicialmedicao",
   "datafinalmedicao",
-  "medicaovigente",
   "column_break_ufsa",
   "data_ejak",
   "data_final_do_contrato",
   "obra",
   "valorcontrato",
+  "medicaovigente",
+  "total_da_medi\u00e7\u00e3o_anterior_section",
+  "medicaoacumuladaanterior",
+  "caucaoacumuladoanterior",
+  "column_break_gzvz",
+  "ftdacumuladoanterior",
   "total_da_medi\u00e7\u00e3o_section",
   "medicaoatual",
   "faturamentodireto",
@@ -34,6 +40,7 @@
   "caucaoatual",
   "caucaoacumulado",
   "column_break_ppvu",
+  "imprimir",
   "breaksap",
   "tablepedidossap",
   "breakftp",
@@ -51,7 +58,7 @@
   {
    "fieldname": "contrato",
    "fieldtype": "Link",
-   "label": "N\u00ba do contrato\"",
+   "label": "N\u00ba do contrato",
    "options": "Contract"
   },
   {
@@ -261,25 +268,73 @@
    "fieldtype": "Table",
    "label": "Itens do contrato",
    "options": "Contract Measurement Item"
+  },
+  {
+   "fieldname": "imprimir",
+   "fieldtype": "Button",
+   "label": "\ud83d\udda8\ufe0f Imprimir"
+  },
+  {
+   "fieldname": "total_da_medi\u00e7\u00e3o_anterior_section",
+   "fieldtype": "Section Break",
+   "label": "Total da medi\u00e7\u00e3o anterior"
+  },
+  {
+   "fieldname": "medicaoacumuladaanterior",
+   "fieldtype": "Currency",
+   "label": "Medi\u00e7\u00e3o acumulada anterior",
+   "non_negative": 1,
+   "precision": "2"
+  },
+  {
+   "fieldname": "caucaoacumuladoanterior",
+   "fieldtype": "Currency",
+   "label": "Cau\u00e7\u00e3o acumulado anterior",
+   "non_negative": 1,
+   "precision": "2"
+  },
+  {
+   "fieldname": "column_break_gzvz",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "ftdacumuladoanterior",
+   "fieldtype": "Currency",
+   "label": "Faturamento direto (FTD) acumulado anterior",
+   "non_negative": 1,
+   "precision": "2"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
- "links": [],
- "modified": "2025-05-21 12:46:36.797019",
+ "links": [
+  {
+   "link_doctype": "Contract Measurement Record",
+   "link_fieldname": "boletimmedicao"
+  },
+  {
+   "link_doctype": "Integration Record",
+   "link_fieldname": "boletimmedicao"
+  }
+ ],
+ "modified": "2025-05-31 16:18:56.660438",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Measurement",
+ "naming_rule": "UUID",
  "owner": "Administrator",
  "permissions": [
   {
+   "create": 1,
+   "delete": 1,
    "email": 1,
    "export": 1,
    "print": 1,
    "read": 1,
    "report": 1,
    "role": "System Manager",
-   "share": 1
+   "share": 1,
+   "write": 1
   },
   {
    "create": 1,
@@ -298,5 +353,6 @@
  "sort_field": "creation",
  "sort_order": "DESC",
  "states": [],
- "title_field": "contrato"
+ "title_field": "contrato",
+ "track_changes": 1
 }
