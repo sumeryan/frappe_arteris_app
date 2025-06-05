@@ -38,6 +38,7 @@
   "dados_de_encerramento_do_contrato_section",
   "contratoencerrado",
   "column_break_kkyj",
+  "imprimir",
   "integrations_tab",
   "grupo_de_f\u00f3rmulas_section",
   "grupoformulas",
@@ -271,6 +272,11 @@
   {
    "fieldname": "column_break_kkyj",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "imprimir",
+   "fieldtype": "Button",
+   "label": "Imprimir"
   }
  ],
  "grid_page_length": 50,
@@ -289,7 +295,7 @@
    "link_fieldname": "contrato"
   }
  ],
- "modified": "2025-05-31 16:20:18.537701",
+ "modified": "2025-06-04 15:00:05.308771",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract",
@@ -314,6 +320,6 @@
  "sort_field": "creation",
  "sort_order": "DESC",
  "states": [],
- "title_field": "contrato",
+ "title_field": "subsidiaria",
  "track_changes": 1
 }

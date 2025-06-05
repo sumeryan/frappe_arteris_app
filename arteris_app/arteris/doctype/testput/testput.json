@@ -10,7 +10,8 @@
   "valor",
   "quantidade",
   "html_ljsq",
-  "table_umby"
+  "table_umby",
+  "html_bwky"
  ],
  "fields": [
   {
@@ -37,12 +38,19 @@
    "fieldname": "table_umby",
    "fieldtype": "Table",
    "options": "TestPutChild"
+  },
+  {
+   "fieldname": "html_bwky",
+   "fieldtype": "HTML",
+   "max_height": "200px",
+   "options": "<!-- include styles -->\n<link href=\"https://unpkg.com/frappe-datatable@0.0.5/dist/frappe-datatable.min.css\" rel=\"stylesheet\">\n\n<!-- create the container element -->\n<div id=\"datatable\"></div>\n\n<!-- include the dependencies -->\n<script src=\"https://unpkg.com/sortablejs@1.7.0/Sortable.min.js\"></script>\n<script src=\"https://unpkg.com/clusterize.js@0.18.0/clusterize.min.js\"></script>\n<!-- include the lib -->\n<script src=\"https://unpkg.com/frappe-datatable@0.0.5/dist/frappe-datatable.min.js\"></script>\n\n<!-- initialize DataTable -->\n<script>\n  const datatable = new DataTable('#datatable', {\n    columns: ['Name', 'Position', 'Salary'],\n    data: [\n      ['Faris', 'Software Developer', '$1200'],\n      ['Manas', 'Software Engineer', '$1400'],\n    ]\n  });\n</script>",
+   "width": "200px"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-28 14:33:25.366467",
+ "modified": "2025-06-03 12:05:04.246892",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "TestPut",

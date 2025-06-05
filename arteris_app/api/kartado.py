@@ -106,6 +106,7 @@ def update_contract(contract: str, kartado_uuid: str):
         set_result = frappe.db.set_value("Contract", get_result[0].name, "uuidkartado", kartado_uuid)
         return set_result
 
+
 @frappe.whitelist(methods=["POST"])
 def create_kartado_measurement_record():
     """
@@ -115,7 +116,7 @@ def create_kartado_measurement_record():
     body = frappe.form_dict
 
     # get body data and relations from the request
-    record_type = frappe.form_dict.type
+    # record_type = frappe.form_dict.type
     contract_name = frappe.form_dict.contract_name
     contract_meaesurement = frappe.form_dict.contract_meaesurement
     contract_meaesurement_current = frappe.form_dict.contract_meaesurement_current
@@ -123,16 +124,16 @@ def create_kartado_measurement_record():
     data = frappe.form_dict.data
     relations = frappe.form_dict.relations
 
-    def check_kartado_relation(kartado_description, type):
+    def check_kartado_relation(kartado_description, r_type):
         """
         Check ralation between kartado description and kartado list.
         :param kartado_description: The description of the kartado.
         :param type: The type of relation to check (e.g., "asset", "work_role", "contract_item").
         :return: The name of the kartado relation if found, otherwise None.
         """
-        for k in relations[type]:
+        for k in relations[r_type]:
             if k['kartado'] == kartado_description:
-                return k["name"] 
+                return k["name"]
 
         return None
     
@@ -142,6 +143,9 @@ def create_kartado_measurement_record():
 
     # List of kartado uuids
     kartado_uuids = []
+    kartado_logs = []
+    str_logs = ""
+    str_highways = ""
 
     # Measurement Record header
     kartado_measurement_record = None
@@ -154,18 +158,35 @@ def create_kartado_measurement_record():
     # Parse the itens
     for d in data:
 
-        # Check change in RDO and Reporting record
-        if record_type == "rdo":
-            rdo_check = f"{d['rdo_chave']}{d['log_chave_relatorio']}"
-            if not kartado_rdo_check == rdo_check:
-                if kartado_measurement_record and has_itens:
-                    # Save the previous measurement record
-                    kartado_measurement_record.save()
-                # Reset the kartado_rdo_check
-                kartado_rdo_check = f"{d['rdo_chave']}{d['log_chave_relatorio']}"
-                # Reset the kartado_measurement_record
-                has_itens = False
-                kartado_measurement_record = None
+        # Check change in RDO or Reporting record
+        if d.get('rdo_chave',''):
+            rdo_check = f"{d.get('rdo_chave','')}"
+        elif d.get('log_chave_relatorio',''):
+            rdo_check = f"{d.get('log_chave_relatorio','')}"
+        else:
+            rdo_check = ""
+
+        if kartado_rdo_check != rdo_check:
+            if kartado_measurement_record and has_itens:
+                # Save the previous measurement record
+                kartado_measurement_record.relatorio = str_logs[0:30]
+                kartado_measurement_record.rodovia = str_highways[0:30]
+                kartado_measurement_record.save()
+
+            # Reset the kartado_rdo_check
+            if d.get('rdo_chave',''):
+                kartado_rdo_check = f"{d.get('rdo_chave','')}"
+            elif d.get('log_chave_relatorio',''):
+                kartado_rdo_check = f"{d.get('log_chave_relatorio','')}"
+            else:
+                kartado_rdo_check = ""            
+
+            # Reset the kartado_measurement_record
+            has_itens = False
+            kartado_measurement_record = None
+            kartado_logs = []
+            str_logs = ""
+            str_highways = ""
 
         if not kartado_measurement_record:
             # Measurement Record header
@@ -173,6 +194,7 @@ def create_kartado_measurement_record():
             kartado_measurement_record.tipo = f"Kartado - Importação de registros de medição - {d['contrato']}"
             kartado_measurement_record.datacriacao = d["data_criacao"]
             kartado_measurement_record.dataexecucao = d["data_criacao"]
+            kartado_measurement_record.dataaprovacao = d["data_aprovacao"]
             kartado_measurement_record.contrato = contract_name
             kartado_measurement_record.boletimmedicao = contract_meaesurement
             kartado_measurement_record.kminicial = 0
@@ -180,31 +202,30 @@ def create_kartado_measurement_record():
             kartado_measurement_record.medicaovigente = contract_meaesurement_current
             kartado_measurement_record.aprovador = d["aprovado_por"]
 
-            if record_type == "rdo":
-                kartado_measurement_record.origem = "Kartado RDO"
-            elif record_type == "adm":
-                 kartado_measurement_record.origem = "Kartado ADM"
+            if d["tipo_registro"] == "rdo": # or record_type == "rpt":
+                kartado_measurement_record.origem_integracao = "Kartado RDO"
+            elif d["tipo_registro"] == "log":
+                kartado_measurement_record.origem_integracao = "Kartado Apontamento"
             else:
-                kartado_measurement_record.origem = "Kartado Outros"
+                kartado_measurement_record.origem_integracao = "Kartado Outros"
 
-            if record_type == "rdo":
-                kartado_measurement_record.dataexecucao = d["log_data_execucao"]
-                kartado_measurement_record.rodovia = d["log_nome_rodovia"]
-                kartado_measurement_record.kminicial = d["log_km_inicial"]
-                kartado_measurement_record.kmfinal = d["log_km_final"]
-                kartado_measurement_record.latitude = d["log_latitude"]
-                kartado_measurement_record.longitude = d["log_longitude"]
-                kartado_measurement_record.criadopor = d["rdo_criado_por"]
+            # Set code using reporting code
+            if d["log_codigo_relatorio"]:
+                kartado_measurement_record.codigo = d["log_codigo_relatorio"]
+
+            # RDO contains data
+            if d["rdo_chave"]:
+                data_execucao = d["rdo_data"].split('-')
+                kartado_measurement_record.dataexecucao = f"{data_execucao[2]}-{data_execucao[1]}-{data_execucao[0]}"
                 kartado_measurement_record.responsavel = d["rdo_responsavel"]
-                kartado_measurement_record.codigordo = d["rdo_chave"]
-                kartado_measurement_record.codigorelatorio = d["log_codigo_relatorio"]
+                kartado_measurement_record.codigo = d["rdo_chave"]
                 kartado_measurement_record.climadamanha = d["rdo_clima_manha"]
                 kartado_measurement_record.condicoesdamanha = d["rdo_condicoes_manha"]
                 kartado_measurement_record.climadatarde = d["rdo_clima_tarde"]
                 kartado_measurement_record.condicoesdatarde = d["rdo_condicoes_tarde"]
                 kartado_measurement_record.climadanoite = d["rdo_clima_noite"]
                 kartado_measurement_record.condicoesdanoite = d["rdo_condicoes_noite"]
-                kartado_measurement_record.observacoes = d["log_notas_formulario_json"]
+                kartado_measurement_record.criadopor = d["rdo_criado_por"]
 
         has_inconsistent_data = False
 
@@ -214,7 +235,7 @@ def create_kartado_measurement_record():
         d["chave_item_contrato"] = check_kartado_relation(d.get("codigo_item"), "contract_item")
 
         # Check if is administrative record
-        if record_type == "adm":
+        if d["tipo_administracao"]:
             if not d["chave_ativo"] and not d["chave_funcao"]:
                 msg = f"Relação de ativo ou função '{d.get('recurso_item')}' não localizado."
                 if msg not in inconsistent_data:
@@ -236,27 +257,33 @@ def create_kartado_measurement_record():
             
             # Create work role measurement record
             if d["chave_funcao"]:
-                kartado_uuids.append(d["chave_utilizacao"])
-                has_itens = True
-                kartado_measurement_work_role_record = kartado_measurement_record.append("tabworkrole")
-                kartado_measurement_work_role_record.item = d["chave_item_contrato"]
-                kartado_measurement_work_role_record.funcao = d["chave_funcao"]
-                kartado_measurement_work_role_record.quantidademedida = d["quantidade"]
-                kartado_measurement_work_role_record.valortotal = d["valor_total"]
-                kartado_measurement_work_role_record.valorcalculado = 0.0
+                if not d["chave_utilizacao"] in kartado_uuids:
+                    kartado_uuids.append(d["chave_utilizacao"])
+                    has_itens = True
+                    kartado_measurement_work_role_record = kartado_measurement_record.append("tabworkrole")
+                    kartado_measurement_work_role_record.item = d["chave_item_contrato"]
+                    kartado_measurement_work_role_record.funcao = d["chave_funcao"]
+                    kartado_measurement_work_role_record.quantidademedida = d["quantidade"]
+                    kartado_measurement_work_role_record.valortotal = d["valor_total"]
+                    kartado_measurement_work_role_record.valorcalculado = 0.0
+                    kartado_measurement_work_role_record.tipo = d["tipo_item"]
+                    kartado_measurement_work_role_record.peso = d["peso"]
 
             # Create asset measurement record
-            elif d["chave_ativo"]:
-                kartado_uuids.append(d["chave_utilizacao"])
-                has_itens = True
-                kartado_measurement_asset_record = kartado_measurement_record.append("tabasset")
-                kartado_measurement_asset_record.item = d["chave_item_contrato"]
-                kartado_measurement_asset_record.maquina_equipamento_ou_ferramenta = d["chave_ativo"]
-                kartado_measurement_asset_record.quantidademedida = d["quantidade"]
-                kartado_measurement_asset_record.valortotal = d["valor_total"]
-                kartado_measurement_asset_record.valorcalculado = 0.0
+            if d["chave_ativo"]:
+                if not d["chave_utilizacao"] in kartado_uuids:
+                    kartado_uuids.append(d["chave_utilizacao"])
+                    has_itens = True
+                    kartado_measurement_asset_record = kartado_measurement_record.append("tabasset")
+                    kartado_measurement_asset_record.item = d["chave_item_contrato"]
+                    kartado_measurement_asset_record.maquina_equipamento_ou_ferramenta = d["chave_ativo"]
+                    kartado_measurement_asset_record.quantidademedida = d["quantidade"]
+                    kartado_measurement_asset_record.valortotal = d["valor_total"]
+                    kartado_measurement_asset_record.valorcalculado = 0.0
+                    kartado_measurement_asset_record.tipo = d["tipo_item"]
+                    kartado_measurement_asset_record.peso = d["peso"]                
 
-            elif record_type == "rdo" or record_type == "non_adm":
+            if d["tipo_registro"] == "rdo" and not d["tipo_administracao"]: # elif record_type == "rdo" or record_type == "rpt":
                  if d["chave_item_contrato"]:
                     # Prevent duplicate kartado uuids
                     if not d["chave_utilizacao"] in kartado_uuids:
@@ -266,9 +293,35 @@ def create_kartado_measurement_record():
                         kartado_measurement_reseource_record.item = d["chave_item_contrato"]
                         kartado_measurement_reseource_record.quantidade = d["quantidade"]
                         kartado_measurement_reseource_record.valortotal = d["valor_total"]
+                        kartado_measurement_reseource_record.tipo = d["tipo_item"]
+                        kartado_measurement_reseource_record.peso = d["peso"]                         
+
+            if d["log_codigo_relatorio"]:
+                if not d["log_codigo_relatorio"] in kartado_logs:
+                    kartado_logs.append(d["log_codigo_relatorio"])
+                    if not d["chave_utilizacao"] in kartado_uuids:
+                        kartado_uuids.append(d["chave_utilizacao"])
+                    has_itens = True
+                    kartado_measurement_log_record = kartado_measurement_record.append("tablog")
+                    kartado_measurement_log_record.codigorelatorio = d["log_codigo_relatorio"]
+                    kartado_measurement_log_record.dataexecucao = d["log_data_execucao"]
+                    kartado_measurement_log_record.rodovia = d["log_nome_rodovia"]
+                    kartado_measurement_log_record.kminicial = d["log_km_inicial"]
+                    kartado_measurement_log_record.kmfinal = d["log_km_final"]
+                    kartado_measurement_log_record.latitude = d["log_latitude"]
+                    kartado_measurement_log_record.longitude = d["log_longitude"]
+                    kartado_measurement_log_record.observacoes = d["log_notas_formulario_json"]
+                    if str_logs:
+                        str_logs += ", "
+                    str_logs += d["log_codigo_relatorio"]
+                    if str_highways:
+                        str_highways += ", "
+                    str_highways += d["log_nome_rodovia"]
 
     if has_itens:
         # Save the measurement record
+        kartado_measurement_record.relatorio = str_logs[0:30]
+        kartado_measurement_record.rodovia = str_highways[0:30]
         kartado_measurement_record.save()
 
         # Add the kartado uuids 
@@ -292,7 +345,7 @@ def create_kartado_measurement_record():
         s_inconsistency += f"Chaves:\n"
         for key in inconsistent_keys:
              s_inconsistency += f"{key}\n"
-             
+
         # Create a Kartado Inconsistency record
         kartado_inconsistent = frappe.new_doc("Integration Inconsistency")
         kartado_inconsistent.boletimmedicao = contract_meaesurement

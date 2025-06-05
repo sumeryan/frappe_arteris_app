@@ -32,7 +32,10 @@ def open_measurement(measurement: str):
     Open measurement.
     """
     # Get all measurements for the contract
-    measurements = frappe.db.get_all("Contract Measurement", fields=["name"], filters={"name": measurement})
+    measurements = frappe.db.get_all("Contract Measurement", fields=["name","contrato"], filters={"name": measurement})
+
+    # Close the measurement if it is open
+    close_measurements(measurements[0].contrato) 
 
     if not measurements:
         return {"message": f"No measurements found for name {measurement}."}
@@ -43,7 +46,7 @@ def open_measurement(measurement: str):
         doc.medicaovigente = "Sim"
         doc.save()
         # Open all measurement records associated with this measurement
-        measurement_records = frappe.db.get_all("Contract Measurement Record", fields=["name"], filters={"boletimmedicao": measurement.name, "medicaovigente": "Sim"})
+        measurement_records = frappe.db.get_all("Contract Measurement Record", fields=["name"], filters={"boletimmedicao": measurement.name})
         for record in measurement_records:
             record_doc = frappe.get_doc("Contract Measurement Record", record.name)
             record_doc.medicaovigente = "Sim"

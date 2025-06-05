@@ -9,7 +9,6 @@
  "field_order": [
   "m\u00e1quinas_equipamentos_e_ve\u00edculos_section",
   "nomeativo",
-  "operadoresoumotoristas",
   "configura\u00e7\u00f5es_tab",
   "kartado_section",
   "de_para_de_ativos_kartado_column",
@@ -20,12 +19,6 @@
    "fieldname": "m\u00e1quinas_equipamentos_e_ve\u00edculos_section",
    "fieldtype": "Section Break",
    "label": "M\u00e1quinas, equipamentos e ve\u00edculos"
-  },
-  {
-   "fieldname": "operadoresoumotoristas",
-   "fieldtype": "Table",
-   "label": "Operadores ou motoristas",
-   "options": "Asset Operator"
   },
   {
    "fieldname": "nomeativo",
@@ -61,7 +54,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-21 13:28:06.461786",
+ "modified": "2025-06-04 21:02:28.041369",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Asset",

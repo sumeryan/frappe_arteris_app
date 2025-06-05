@@ -24,6 +24,7 @@
   "unidade",
   "tipodoitem",
   "fatorpagamento",
+  "codigopep",
   "listapedidossap",
   "tablepedidossap",
   "cidades_section",
@@ -81,6 +82,8 @@
    "options": "Contract Item"
   },
   {
+   "fetch_from": "itempadrao.codigo",
+   "fetch_if_empty": 1,
    "fieldname": "codigo",
    "fieldtype": "Data",
    "in_filter": 1,
@@ -228,14 +231,19 @@
    "label": "Fator de pagamento %",
    "non_negative": 1,
    "precision": "3"
+  },
+  {
+   "fieldname": "codigopep",
+   "fieldtype": "Data",
+   "label": "C\u00f3digo PEP",
+   "length": 30
   }
  ],
- "force_re_route_to_default_view": 1,
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_tree": 1,
  "links": [],
- "modified": "2025-05-31 15:40:40.975431",
+ "modified": "2025-06-04 16:45:57.799599",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Item",

@@ -77,6 +77,7 @@
   {
    "fieldname": "rodovia_section",
    "fieldtype": "Section Break",
+   "hidden": 1,
    "label": "Rodovia (Para identifica\u00e7\u00e3o de cidade e ISS)"
   },
   {
@@ -100,7 +101,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-26 08:11:32.552897",
+ "modified": "2025-06-04 15:17:26.606991",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "SAP Order",

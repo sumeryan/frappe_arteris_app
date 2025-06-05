@@ -1,0 +1,93 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-06-03 10:20:09.939176",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "codigorelatorio",
+  "dataexecucao",
+  "observacoes",
+  "column_break_zyxn",
+  "rodovia",
+  "kminicial",
+  "kmfinal",
+  "latitude",
+  "longitude"
+ ],
+ "fields": [
+  {
+   "fieldname": "codigorelatorio",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "C\u00f3digo relat\u00f3rio ",
+   "length": 36,
+   "reqd": 1
+  },
+  {
+   "fieldname": "rodovia",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Rodovia",
+   "length": 30
+  },
+  {
+   "fieldname": "kminicial",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Km inicial"
+  },
+  {
+   "fieldname": "kmfinal",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Km final",
+   "non_negative": 1,
+   "precision": "2"
+  },
+  {
+   "fieldname": "latitude",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Latitude",
+   "precision": "6"
+  },
+  {
+   "fieldname": "longitude",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Longitude",
+   "precision": "6"
+  },
+  {
+   "fieldname": "dataexecucao",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Data execu\u00e7\u00e3o"
+  },
+  {
+   "fieldname": "observacoes",
+   "fieldtype": "Small Text",
+   "label": "Observa\u00e7\u00f5es"
+  },
+  {
+   "fieldname": "column_break_zyxn",
+   "fieldtype": "Column Break"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-06-03 10:26:49.177421",
+ "modified_by": "Administrator",
+ "module": "Arteris",
+ "name": "Contract Measurement Record Log",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

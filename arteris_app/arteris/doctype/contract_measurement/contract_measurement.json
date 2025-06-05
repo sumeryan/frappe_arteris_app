@@ -6,6 +6,12 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "imprimir_boletim_de_medi\u00e7\u00e3o_section",
+  "column_break_ppvu",
+  "imprimircapa",
+  "column_break_ytcj",
+  "imprimirboletim",
+  "section_break_gfay",
   "contrato",
   "contratada",
   "datainicialmedicao",
@@ -39,20 +45,18 @@
   "cau\u00e7\u00e3o_section",
   "caucaoatual",
   "caucaoacumulado",
-  "column_break_ppvu",
-  "imprimir",
   "breaksap",
   "tablepedidossap",
   "breakftp",
   "tableftp",
-  "breakmunicipios",
-  "tablemunicipios",
   "breakmaodeobra",
   "tablemaodeobra",
   "breakativos",
   "tableativos",
   "itens_tab",
-  "tabitenscontatrato"
+  "tabitenscontatrato",
+  "breakmunicipios",
+  "tablemunicipios"
  ],
  "fields": [
   {
@@ -99,7 +103,7 @@
   {
    "fieldname": "breakmaodeobra",
    "fieldtype": "Tab Break",
-   "label": "M\u00e3o de obra"
+   "label": "M\u00e3o de obra (Fun\u00e7\u00f5es)"
   },
   {
    "fieldname": "tablemaodeobra",
@@ -109,7 +113,7 @@
   {
    "fieldname": "breakativos",
    "fieldtype": "Tab Break",
-   "label": "Maq., equip. e ve\u00edculos"
+   "label": "Maq., equip. e ve\u00edculos (Ativos)"
   },
   {
    "fieldname": "tableativos",
@@ -270,11 +274,6 @@
    "options": "Contract Measurement Item"
   },
   {
-   "fieldname": "imprimir",
-   "fieldtype": "Button",
-   "label": "\ud83d\udda8\ufe0f Imprimir"
-  },
-  {
    "fieldname": "total_da_medi\u00e7\u00e3o_anterior_section",
    "fieldtype": "Section Break",
    "label": "Total da medi\u00e7\u00e3o anterior"
@@ -303,6 +302,29 @@
    "label": "Faturamento direto (FTD) acumulado anterior",
    "non_negative": 1,
    "precision": "2"
+  },
+  {
+   "fieldname": "imprimircapa",
+   "fieldtype": "Button",
+   "label": "\ud83d\udda8\ufe0f Imprimir capa do boletim"
+  },
+  {
+   "fieldname": "column_break_ytcj",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "imprimirboletim",
+   "fieldtype": "Button",
+   "label": "\ud83d\udda8\ufe0f Imprimir boletim"
+  },
+  {
+   "fieldname": "section_break_gfay",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "imprimir_boletim_de_medi\u00e7\u00e3o_section",
+   "fieldtype": "Section Break",
+   "label": "Imprimir boletim de medi\u00e7\u00e3o"
   }
  ],
  "grid_page_length": 50,
@@ -317,7 +339,7 @@
    "link_fieldname": "boletimmedicao"
   }
  ],
- "modified": "2025-05-31 16:18:56.660438",
+ "modified": "2025-06-04 20:43:38.334999",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Measurement",
