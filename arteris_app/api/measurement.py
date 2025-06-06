@@ -42,7 +42,7 @@ def open_measurement(measurement: str):
 
     # Open each measurement
     for measurement in measurements:
-        doc = frappe.get_doc("Contract Measurement", measurement.name)
+        doc = frappe.get_ddocker oc("Contract Measurement", measurement.name)
         doc.medicaovigente = "Sim"
         doc.save()
         # Open all measurement records associated with this measurement
@@ -53,7 +53,6 @@ def open_measurement(measurement: str):
             record_doc.save()
 
     return {"message": f"Open measurement {measurement}."}
-
 
 @frappe.whitelist(methods=["POST"])
 def create_measurement(month: int, year: int, ignore_current_measurement: bool = False, contract: str = None):
@@ -274,3 +273,55 @@ def create_measurement(month: int, year: int, ignore_current_measurement: bool =
         "measurements": measurements,
         "inconsistencies": inconsistencies
     }
+
+@frappe.whitelist(methods=["POST"])
+def sum_measurement_orders(measurement: str):
+    """
+    Sum all measurement orders for a given measurement.
+    """
+    # Get the measurement document
+    measurement_doc = frappe.get_doc("Contract Measurement", measurement)
+
+    # Get contract SAP orders
+    contract_item_sap_orders = []
+    contract_itens = frappe.db.get_all("Contract Item", fields=["name"], filters={"contrato": measurement_doc.contrato})
+
+    for item in contract_itens:
+        item_order = {"item": item.name, "sap_orders": []}
+        # Get all SAP orders for the contract item
+        sap_orders = frappe.db.get_all("Contract Item Order", fields=["name"], filters={"parent": item.name})
+        for sap_order in sap_orders:
+            # Add the SAP order to the list
+            item_order["sap_orders"].append({"sap_order": sap_order.name, "value": sap_order.valortotal})
+        
+        contract_item_sap_orders.extend(item_order.copy())
+
+    # Sum and get the factor for each SAP order
+    for item_sap in contract_item_sap_orders:
+        order_total = 0.0
+        for sap_order in item_sap["sap_orders"]:
+            order_total += sap_order["value"]
+        # Get the factor for each SAP order
+        for sap_order in item_sap["sap_orders"]:
+            sap_order["factor"] = sap_order["value"] / order_total
+
+    # Get measurement assets
+    measurement_assets = frappe.db.get_all("Contract Measurement Asset", fields=["name","item"], filters={"parent": measurement})
+    for asset in measurement_assets:
+        for sap_order in contract_item_sap_orders:
+            if asset.item == sap_order.item:
+                sap_order["value"] += asset.valormedido
+        
+
+
+
+    if not measurement_doc:
+        return {"message": f"No measurement found for name {measurement}."}
+
+    total_order_value = 0.0
+
+    # Iterate through the SAP orders in the measurement
+    for order in measurement_doc.tablepedidossap:
+        total_order_value += order.valormedido
+
+    return {"total_order_value": total_order_value}

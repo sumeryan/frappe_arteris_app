@@ -1,0 +1,225 @@
+{% extends "templates/web.html" %}
+
+{% block title %}{{ _("Custom Page") }}{% endblock %}
+
+{% block style %}
+<link rel="stylesheet" href="/assets/frappe/css/frappe-web.css">
+{% endblock %}
+
+{% block script %}
+<script src="/assets/frappe/js/lib/jquery/jquery.min.js"></script>
+<script src="/assets/frappe/js/frappe-web.min.js"></script>
+<script src="/assets/frappe/js/lib/moment.min.js"></script>
+{% endblock %}
+
+{% block header %}
+<h1>{{ _("Página Personalizada") }}</h1>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid" id="custom-page-container">
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Gerenciador de valores esperados para contratos</h3>
+            <div class="form-group">
+                <label for="contract-select">Selecionar Contrato:</label>
+                <select id="contract-select" class="form-control" style="width: 300px;">
+                    <option value="">Selecione um Contrato...</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-4">
+        <div class="col-md-8">
+            <div id="contract-list-container" style="display: none;">
+                <h4>Itens do contrato</h4>
+                <div id="contract-items" class="table-responsive">
+                    <!-- Lista será carregada aqui -->
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div id="input-form" style="display: none;">
+                <h4>Adicionar Novo Item</h4>
+                <form id="new-item-form">
+                    <div class="form-group">
+                        <label for="item-name">Nome:</label>
+                        <input type="text" id="item-name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="item-description">Descrição:</label>
+                        <textarea id="item-description" class="form-control" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="item-data">Dados Adicionais:</label>
+                        <input type="text" id="item-data" class="form-control">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Adicionar Item</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Wait for frappe to be ready
+    if (window.frappe) {
+        init_page();
+    } else {
+        document.addEventListener('frappe-ready', init_page);
+    }
+});
+
+function init_page() {
+    console.log('Página personalizada carregada.');
+    init_custom_page();
+}
+// Teste básico de API
+frappe.call({
+    method: 'frappe.client.get_list',
+    args: {
+        doctype: 'DocType',
+        fields: ['contrato'],
+        limit_page_length: 5
+    },
+    callback: function(r) {
+        console.log('Resposta da API:', r);
+    }
+});
+// JavaScript inline ou inclua arquivo separado
+$(document).ready(function() {
+    init_custom_page();
+});
+
+function init_custom_page() {
+    load_doctypes();
+    
+    $('#contract-select').on('change', function() {
+        const selected_doctype = $(this).val();
+        if (selected_doctype) {
+            load_contract_items(selected_doctype);
+            $('#contract-list-container').show();
+            $('#input-form').show();
+        } else {
+            $('#contract-list-container').hide();
+            $('#input-form').hide();
+        }
+    });
+    
+    $('#new-item-form').on('submit', function(e) {
+        e.preventDefault();
+        add_new_item();
+    });
+}
+
+function load_doctypes() {
+     console.log('Carregando Contratos...');
+    frappe.call({
+        method: 'frappe.client.get_list',
+        args: {
+            doctype: 'Contract',
+            fields: ['name', 'contrato'],
+            limit_page_length: 20,
+            order_by: 'creation desc'
+        },
+        callback: function(r) {
+            console.log('Contratos carregados:', r);
+            if (r.message) {
+                const select = $('#contract-select');
+                select.empty().append('<option value="">Selecione um Contrato...</option>');
+                
+                r.message.forEach(function(item) {
+                    select.append(`<option value="${item.name}">${item.contrato}</option>`);
+                });
+            }
+        }
+    });
+}
+
+function load_contract_items(contract_name) {
+    console.log('Carregando itens do contrato:', contract_name);
+    frappe.call({
+        method: 'frappe.client.get_list',
+        args: {
+            doctype: 'Contract Item',
+            name: contract_name,
+            filters: {
+                'contrato': contract_name
+            },
+            fields: ['name', 'descricao', 'modified'],
+            order_by: 'creation desc'
+        },
+        callback: function(r) {
+            if (r.message) {
+                render_contract_items(r.message, contract_name);
+            }
+        }
+    });
+}
+
+function render_contract_items(items, doctype) {
+    let html = `
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Descrição</th>
+                    <th>Modificado em</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+    
+    items.forEach(function(item) {
+        html += `
+            <tr>
+                <td>${item.descricao}</td>
+                <td>${moment(item.modified).format('DD/MM/YYYY HH:mm')}</td>
+            </tr>
+        `;
+    });
+    
+    html += '</tbody></table>';
+    $('#contract-items').html(html);
+}
+
+function view_item_details(doctype, doc_name) {
+    // Abrir em nova aba
+    window.open(`/app/${doctype.toLowerCase().replace(' ', '-')}/${doc_name}`, '_blank');
+}
+
+function add_new_item() {
+    const selected_doctype = $('#contract-select').val();
+    const name = $('#item-name').val();
+    const description = $('#item-description').val();
+    const additional_data = $('#item-data').val();
+    
+    if (!selected_doctype || !name) {
+        frappe.msgprint('Por favor, selecione um DocType e preencha o nome.');
+        return;
+    }
+    
+    frappe.call({
+        method: 'frappe.client.insert',
+        args: {
+            doc: {
+                doctype: 'Custom Data Table',
+                doctype_reference: selected_doctype,
+                item_name: name,
+                description: description,
+                additional_data: additional_data
+            }
+        },
+        callback: function(r) {
+            if (r.message) {
+                frappe.msgprint('Item adicionado com sucesso!');
+                $('#new-item-form')[0].reset();
+            }
+        }
+    });
+}
+</script>
+{% endblock %}

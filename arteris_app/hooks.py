@@ -237,3 +237,19 @@ add_to_apps_screen = [
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
 
+
+
+
+# Website Pages
+website_route_rules = [
+    {"from_route": "/custom-page", "to_route": "custom-page"},
+]
+
+# Web Pages (se usando www)
+web_include_css = [
+    "/assets/arteris_app/css/custom-page.css"
+]
+
+web_include_js = [
+    "/assets/arteris_app/js/custom-page.js"
+]

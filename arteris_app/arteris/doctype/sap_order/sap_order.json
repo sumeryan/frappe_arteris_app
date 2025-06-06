@@ -8,6 +8,7 @@
  "field_order": [
   "pedido_section",
   "numeropedido",
+  "codigopep",
   "capexopex",
   "tipo",
   "column_break_fuml",
@@ -96,12 +97,22 @@
    "fieldtype": "Data",
    "label": "Tipo",
    "length": 10
+  },
+  {
+   "fieldname": "codigopep",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "C\u00f3digo PEP",
+   "length": 30,
+   "sticky": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-04 15:17:26.606991",
+ "modified": "2025-06-05 12:03:28.383527",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "SAP Order",

@@ -283,7 +283,7 @@ def create_kartado_measurement_record():
                     kartado_measurement_asset_record.tipo = d["tipo_item"]
                     kartado_measurement_asset_record.peso = d["peso"]                
 
-            if d["tipo_registro"] == "rdo" and not d["tipo_administracao"]: # elif record_type == "rdo" or record_type == "rpt":
+            if not d["chave_ativo"] and not d["chave_funcao"]:
                  if d["chave_item_contrato"]:
                     # Prevent duplicate kartado uuids
                     if not d["chave_utilizacao"] in kartado_uuids:
