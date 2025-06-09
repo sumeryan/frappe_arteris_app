@@ -79,8 +79,7 @@
    "in_list_view": 1,
    "in_preview": 1,
    "label": "Centro de custo",
-   "length": 30,
-   "reqd": 1
+   "length": 30
   },
   {
    "fieldname": "column_break_iwcl",
@@ -102,7 +101,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-06-05 12:16:42.227363",
+ "modified": "2025-06-06 15:06:40.035047",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "SAP Order Period",

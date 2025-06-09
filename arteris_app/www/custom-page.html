@@ -26,6 +26,8 @@
                 <select id="contract-select" class="form-control" style="width: 300px;">
                     <option value="">Selecione um Contrato...</option>
                 </select>
+                <h3></h3>
+
             </div>
         </div>
     </div>
@@ -44,18 +46,6 @@
             <div id="input-form" style="display: none;">
                 <h4>Adicionar Novo Item</h4>
                 <form id="new-item-form">
-                    <div class="form-group">
-                        <label for="item-name">Nome:</label>
-                        <input type="text" id="item-name" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="item-description">Descrição:</label>
-                        <textarea id="item-description" class="form-control" rows="3"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="item-data">Dados Adicionais:</label>
-                        <input type="text" id="item-data" class="form-control">
-                    </div>
                     <button type="submit" class="btn btn-primary">Adicionar Item</button>
                 </form>
             </div>
@@ -75,28 +65,11 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function init_page() {
-    console.log('Página personalizada carregada.');
     init_custom_page();
 }
-// Teste básico de API
-frappe.call({
-    method: 'frappe.client.get_list',
-    args: {
-        doctype: 'DocType',
-        fields: ['contrato'],
-        limit_page_length: 5
-    },
-    callback: function(r) {
-        console.log('Resposta da API:', r);
-    }
-});
-// JavaScript inline ou inclua arquivo separado
-$(document).ready(function() {
-    init_custom_page();
-});
 
 function init_custom_page() {
-    load_doctypes();
+    load_contracts();
     
     $('#contract-select').on('change', function() {
         const selected_doctype = $(this).val();
@@ -116,18 +89,15 @@ function init_custom_page() {
     });
 }
 
-function load_doctypes() {
-     console.log('Carregando Contratos...');
+function load_contracts() {
     frappe.call({
         method: 'frappe.client.get_list',
         args: {
             doctype: 'Contract',
             fields: ['name', 'contrato'],
-            limit_page_length: 20,
             order_by: 'creation desc'
         },
         callback: function(r) {
-            console.log('Contratos carregados:', r);
             if (r.message) {
                 const select = $('#contract-select');
                 select.empty().append('<option value="">Selecione um Contrato...</option>');
@@ -141,16 +111,30 @@ function load_doctypes() {
 }
 
 function load_contract_items(contract_name) {
-    console.log('Carregando itens do contrato:', contract_name);
     frappe.call({
         method: 'frappe.client.get_list',
         args: {
             doctype: 'Contract Item',
-            name: contract_name,
             filters: {
                 'contrato': contract_name
             },
             fields: ['name', 'descricao', 'modified'],
+            order_by: 'creation desc'
+        },
+        callback: function(r) {
+            if (r.message) {
+                render_contract_items(r.message, contract_name);
+            }
+        }
+    });
+        frappe.call({
+        method: 'frappe.client.get_list',
+        args: {
+            doctype: 'Contract Measurement',
+            filters: {
+                'contrato': contract_name
+            },
+            fields: ['name', 'tabitenscontatrato', 'obra'],
             order_by: 'creation desc'
         },
         callback: function(r) {
@@ -168,6 +152,7 @@ function render_contract_items(items, doctype) {
                 <tr>
                     <th>Descrição</th>
                     <th>Modificado em</th>
+                    <th>Valor Esperado</th>
                 </tr>
             </thead>
             <tbody>
@@ -178,6 +163,7 @@ function render_contract_items(items, doctype) {
             <tr>
                 <td>${item.descricao}</td>
                 <td>${moment(item.modified).format('DD/MM/YYYY HH:mm')}</td>
+                <td><input></input></td>
             </tr>
         `;
     });
@@ -186,10 +172,6 @@ function render_contract_items(items, doctype) {
     $('#contract-items').html(html);
 }
 
-function view_item_details(doctype, doc_name) {
-    // Abrir em nova aba
-    window.open(`/app/${doctype.toLowerCase().replace(' ', '-')}/${doc_name}`, '_blank');
-}
 
 function add_new_item() {
     const selected_doctype = $('#contract-select').val();

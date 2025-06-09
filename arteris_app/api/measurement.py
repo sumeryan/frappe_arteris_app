@@ -42,7 +42,7 @@ def open_measurement(measurement: str):
 
     # Open each measurement
     for measurement in measurements:
-        doc = frappe.get_ddocker oc("Contract Measurement", measurement.name)
+        doc = frappe.get_doc("Contract Measurement", measurement.name)
         doc.medicaovigente = "Sim"
         doc.save()
         # Open all measurement records associated with this measurement
@@ -287,41 +287,47 @@ def sum_measurement_orders(measurement: str):
     contract_itens = frappe.db.get_all("Contract Item", fields=["name"], filters={"contrato": measurement_doc.contrato})
 
     for item in contract_itens:
-        item_order = {"item": item.name, "sap_orders": []}
+        item_order = {"name": item.name, "total": 0.0, "sap_orders": []}
         # Get all SAP orders for the contract item
         sap_orders = frappe.db.get_all("Contract Item Order", fields=["name"], filters={"parent": item.name})
-        for sap_order in sap_orders:
+        for item_sap_order in sap_orders:
             # Add the SAP order to the list
-            item_order["sap_orders"].append({"sap_order": sap_order.name, "value": sap_order.valortotal})
+            item_order["sap_orders"].append({"name": item_sap_order.name, "value": item_sap_order.valortotal, "total": 0.0})
         
         contract_item_sap_orders.extend(item_order.copy())
 
     # Sum and get the factor for each SAP order
     for item_sap in contract_item_sap_orders:
         order_total = 0.0
-        for sap_order in item_sap["sap_orders"]:
-            order_total += sap_order["value"]
+        for item_sap_order in item_sap["sap_orders"]:
+            order_total += item_sap_order["value"]
         # Get the factor for each SAP order
-        for sap_order in item_sap["sap_orders"]:
-            sap_order["factor"] = sap_order["value"] / order_total
+        for item_sap_order in item_sap["sap_orders"]:
+            item_sap_order["factor"] = item_sap_order["value"] / order_total
+ 
+    # Get all itens measurement totals
+    measurement_itens = frappe.db.get_all("Contract Measurement Item", fields=["name","valortotalmedido"], filters={"parent": measurement})
 
-    # Get measurement assets
-    measurement_assets = frappe.db.get_all("Contract Measurement Asset", fields=["name","item"], filters={"parent": measurement})
-    for asset in measurement_assets:
-        for sap_order in contract_item_sap_orders:
-            if asset.item == sap_order.item:
-                sap_order["value"] += asset.valormedido
-        
+    # Update measurement total value
+    for item_sap_order in contract_item_sap_orders:
 
+        for item_measurement in measurement_itens:
+            if item_measurement.name == item_sap_order["name"]:
+                for sap_order in item_sap_order["sap_orders"]:
+                    sap_order["total"] = item_measurement.valortotalmedido * sap_order["factor"]
 
+        # Get SAP orders for the item
+        measurements_sap = frappe.db.get_all("", fields=["name"], filters={"parent": measurement})
 
-    if not measurement_doc:
-        return {"message": f"No measurement found for name {measurement}."}
+        for measurement_sap in measurements_sap:
+            # Get the total value for the item
+            for item in item_sap_order:
+                for sap_order in item["sap_orders"]:
+                    if sap_order["name"] == measurement_sap.name:
+                        sap_doc = frappe.get_doc("Contract Measurement SAP Order", sap_order["name"])
+                        sap_doc.valormedido = sap_order["total"]
+                        sap_doc.acumuladoatual = sap_doc.valormedido + sap_doc.acumuladoanterior
+                        sap_doc.medicaoacumuladaatualpercentual = sap_doc.acumuladoatual / sap_doc.valortotalvigente * 100.0
+                        sap_doc.save()
 
-    total_order_value = 0.0
-
-    # Iterate through the SAP orders in the measurement
-    for order in measurement_doc.tablepedidossap:
-        total_order_value += order.valormedido
-
-    return {"total_order_value": total_order_value}
+    return {"Processed": True, "message": "Measurement orders summed successfully."}

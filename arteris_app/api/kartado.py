@@ -106,6 +106,44 @@ def update_contract(contract: str, kartado_uuid: str):
         set_result = frappe.db.set_value("Contract", get_result[0].name, "uuidkartado", kartado_uuid)
         return set_result
 
+@frappe.whitelist(methods=["POST"])
+def update_measurement_records(measurement: str):
+    """
+    Sum all measurement orders for a given measurement.
+    """
+    # Get the measurement document
+    measurement_doc = frappe.get_doc("Contract Measurement", measurement)
+
+    # Get contract SAP orders
+    contract_itens = frappe.db.get_all("Contract Item", fields=["name","valorunitario"], filters={"contrato": measurement_doc.contrato})
+
+    # Update calculated value for measurement records
+    doctypes_records = [
+        "Contract Measurement Record Asset",
+        "Contract Measurement Record Material",
+        "Contract Measurement Record Resource",
+        "Contract Measurement Record Work Role"
+    ]
+    for doctype in doctypes_records:
+        if doctype == "Contract Measurement Record Resource":
+            str_quantity = "quantidade"
+        else:
+            str_quantity = "quantidademedida"
+        
+        for item in contract_itens:
+            measurement_records = frappe.db.get_all(doctype, fields=["name", "item" ,str_quantity, "valorcalculado"], filters={"item": item["name"], "valorcalculado": 0.0})
+            for record in measurement_records:
+                record["valorcalculado"] = record[str_quantity] * item["valorunitario"]
+                # Set the value in the database
+                frappe.db.set_value(doctype, record.name, "valorcalculado", record["valorcalculado"])
+            
+            measurement_records = frappe.db.get_all(doctype, fields=["name", "item" ,str_quantity, "valorcalculado"], filters={"item": item["name"], "valorcalculado": None})
+            for record in measurement_records:
+                record["valorcalculado"] = record[str_quantity] * item["valorunitario"]
+                # Set the value in the database
+                frappe.db.set_value(doctype, record.name, "valorcalculado", record["valorcalculado"])
+
+    return {"Processed": True, "message": "Measurement orders summed successfully."}
 
 @frappe.whitelist(methods=["POST"])
 def create_kartado_measurement_record():
@@ -294,7 +332,8 @@ def create_kartado_measurement_record():
                         kartado_measurement_reseource_record.quantidade = d["quantidade"]
                         kartado_measurement_reseource_record.valortotal = d["valor_total"]
                         kartado_measurement_reseource_record.tipo = d["tipo_item"]
-                        kartado_measurement_reseource_record.peso = d["peso"]                         
+                        kartado_measurement_reseource_record.peso = d["peso"]      
+                        kartado_measurement_reseource_record.valorcalculado = 0.0
 
             if d["log_codigo_relatorio"]:
                 if not d["log_codigo_relatorio"] in kartado_logs:
@@ -353,6 +392,8 @@ def create_kartado_measurement_record():
         kartado_inconsistent.dataehora = frappe.utils.now()
         kartado_inconsistent.observacoes = s_inconsistency
         kartado_inconsistent.save()
+
+    update_measurement_records(contract_meaesurement)
 
     if has_itens:
         return {

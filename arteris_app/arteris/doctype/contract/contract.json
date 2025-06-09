@@ -177,8 +177,7 @@
    "fieldname": "responsavel",
    "fieldtype": "Link",
    "label": "Respons\u00e1vel",
-   "options": "Person",
-   "reqd": 1
+   "options": "Person"
   },
   {
    "fieldname": "vertical",
@@ -190,8 +189,7 @@
    "fieldname": "categoria",
    "fieldtype": "Link",
    "label": "Categoria",
-   "options": "Category",
-   "reqd": 1
+   "options": "Category"
   },
   {
    "default": "0",
@@ -295,7 +293,7 @@
    "link_fieldname": "contrato"
   }
  ],
- "modified": "2025-06-04 15:00:05.308771",
+ "modified": "2025-06-06 13:02:35.759247",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract",

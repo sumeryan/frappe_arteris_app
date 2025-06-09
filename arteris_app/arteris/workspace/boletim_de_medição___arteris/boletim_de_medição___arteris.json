@@ -1,0 +1,400 @@
+{
+ "app": "frappe",
+ "charts": [],
+ "content": "[{\"id\":\"mUrQ9yIMKv\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Image\",\"col\":12}},{\"id\":\"XQWx6Lwb4X\",\"type\":\"card\",\"data\":{\"card_name\":\"Contrato\",\"col\":4}},{\"id\":\"ZWNg9pRXxt\",\"type\":\"card\",\"data\":{\"card_name\":\"Medi\u00e7\u00f5es de contrato\",\"col\":4}},{\"id\":\"5c5Zo3B8_t\",\"type\":\"card\",\"data\":{\"card_name\":\"F\u00f3rmulas\",\"col\":4}},{\"id\":\"gbDGYCwVRt\",\"type\":\"card\",\"data\":{\"card_name\":\"Cadastros\",\"col\":8}},{\"id\":\"NLaVXSjBR2\",\"type\":\"card\",\"data\":{\"card_name\":\"Intergra\u00e7\u00f5es\",\"col\":4}}]",
+ "creation": "2025-04-27 17:31:59.249041",
+ "custom_blocks": [
+  {
+   "custom_block_name": "Image",
+   "label": "Image"
+  }
+ ],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "grid",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "Boletim de medi\u00e7\u00e3o - Arteris",
+ "link_type": "DocType",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Ativos",
+   "link_count": 0,
+   "link_to": "Asset",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Contratadas",
+   "link_count": 0,
+   "link_to": "Contracted Company",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Fun\u00e7\u00f5es",
+   "link_count": 0,
+   "link_to": "Work Role",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Subsidi\u00e1rias",
+   "link_count": 0,
+   "link_to": "Subsidiary",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Tipos de reten\u00e7\u00e3o",
+   "link_count": 0,
+   "link_to": "Retention Type",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Cidades",
+   "link_count": 0,
+   "link_to": "City",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Modelos de f\u00f3rmulas",
+   "link_count": 0,
+   "link_to": "Formula Template",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "F\u00f3rmulas",
+   "link_count": 2,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "\ud83d\udd27 Grupos de f\u00f3rmulas",
+   "link_count": 0,
+   "link_to": "Formula Group",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "\ud83d\udd27 Mapeamento de campos",
+   "link_count": 0,
+   "link_to": "Formula Fields",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Intergra\u00e7\u00f5es",
+   "link_count": 1,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "\u26a0\ufe0f Inconsist\u00eancia ",
+   "link_count": 0,
+   "link_to": "Integration Inconsistency",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Contrato",
+   "link_count": 4,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Contratos \u270f\ufe0f \u2699\ufe0f",
+   "link_count": 0,
+   "link_to": "Contract",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Itens do contrato \u270f\ufe0f \u2699\ufe0f",
+   "link_count": 0,
+   "link_to": "Contract Item",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Reajustes de contrato \u270f\ufe0f",
+   "link_count": 0,
+   "link_to": "Contract Adjustment",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Pedido SAP \u2699\ufe0f",
+   "link_count": 0,
+   "link_to": "SAP Order",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Medi\u00e7\u00f5es de contrato",
+   "link_count": 2,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Boletins de medi\u00e7\u00e3o \u2699\ufe0f",
+   "link_count": 0,
+   "link_to": "Contract Measurement",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Registros de medi\u00e7\u00e3o \u2699\ufe0f",
+   "link_count": 0,
+   "link_to": "Contract Measurement Record",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Cadastros",
+   "link_count": 15,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Subsidi\u00e1rias \u270f\ufe0f",
+   "link_count": 0,
+   "link_to": "Subsidiary",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Contratadas \u270f\ufe0f",
+   "link_count": 0,
+   "link_to": "Contracted Company",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Ativos \u270f\ufe0f",
+   "link_count": 0,
+   "link_to": "Asset",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Fun\u00e7\u00f5es \u270f\ufe0f",
+   "link_count": 0,
+   "link_to": "Work Role",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Cidades \u270f\ufe0f",
+   "link_count": 0,
+   "link_to": "City",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Pessoas \u270f\ufe0f",
+   "link_count": 0,
+   "link_to": "Person",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Unidades \u270f\ufe0f",
+   "link_count": 0,
+   "link_to": "Unit",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Verticais \u270f\ufe0f",
+   "link_count": 0,
+   "link_to": "Vertical",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Categorias \u270f\ufe0f",
+   "link_count": 0,
+   "link_to": "Category",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Feriados \u270f\ufe0f",
+   "link_count": 0,
+   "link_to": "Holiday",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Rodovias \u270f\ufe0f",
+   "link_count": 0,
+   "link_to": "Highway",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Materiais \u270f\ufe0f",
+   "link_count": 0,
+   "link_to": "Material",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Template de itens contratuais \u270f\ufe0f",
+   "link_count": 0,
+   "link_to": "Item",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Tipo do item de contrato \u270f\ufe0f",
+   "link_count": 0,
+   "link_to": "Contract Item Type",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Retention Type",
+   "link_count": 0,
+   "link_to": "Retention Type",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2025-06-09 00:40:17.747249",
+ "modified_by": "Administrator",
+ "module": "Arteris",
+ "name": "Boletim de medi\u00e7\u00e3o - Arteris",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [
+  {
+   "role": "Accounts User"
+  },
+  {
+   "role": "Administrator"
+  }
+ ],
+ "sequence_id": 23.0,
+ "shortcuts": [],
+ "title": "Boletim de medi\u00e7\u00e3o - Arteris",
+ "type": "Workspace"
+}
