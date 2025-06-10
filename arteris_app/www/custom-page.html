@@ -26,7 +26,10 @@
                 <select id="contract-select" class="form-control" style="width: 300px;">
                     <option value="">Selecione um Contrato...</option>
                 </select>
-                <h3></h3>
+                <h5>
+                    <div id="subsidiaria-name"></div>
+                    <div id="contratada-name"></div>
+                </h5>
 
             </div>
         </div>
@@ -72,9 +75,15 @@ function init_custom_page() {
     load_contracts();
     
     $('#contract-select').on('change', function() {
-        const selected_doctype = $(this).val();
-        if (selected_doctype) {
-            load_contract_items(selected_doctype);
+        const selected_contract = $(this).val();
+        if (selected_contract) {
+            const selected_option = $(this).find('option:selected');
+            const contratada = selected_option.attr('contratada');
+            const subsidiaria = selected_option.attr('subsidiaria');
+            
+            load_subsidiaria(subsidiaria);
+            load_contratada(contratada);
+            load_contract_items(selected_contract);
             $('#contract-list-container').show();
             $('#input-form').show();
         } else {
@@ -94,8 +103,9 @@ function load_contracts() {
         method: 'frappe.client.get_list',
         args: {
             doctype: 'Contract',
-            fields: ['name', 'contrato'],
-            order_by: 'creation desc'
+            fields: ['name', 'contrato', 'contratada', 'subsidiaria'],
+            order_by: 'creation desc',
+            limit_page_lenght: 1000,
         },
         callback: function(r) {
             if (r.message) {
@@ -103,7 +113,10 @@ function load_contracts() {
                 select.empty().append('<option value="">Selecione um Contrato...</option>');
                 
                 r.message.forEach(function(item) {
-                    select.append(`<option value="${item.name}">${item.contrato}</option>`);
+                    select.append(`<option value="${item.name}" 
+                                    contratada="${item.contratada}" 
+                                    subsidiaria="${item.subsidiaria}">
+                                    ${item.contrato}</option>`);
                 });
             }
         }
@@ -127,7 +140,49 @@ function load_contract_items(contract_name) {
             }
         }
     });
+}
+function load_contratada(contratada_id){
         frappe.call({
+        method: 'frappe.client.get_list',
+        args: {
+            doctype: 'Contracted Company',
+            filters: {
+                'name': contratada_id
+            },
+            fields: ['nome'],
+            order_by: 'creation desc'
+        },
+        callback: function(r) {
+            if (r.message) {
+                let html = `<p>Empresa: ${r.message[0].nome}</p>`
+                $('#contratada-name').html(html);
+            }
+        }
+    });
+}
+function load_subsidiaria(subsidiaria_id){
+        frappe.call({
+        method: 'frappe.client.get_list',
+        args: {
+            doctype: 'Subsidiary',
+            filters: {
+                'name': subsidiaria_id
+            },
+            fields: ['nome'],
+            order_by: 'creation desc'
+        },
+        callback: function(r) {
+            if (r.message) {
+                let html = `<p>Concessionária: ${r.message[0].nome}</p>`
+                $('#subsidiaria-name').html(html);
+            }
+        }
+    });
+}
+
+function render_contract_measurement_items(items, doctype){
+    console.log(doctype, items)
+    frappe.call({
         method: 'frappe.client.get_list',
         args: {
             doctype: 'Contract Measurement',
@@ -139,7 +194,7 @@ function load_contract_items(contract_name) {
         },
         callback: function(r) {
             if (r.message) {
-                render_contract_items(r.message, contract_name);
+                render_contract_measurement_items(r.message, contract_name);
             }
         }
     });
