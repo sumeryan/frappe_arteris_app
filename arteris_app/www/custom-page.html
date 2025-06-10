@@ -39,13 +39,8 @@
         <div class="col-md-8">
             <div id="contract-list-container" style="display: none;">
                 <h4>Itens do contrato</h4>
-                <div id="contract-items" class="table-responsive">
-                    <!-- Lista será carregada aqui -->
-                </div>
+                <div class="col-md-4" id="measurement-items"></div>
             </div>
-        </div>
-        
-        <div class="col-md-4">
             <div id="input-form" style="display: none;">
                 <h4>Adicionar Novo Item</h4>
                 <form id="new-item-form">
@@ -53,7 +48,9 @@
                 </form>
             </div>
         </div>
-    </div>
+
+
+</div>
 </div>
 
 <script>
@@ -104,8 +101,8 @@ function load_contracts() {
         args: {
             doctype: 'Contract',
             fields: ['name', 'contrato', 'contratada', 'subsidiaria'],
-            order_by: 'creation desc',
-            limit_page_lenght: 1000,
+            order_by: 'creation asc',
+            limit_page_length: 100,
         },
         callback: function(r) {
             if (r.message) {
@@ -123,24 +120,6 @@ function load_contracts() {
     });
 }
 
-function load_contract_items(contract_name) {
-    frappe.call({
-        method: 'frappe.client.get_list',
-        args: {
-            doctype: 'Contract Item',
-            filters: {
-                'contrato': contract_name
-            },
-            fields: ['name', 'descricao', 'modified'],
-            order_by: 'creation desc'
-        },
-        callback: function(r) {
-            if (r.message) {
-                render_contract_items(r.message, contract_name);
-            }
-        }
-    });
-}
 function load_contratada(contratada_id){
         frappe.call({
         method: 'frappe.client.get_list',
@@ -180,8 +159,7 @@ function load_subsidiaria(subsidiaria_id){
     });
 }
 
-function render_contract_measurement_items(items, doctype){
-    console.log(doctype, items)
+function load_contract_items(contract_name){
     frappe.call({
         method: 'frappe.client.get_list',
         args: {
@@ -189,55 +167,68 @@ function render_contract_measurement_items(items, doctype){
             filters: {
                 'contrato': contract_name
             },
-            fields: ['name', 'tabitenscontatrato', 'obra'],
+            fields: ['name', 'tabitenscontatrato', 'obra','datafinalmedicao'],
             order_by: 'creation desc'
         },
         callback: function(r) {
             if (r.message) {
-                render_contract_measurement_items(r.message, contract_name);
+                console.log(r.message);
+                render_contract_measurement_items(r.message);
             }
         }
     });
 }
 
-function render_contract_items(items, doctype) {
+function render_contract_measurement_items(measurements) {
+    // Get all unique dates from measurements for table headers
+    const dates = measurements.map(item => item.datafinalmedicao);
+
+    // Render table header with each date as a column
     let html = `
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>Descrição</th>
-                    <th>Modificado em</th>
-                    <th>Valor Esperado</th>
+                    <th>Descrição do Item</th>
+    `;
+            dates.forEach(date => {
+                html += `<th>${moment(date).format('DD/MM/YYYY')}</th>`;
+            });
+            html += `
                 </tr>
             </thead>
             <tbody>
     `;
-    
-    items.forEach(function(item) {
-        html += `
-            <tr>
-                <td>${item.descricao}</td>
-                <td>${moment(item.modified).format('DD/MM/YYYY HH:mm')}</td>
-                <td><input></input></td>
-            </tr>
-        `;
-    });
-    
-    html += '</tbody></table>';
-    $('#contract-items').html(html);
-}
 
+    // Fetch contract items for the selected contract
+    frappe.call({
+        method: 'frappe.client.get_list',
+        args: {
+            doctype: 'Contract Item',
+            filters: {
+                'contrato': $('#contract-select').val()
+            },
+            fields: ['name', 'descricao'],
+            order_by: 'creation desc'
+        },
+        callback: function(r) {
+            if (r.message) {
+                console.log(r.message);
+                r.message.forEach(function(item) {
+                    html += `<tr><td>${item.descricao}</td>`;
+                    dates.forEach(() => {
+                        html += `<td><input type="text" class="form-control" /></td>`;
+                    });
+                    html += `</tr>`;
+                });
+                html += '</tbody></table>';
+                $('#measurement-items').html(html);
+            }
+        }
+    });
+}
 
 function add_new_item() {
     const selected_doctype = $('#contract-select').val();
-    const name = $('#item-name').val();
-    const description = $('#item-description').val();
-    const additional_data = $('#item-data').val();
-    
-    if (!selected_doctype || !name) {
-        frappe.msgprint('Por favor, selecione um DocType e preencha o nome.');
-        return;
-    }
     
     frappe.call({
         method: 'frappe.client.insert',
