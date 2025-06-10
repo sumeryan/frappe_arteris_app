@@ -168,7 +168,7 @@ function load_contract_items(contract_name){
                 'contrato': contract_name
             },
             fields: ['name', 'tabitenscontatrato', 'obra','datafinalmedicao'],
-            order_by: 'creation desc'
+            order_by: 'datafinalmedicao asc'
         },
         callback: function(r) {
             if (r.message) {
@@ -208,7 +208,7 @@ function render_contract_measurement_items(measurements) {
                 'contrato': $('#contract-select').val()
             },
             fields: ['name', 'descricao'],
-            order_by: 'creation desc'
+            order_by: 'codigo asc'
         },
         callback: function(r) {
             if (r.message) {
