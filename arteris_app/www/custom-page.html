@@ -4,6 +4,24 @@
 
 {% block style %}
 <link rel="stylesheet" href="/assets/frappe/css/frappe-web.css">
+<style>
+    #custom-page-container input.form-control {
+        background-color: #002d4745 !important;
+        border-color: #002d4745 !important;
+        box-shadow: none !important;
+    }
+    /* Make table header sticky */
+    #measurement-items table thead th {
+        position: sticky;
+        top: 0;
+        background: #fff;
+        z-index: 2;
+    }
+    /* Optional: Add a shadow for better visibility */
+    #measurement-items table thead th {
+        box-shadow: 0 2px 2px -1px rgba(0,0,0,0.1);
+    }
+</style>
 {% endblock %}
 
 {% block script %}
@@ -91,7 +109,7 @@ function init_custom_page() {
     
     $('#new-item-form').on('submit', function(e) {
         e.preventDefault();
-        add_new_item();
+        saveMeasurementPlan();
     });
 }
 
@@ -190,10 +208,10 @@ function render_contract_measurement_items(measurements) {
                 <tr>
                     <th>Descrição do Item</th>
     `;
-            dates.forEach(date => {
-                html += `<th>${moment(date).format('DD/MM/YYYY')}</th>`;
-            });
-            html += `
+    dates.forEach((date, idx) => {
+        html += `<th>${moment(date).format('DD/MM/YYYY')}</th>`;
+    });
+    html += `
                 </tr>
             </thead>
             <tbody>
@@ -227,24 +245,65 @@ function render_contract_measurement_items(measurements) {
     });
 }
 
-function add_new_item() {
-    const selected_doctype = $('#contract-select').val();
-    
+// Update saveMeasurementPlan to use item id instead of description
+function saveMeasurementPlan() {
+    // Get contract
+    const contract = $('#contract-select').val();
+    if (!contract) {
+        frappe.msgprint('Selecione um contrato.');
+        return;
+    }
+
+    // Get dates from table header
+    const dateHeaders = [];
+    $('#measurement-items table thead tr:nth-child(1) th').each(function(idx) {
+        if (idx > 0) { // skip first column
+            dateHeaders.push($(this).text().trim());
+        }
+    });
+
+    // Get item ids from data attribute
+    const items = [];
+    $('#measurement-items table tbody tr').each(function() {
+        const row = $(this);
+        const item_id = row.attr('data-item-id');
+        const inputs = row.find('input.measurement-input');
+        inputs.each(function(colIdx) {
+            const valor_esperado = $(this).val();
+            if (valor_esperado) {
+                items.push({
+                    contract_item: item_id,
+                    datafinalmedicao: dateHeaders[colIdx],
+                    valor_esperado: valor_esperado
+                });
+            }
+        });
+    });
+
+    if (items.length === 0) {
+        frappe.msgprint('Nenhum valor preenchido para salvar.');
+        return;
+    }
+
+    console.log(contract)
+    console.log(items)
+    // Send to backend (replace 'Contract Measurement Plan' and child table as needed)
     frappe.call({
         method: 'frappe.client.insert',
         args: {
             doc: {
-                doctype: 'Custom Data Table',
-                doctype_reference: selected_doctype,
-                item_name: name,
-                description: description,
-                additional_data: additional_data
+                doctype: 'Contract Measurement Plan',
+                contrato: contract,
+                items: items.map(i => ({
+                    contract_item: i.contract_item,
+                    datafinalmedicao: moment(i.datafinalmedicao, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+                    valor_esperado: i.valor_esperado
+                }))
             }
         },
         callback: function(r) {
             if (r.message) {
-                frappe.msgprint('Item adicionado com sucesso!');
-                $('#new-item-form')[0].reset();
+                frappe.msgprint('Plano de medição salvo com sucesso!');
             }
         }
     });
