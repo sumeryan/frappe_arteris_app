@@ -98,11 +98,6 @@ function init_custom_page() {
             $('#input-form').hide();
         }
     });
-    
-    $('#new-item-form').on('submit', function(e) {
-        e.preventDefault();
-        saveMeasurementPlan();
-    });
 }
 
 function load_contracts() {
@@ -257,7 +252,15 @@ function render_contract_measurement_items(measurements, workload_cfgs) {
     dates.forEach((date, idx) => {
         html += `<th>
             ${moment(date).format('DD/MM/YYYY')}
-            <button type="button" class="btn btn-sm btn-success save-date-btn" data-date="${date}" data-idx="${idx}" style="margin-left:5px;">Salvar</button>
+            <button 
+                type="button" 
+                class="btn btn-sm btn-success save-date-btn" 
+                data-date="${date}" 
+                data-idx="${idx}" 
+                style="margin-left:5px;"
+                disabled >
+                Salvar
+                </button>
         </th>`;
     });
     html += `
@@ -292,13 +295,24 @@ function render_contract_measurement_items(measurements, workload_cfgs) {
                 });
                 html += '</tbody></table>';
                 $('#measurement-items').html(html);
-                $('.save-date-btn').on('click', function() {
+                $('.save-date-btn').on('click', function(event) {
                     const date = $(this).data('date');
-                    saveMeasurementPlan(date);
+                    saveMeasurementPlan(date, event);
                 });
                 // Allow only numbers in input fields
                 $('.measurement-input').on('input', function() {
                     this.value = this.value.replace(/[^0-9.,]/g, '');
+
+                    // Find the column index of the changed input
+                    const td = $(this).closest('td');
+                    const tr = $(this).closest('tr');
+                    const colIdx = td.index(); // 0-based, 0 is description
+                    console.log(colIdx)
+
+                    // Enable the corresponding save button in the header
+                    // colIdx matches the th index, so use colIdx
+                    const saveBtn = $('#measurement-items table thead th').eq(colIdx).find('.save-date-btn');
+                    saveBtn.prop('disabled', false);
                 });
             }
         }
@@ -306,7 +320,7 @@ function render_contract_measurement_items(measurements, workload_cfgs) {
 }
 
 // Update saveMeasurementPlan to use item id instead of description
-function saveMeasurementPlan(selectedDate) {
+function saveMeasurementPlan(selectedDate, event) {
     const month = moment(selectedDate).format('MM')
     const year = moment(selectedDate).format('YYYY')
 
@@ -364,6 +378,11 @@ function saveMeasurementPlan(selectedDate) {
         callback: function(r) {
             if (r.message) {
                 frappe.msgprint('Plano de medição salvo com sucesso!');
+                if (event && event.target) {
+                    const colIdx = $(event.target).data('idx') + 1;
+                    console.log(colIdx)
+                    $('#measurement-items table thead th').eq(colIdx).find('.save-date-btn').prop('disabled', true);
+                }
             }
         }
     });
