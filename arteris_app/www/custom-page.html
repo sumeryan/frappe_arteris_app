@@ -181,18 +181,73 @@ function load_contract_items(contract_name){
             order_by: 'datafinalmedicao asc'
         },
         callback: function(r) {
-            if (r.message) {
-                render_contract_measurement_items(r.message);
-            }
+            const measurements = r.message || [];
+            frappe.call({
+                method: 'frappe.client.get_list',
+                args: {
+                    doctype: 'Contract Item Workload Cfg',
+                    filters: {
+                        'contrato': contract_name
+                    },
+                    fields: ['name', 'mes', 'ano'],
+                    limit_page_length: 1000
+                },
+                callback: function(r) {
+                    if (r.message && r.message.length) {
+                        let docsFetched = 0;
+                        let allDocs = [];
+                        r.message.forEach(function(row) {
+                            frappe.call({
+                                method: 'frappe.client.get',
+                                args: {
+                                    doctype: 'Contract Item Workload Cfg',
+                                    name: row.name
+                                },
+                                callback: function(docRes) {
+                                    allDocs.push(docRes.message);
+                                    docsFetched++;
+                                    if (docsFetched === r.message.length) {
+                                        // Merge all tabitens from allDocs into a flat array
+                                        let workload_cfgs = [];
+                                        allDocs.forEach(doc => {
+                                            if (doc.tabitens && doc.tabitens.length) {
+                                                doc.tabitens.forEach(item => {
+                                                    workload_cfgs.push({
+                                                        item: item.item,
+                                                        mes: String(doc.mes).padStart(2, '0'), // always two digits
+                                                        ano: String(doc.ano),
+                                                        valor: item.valor
+                                                    });
+                                                });
+                                            }
+                                        });
+                                        console.log(workload_cfgs)
+                                        // Now render the table with measurements and workload_cfgs
+                                        render_contract_measurement_items(measurements, workload_cfgs);
+                                    }
+                                }
+                            });
+                        });
+                    } else {
+                        // No workload cfgs, just render measurements
+                        render_contract_measurement_items(measurements, []);
+                    }
+                }
+            });
         }
     });
 }
 
-function render_contract_measurement_items(measurements) {
-    // Get all unique dates from measurements for table headers
+function render_contract_measurement_items(measurements, workload_cfgs) {
     const dates = measurements.map(item => item.datafinalmedicao);
 
-    // Render table header with each date as a column
+    // Helper: build a lookup for quick access
+    const cfg_lookup = {};
+    workload_cfgs.forEach(cfg => {
+        const key = `${cfg.item}_${cfg.mes}_${cfg.ano}`;
+        cfg_lookup[key] = cfg.valor;
+    });
+
     let html = `
         <table class="table table-striped">
             <thead>
@@ -200,10 +255,11 @@ function render_contract_measurement_items(measurements) {
                     <th>Descrição do Item</th>
     `;
     dates.forEach((date, idx) => {
-    html += `<th>
-        ${moment(date).format('DD/MM/YYYY')}
-        <button type="button" class="btn btn-sm btn-success save-date-btn" data-date="${date}" data-idx="${idx}" style="margin-left:5px;">Salvar</button>
-    </th>`;    });
+        html += `<th>
+            ${moment(date).format('DD/MM/YYYY')}
+            <button type="button" class="btn btn-sm btn-success save-date-btn" data-date="${date}" data-idx="${idx}" style="margin-left:5px;">Salvar</button>
+        </th>`;
+    });
     html += `
                 </tr>
             </thead>
@@ -225,8 +281,12 @@ function render_contract_measurement_items(measurements) {
             if (r.message) {
                 r.message.forEach(function(item) {
                     html += `<tr data-item-id="${item.name}"><td>${item.descricao}</td>`;
-                    dates.forEach(() => {
-                        html += `<td><input type="number" min="0" class="form-control measurement-input" /></td>`;
+                    dates.forEach(date => {
+                        const mes = moment(date).format('MM');
+                        const ano = moment(date).format('YYYY');
+                        const key = `${item.name}_${mes}_${ano}`;
+                        const valor = cfg_lookup[key] || '';
+                        html += `<td><input type="number" min="0" class="form-control measurement-input" value="${valor}" /></td>`;
                     });
                     html += `</tr>`;
                 });
