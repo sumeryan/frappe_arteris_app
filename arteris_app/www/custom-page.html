@@ -57,19 +57,10 @@
     <div class="row mt-4">
         <div class="col-md-8">
             <div id="contract-list-container" style="display: none;">
-                <h4>Itens do contrato</h4>
                 <div class="col-md-4" id="measurement-items"></div>
             </div>
-            <div id="input-form" style="display: none;">
-                <h4>Adicionar Novo Item</h4>
-                <form id="new-item-form">
-                    <button type="submit" class="btn btn-primary">Adicionar Item</button>
-                </form>
-            </div>
         </div>
-
-
-</div>
+    </div>
 </div>
 
 <script>
@@ -209,8 +200,10 @@ function render_contract_measurement_items(measurements) {
                     <th>Descrição do Item</th>
     `;
     dates.forEach((date, idx) => {
-        html += `<th>${moment(date).format('DD/MM/YYYY')}</th>`;
-    });
+    html += `<th>
+        ${moment(date).format('DD/MM/YYYY')}
+        <button type="button" class="btn btn-sm btn-success save-date-btn" data-date="${date}" data-idx="${idx}" style="margin-left:5px;">Salvar</button>
+    </th>`;    });
     html += `
                 </tr>
             </thead>
@@ -239,6 +232,10 @@ function render_contract_measurement_items(measurements) {
                 });
                 html += '</tbody></table>';
                 $('#measurement-items').html(html);
+                $('.save-date-btn').on('click', function() {
+                    const date = $(this).data('date');
+                    saveMeasurementPlan(date);
+                });
                 // Allow only numbers in input fields
                 $('.measurement-input').on('input', function() {
                     this.value = this.value.replace(/[^0-9.,]/g, '');
@@ -249,7 +246,10 @@ function render_contract_measurement_items(measurements) {
 }
 
 // Update saveMeasurementPlan to use item id instead of description
-function saveMeasurementPlan() {
+function saveMeasurementPlan(selectedDate) {
+    const month = moment(selectedDate).format('MM')
+    const year = moment(selectedDate).format('YYYY')
+
     // Get contract
     const contract = $('#contract-select').val();
     if (!contract) {
@@ -267,20 +267,20 @@ function saveMeasurementPlan() {
 
     // Get item ids from data attribute
     const items = [];
+    const columnIndex = $(event.target).data('idx') + 1; // +1 because first column is description
+    
     $('#measurement-items table tbody tr').each(function() {
         const row = $(this);
         const item_id = row.attr('data-item-id');
-        const inputs = row.find('input.measurement-input');
-        inputs.each(function(colIdx) {
-            const valor_esperado = $(this).val();
-            if (valor_esperado) {
-                items.push({
-                    contract_item: item_id,
-                    datafinalmedicao: dateHeaders[colIdx],
-                    valor_esperado: valor_esperado
-                });
-            }
-        });
+        const input = row.find(`td:nth-child(${columnIndex + 1}) input.measurement-input`);
+        const valor_esperado = input.val();
+        
+        if (valor_esperado) {
+            items.push({
+                contract_item: item_id,
+                valor_esperado: valor_esperado
+            });
+        }
     });
 
     if (items.length === 0) {
@@ -294,8 +294,8 @@ function saveMeasurementPlan() {
         args: {
             doctype: 'Contract Item Workload Cfg',
             contrato: contract,
-            mes: '2',
-            ano: '2025',
+            mes: month,
+            ano: year,
             tabitens: items.map(i => ({
                 item: i.contract_item,
                 valor: i.valor_esperado,
