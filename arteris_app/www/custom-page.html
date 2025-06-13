@@ -28,6 +28,7 @@
 <script src="/assets/frappe/js/lib/jquery/jquery.min.js"></script>
 <script src="/assets/frappe/js/frappe-web.min.js"></script>
 <script src="/assets/frappe/js/lib/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 {% endblock %}
 
 {% block header %}
@@ -232,9 +233,9 @@ function render_contract_measurement_items(measurements) {
             if (r.message) {
                 console.log(r.message);
                 r.message.forEach(function(item) {
-                    html += `<tr><td>${item.descricao}</td>`;
+                    html += `<tr data-item-id="${item.name}"><td>${item.descricao}</td>`;
                     dates.forEach(() => {
-                        html += `<td><input type="text" class="form-control" /></td>`;
+                        html += `<td><input type="text" class="form-control measurement-input" /></td>`;
                     });
                     html += `</tr>`;
                 });
@@ -285,21 +286,18 @@ function saveMeasurementPlan() {
         return;
     }
 
-    console.log(contract)
-    console.log(items)
     // Send to backend (replace 'Contract Measurement Plan' and child table as needed)
     frappe.call({
-        method: 'frappe.client.insert',
+        method: 'arteris_app.api.workloadcfg.insert_contract_item_workload_cfg',
         args: {
-            doc: {
-                doctype: 'Contract Measurement Plan',
-                contrato: contract,
-                items: items.map(i => ({
-                    contract_item: i.contract_item,
-                    datafinalmedicao: moment(i.datafinalmedicao, 'DD/MM/YYYY').format('YYYY-MM-DD'),
-                    valor_esperado: i.valor_esperado
-                }))
-            }
+            doctype: 'Contract Item Workload Cfg',
+            contrato: contract,
+            mes: 'outubro',
+            ano: '2025',
+            itens: items.map(i => ({
+                item: i.contract_item,
+                valor: i.valor_esperado,
+            }))
         },
         callback: function(r) {
             if (r.message) {
