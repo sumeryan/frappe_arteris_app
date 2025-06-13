@@ -43,7 +43,8 @@
   "grupo_de_f\u00f3rmulas_section",
   "grupoformulas",
   "kartado",
-  "uuidkartado"
+  "uuidkartado",
+  "tabela_de_pre\u00e7os_tab"
  ],
  "fields": [
   {
@@ -275,6 +276,11 @@
    "fieldname": "imprimir",
    "fieldtype": "Button",
    "label": "Imprimir"
+  },
+  {
+   "fieldname": "tabela_de_pre\u00e7os_tab",
+   "fieldtype": "Tab Break",
+   "label": "Tabela de pre\u00e7os"
   }
  ],
  "grid_page_length": 50,
@@ -293,7 +299,7 @@
    "link_fieldname": "contrato"
   }
  ],
- "modified": "2025-06-06 13:02:35.759247",
+ "modified": "2025-06-10 17:08:56.928567",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract",
@@ -318,6 +324,6 @@
  "sort_field": "creation",
  "sort_order": "DESC",
  "states": [],
- "title_field": "subsidiaria",
+ "title_field": "contrato",
  "track_changes": 1
 }

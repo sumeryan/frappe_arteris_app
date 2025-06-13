@@ -1,10 +1,10 @@
 import frappe
 from frappe.utils import add_to_date
 
-@frappe.whitelist(methods=["POST"])
+@frappe.whitelist(methods=["GET"])
 def close_measurements(contract: str):
     """
-    Close all measurements for a given contract.
+    Get current 
     """
     # Get all measurements for the contract
     measurements = frappe.db.get_all("Contract Measurement", fields=["name"], filters={"contrato": contract, "medicaovigente": "Sim"})
@@ -275,6 +275,22 @@ def create_measurement(month: int, year: int, ignore_current_measurement: bool =
     }
 
 @frappe.whitelist(methods=["POST"])
+def sumarize_measurements(contract: str = None):
+    """
+    Get all open measurements for a given contract.
+    """
+    filters = {"medicaovigente": "Sim"}
+    if contract:
+        filters["contrato"] = contract
+
+    measurements = frappe.db.get_all("Contract Measurement", fields=["name"], filters=filters)
+
+    for measurement in measurements:
+        sum_measurement_orders(measurement.name)
+
+    return measurements
+
+@frappe.whitelist(methods=["POST"])
 def sum_measurement_orders(measurement: str):
     """
     Sum all measurement orders for a given measurement.
@@ -289,12 +305,24 @@ def sum_measurement_orders(measurement: str):
     for item in contract_itens:
         item_order = {"name": item.name, "total": 0.0, "sap_orders": []}
         # Get all SAP orders for the contract item
-        sap_orders = frappe.db.get_all("Contract Item Order", fields=["name"], filters={"parent": item.name})
+        sap_orders = frappe.db.get_all("Contract Item Order", fields=["name","valortotal","pedidosap"], filters={"parent": item.name})
         for item_sap_order in sap_orders:
             # Add the SAP order to the list
-            item_order["sap_orders"].append({"name": item_sap_order.name, "value": item_sap_order.valortotal, "total": 0.0})
-        
-        contract_item_sap_orders.extend(item_order.copy())
+            item_order["sap_orders"].append(
+                {
+                    "name": item_sap_order.name,
+                    "pedidosap": item_sap_order.pedidosap,
+                    "value": item_sap_order.valortotal,
+                    "total": 0.0
+                }) 
+
+        if len(item_order["sap_orders"]):
+            contract_item_sap_orders.append(
+                {
+                    "name": item.name, 
+                    "total": 0.0, 
+                    "sap_orders": [o for o in item_order["sap_orders"]]
+                })
 
     # Sum and get the factor for each SAP order
     for item_sap in contract_item_sap_orders:
@@ -308,6 +336,9 @@ def sum_measurement_orders(measurement: str):
     # Get all itens measurement totals
     measurement_itens = frappe.db.get_all("Contract Measurement Item", fields=["name","valortotalmedido"], filters={"parent": measurement})
 
+    # Get SAP orders for the item
+    measurements_sap = frappe.db.get_all("Contract Measurement SAP Order", fields=["name","pedido_sap"], filters={"parent": measurement})
+
     # Update measurement total value
     for item_sap_order in contract_item_sap_orders:
 
@@ -316,18 +347,18 @@ def sum_measurement_orders(measurement: str):
                 for sap_order in item_sap_order["sap_orders"]:
                     sap_order["total"] = item_measurement.valortotalmedido * sap_order["factor"]
 
-        # Get SAP orders for the item
-        measurements_sap = frappe.db.get_all("", fields=["name"], filters={"parent": measurement})
-
         for measurement_sap in measurements_sap:
             # Get the total value for the item
-            for item in item_sap_order:
-                for sap_order in item["sap_orders"]:
-                    if sap_order["name"] == measurement_sap.name:
-                        sap_doc = frappe.get_doc("Contract Measurement SAP Order", sap_order["name"])
-                        sap_doc.valormedido = sap_order["total"]
-                        sap_doc.acumuladoatual = sap_doc.valormedido + sap_doc.acumuladoanterior
+            for sap_order in item_sap_order["sap_orders"]:
+                if sap_order["pedidosap"] == measurement_sap.pedido_sap:
+                    sap_doc = frappe.get_doc("Contract Measurement SAP Order", measurement_sap["name"])
+                    sap_doc.valormedido = sap_order["total"]
+                    if sap_doc.valortotalvigente == 0.0:
+                        sap_doc.valortotalvigente = sap_order["value"]
+                    sap_doc.valormedido = sap_order["total"]
+                    sap_doc.acumuladoatual = sap_doc.valormedido + sap_doc.acumuladoanterior
+                    if sap_doc.valortotalvigente > 0:
                         sap_doc.medicaoacumuladaatualpercentual = sap_doc.acumuladoatual / sap_doc.valortotalvigente * 100.0
-                        sap_doc.save()
+                    sap_doc.save()
 
     return {"Processed": True, "message": "Measurement orders summed successfully."}
