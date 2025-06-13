@@ -191,7 +191,6 @@ function load_contract_items(contract_name){
         },
         callback: function(r) {
             if (r.message) {
-                console.log(r.message);
                 render_contract_measurement_items(r.message);
             }
         }
@@ -231,16 +230,19 @@ function render_contract_measurement_items(measurements) {
         },
         callback: function(r) {
             if (r.message) {
-                console.log(r.message);
                 r.message.forEach(function(item) {
                     html += `<tr data-item-id="${item.name}"><td>${item.descricao}</td>`;
                     dates.forEach(() => {
-                        html += `<td><input type="text" class="form-control measurement-input" /></td>`;
+                        html += `<td><input type="number" min="0" class="form-control measurement-input" /></td>`;
                     });
                     html += `</tr>`;
                 });
                 html += '</tbody></table>';
                 $('#measurement-items').html(html);
+                // Allow only numbers in input fields
+                $('.measurement-input').on('input', function() {
+                    this.value = this.value.replace(/[^0-9.,]/g, '');
+                });
             }
         }
     });
@@ -292,9 +294,9 @@ function saveMeasurementPlan() {
         args: {
             doctype: 'Contract Item Workload Cfg',
             contrato: contract,
-            mes: 'outubro',
+            mes: '2',
             ano: '2025',
-            itens: items.map(i => ({
+            tabitens: items.map(i => ({
                 item: i.contract_item,
                 valor: i.valor_esperado,
             }))
