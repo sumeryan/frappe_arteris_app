@@ -21,6 +21,15 @@
     #measurement-items table thead th {
         box-shadow: 0 2px 2px -1px rgba(0,0,0,0.1);
     }
+        /* Make the first column (Descrição do Item) wider */
+    #measurement-items table th:first-child,
+    #measurement-items table td:first-child {
+        min-width: 600px;
+        width: 500px;
+        max-width: 750px;
+        white-space: normal;
+        word-break: break-word;
+    }
 </style>
 {% endblock %}
 
@@ -260,7 +269,7 @@ function render_contract_measurement_items(measurements, workload_cfgs) {
                 style="margin-left:5px;"
                 disabled >
                 Salvar
-                </button>
+            </button>
         </th>`;
     });
     html += `
