@@ -58,11 +58,13 @@
                     <div id="subsidiaria-name"></div>
                     <div id="contratada-name"></div>
                 </h5>
-
             </div>
         </div>
     </div>
     
+    <div class="mb-2">
+        <input type="text" id="item-filter" class="form-control" placeholder="Filtrar item de contrato...">
+    </div>
     <div class="row mt-4">
         <div class="col-md-8">
             <div id="contract-list-container" style="display: none;">
@@ -228,6 +230,17 @@ function load_contract_items(contract_name){
                                         console.log(workload_cfgs)
                                         // Now render the table with measurements and workload_cfgs
                                         render_contract_measurement_items(measurements, workload_cfgs);
+                                        $(document).on('input', '#item-filter', function() {
+                                            const filter = $(this).val().toLowerCase();
+                                            $('#measurement-items table tbody tr').each(function() {
+                                                const descricao = $(this).find('td:first').text().toLowerCase();
+                                                if (descricao.indexOf(filter) > -1) {
+                                                    $(this).show();
+                                                } else {
+                                                    $(this).hide();
+                                                }
+                                            });
+                                        });
                                     }
                                 }
                             });
