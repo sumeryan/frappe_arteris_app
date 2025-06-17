@@ -65,6 +65,20 @@
     <div class="mb-2">
         <input type="text" id="item-filter" class="form-control" placeholder="Filtrar item de contrato...">
     </div>
+    <div class="row mb-2" id="date-filter-row">
+    <div class="col-auto">
+        <label for="date-filter-start">De:</label>
+        <input type="date" id="date-filter-start" class="form-control" style="min-width: 150px;">
+    </div>
+    <div class="col-auto">
+        <label for="date-filter-end">Até:</label>
+        <input type="date" id="date-filter-end" class="form-control" style="min-width: 150px;">
+    </div>
+    <div class="col-auto align-self-end">
+        <button type="button" class="btn btn-primary" id="apply-date-filter">Filtrar Datas</button>
+        <button type="button" class="btn btn-secondary" id="clear-date-filter">Limpar</button>
+    </div>
+</div>
     <div class="row mt-4">
         <div class="col-md-8">
             <div id="contract-list-container" style="display: none;">
@@ -239,6 +253,36 @@ function load_contract_items(contract_name){
                                                 } else {
                                                     $(this).hide();
                                                 }
+                                            });
+                                        });
+                                        $(document).on('click', '#apply-date-filter', function() {
+                                            const start = $('#date-filter-start').val();
+                                            const end = $('#date-filter-end').val();
+
+                                            // Esconde/mostra colunas conforme o filtro
+                                            $('#measurement-items table thead tr:nth-child(1) th').each(function(idx) {
+                                                if (idx === 0) return; // Descrição do Item
+                                                const th = $(this);
+                                                const dateText = th.text().trim();
+                                                const date = moment(dateText, 'DD/MM/YYYY').format('YYYY-MM-DD');
+                                                let show = true;
+                                                if (start && date < start) show = false;
+                                                if (end && date > end) show = false;
+
+                                                // Esconde/mostra th e todas as tds da coluna
+                                                const colIdx = idx + 1;
+                                                $('#measurement-items table tr').each(function() {
+                                                    $(this).find('th,td').eq(idx).toggle(show);
+                                                });
+                                            });
+                                        });
+
+                                        $(document).on('click', '#clear-date-filter', function() {
+                                            $('#date-filter-start').val('');
+                                            $('#date-filter-end').val('');
+                                            // Mostra todas as colunas
+                                            $('#measurement-items table tr').each(function() {
+                                                $(this).find('th,td').show();
                                             });
                                         });
                                     }
