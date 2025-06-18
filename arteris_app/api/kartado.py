@@ -1,4 +1,5 @@
 import frappe
+from measurement import update_measurement_records
 
 @frappe.whitelist(methods=["DELETE"])
 def clear_keys():
@@ -107,43 +108,46 @@ def update_contract(contract: str, kartado_uuid: str):
         return set_result
 
 @frappe.whitelist(methods=["POST"])
-def update_measurement_records(measurement: str):
+def update_measurements_main_item():
+
+    # Get all Contract Measurement Record
+    m_records = frappe.db.get_all("Contract Measurement Record", fields=["name"], filters={"item": ""})
+    # m_records = frappe.db.get_all("Contract Measurement Record", fields=["name"])
+
+    for m_record in m_records:
+        item_codes = ""
+        # Get the measurement record document
+        measurement_record = frappe.get_doc("Contract Measurement Record", m_record.name)
+
+        # Get all items from the measurement record
+        items = []
+        for asset in measurement_record.tabasset:
+            if not asset.item in items:
+                items.append(asset.item)
+        for work_role in measurement_record.tabworkrole:
+            if not work_role.item in items:
+                items.append(work_role.item)
+        for resource in measurement_record.tabrecurso:
+            if not resource.item in items:
+                items.append(resource.item)
+
+        if items:
+            item_codes = get_items_code(items)
+            frappe.db.set_value("Contract Measurement Record", m_record.name, "item", item_codes)
+
+    return {"Processed": True, "message": "Measurement records updated with main item."}
+
+def get_items_code(items: list):
     """
-    Sum all measurement orders for a given measurement.
+    Get all contract items codes.
     """
-    # Get the measurement document
-    measurement_doc = frappe.get_doc("Contract Measurement", measurement)
+    get_code = ""
+    # Get all contract items from the database
+    for i in items:
+        # Get kartado for each contract item
+        get_code += frappe.db.get_value("Contract Item", i, "codigo") + ", "
 
-    # Get contract SAP orders
-    contract_itens = frappe.db.get_all("Contract Item", fields=["name","valorunitario"], filters={"contrato": measurement_doc.contrato})
-
-    # Update calculated value for measurement records
-    doctypes_records = [
-        "Contract Measurement Record Asset",
-        "Contract Measurement Record Material",
-        "Contract Measurement Record Resource",
-        "Contract Measurement Record Work Role"
-    ]
-    for doctype in doctypes_records:
-        if doctype == "Contract Measurement Record Resource":
-            str_quantity = "quantidade"
-        else:
-            str_quantity = "quantidademedida"
-        
-        for item in contract_itens:
-            measurement_records = frappe.db.get_all(doctype, fields=["name", "item" ,str_quantity, "valorcalculado"], filters={"item": item["name"], "valorcalculado": 0.0})
-            for record in measurement_records:
-                record["valorcalculado"] = record[str_quantity] * item["valorunitario"]
-                # Set the value in the database
-                frappe.db.set_value(doctype, record.name, "valorcalculado", record["valorcalculado"])
-            
-            measurement_records = frappe.db.get_all(doctype, fields=["name", "item" ,str_quantity, "valorcalculado"], filters={"item": item["name"], "valorcalculado": None})
-            for record in measurement_records:
-                record["valorcalculado"] = record[str_quantity] * item["valorunitario"]
-                # Set the value in the database
-                frappe.db.set_value(doctype, record.name, "valorcalculado", record["valorcalculado"])
-
-    return {"Processed": True, "message": "Measurement orders summed successfully."}
+    return get_code.rstrip(", ")
 
 @frappe.whitelist(methods=["POST"])
 def create_kartado_measurement_record():
@@ -182,6 +186,7 @@ def create_kartado_measurement_record():
     # List of kartado uuids
     kartado_uuids = []
     kartado_logs = []
+    items = []
     str_logs = ""
     str_highways = ""
 
@@ -306,6 +311,8 @@ def create_kartado_measurement_record():
                     kartado_measurement_work_role_record.valorcalculado = 0.0
                     kartado_measurement_work_role_record.tipo = d["tipo_item"]
                     kartado_measurement_work_role_record.peso = d["peso"]
+                    if not d["chave_item_contrato"] in items:
+                        items.append(d["chave_item_contrato"])
 
             # Create asset measurement record
             if d["chave_ativo"]:
@@ -320,6 +327,8 @@ def create_kartado_measurement_record():
                     kartado_measurement_asset_record.valorcalculado = 0.0
                     kartado_measurement_asset_record.tipo = d["tipo_item"]
                     kartado_measurement_asset_record.peso = d["peso"]                
+                    if not d["chave_item_contrato"] in items:
+                        items.append(d["chave_item_contrato"])
 
             if not d["chave_ativo"] and not d["chave_funcao"]:
                  if d["chave_item_contrato"]:
@@ -334,6 +343,8 @@ def create_kartado_measurement_record():
                         kartado_measurement_reseource_record.tipo = d["tipo_item"]
                         kartado_measurement_reseource_record.peso = d["peso"]      
                         kartado_measurement_reseource_record.valorcalculado = 0.0
+                        if not d["chave_item_contrato"] in items:
+                            items.append(d["chave_item_contrato"])
 
             if d["log_codigo_relatorio"]:
                 if not d["log_codigo_relatorio"] in kartado_logs:
@@ -359,6 +370,8 @@ def create_kartado_measurement_record():
 
     if has_itens:
         # Save the measurement record
+        if items:
+            kartado_measurement_record.item = get_items_code(items)
         kartado_measurement_record.relatorio = str_logs[0:30]
         kartado_measurement_record.rodovia = str_highways[0:30]
         kartado_measurement_record.save()

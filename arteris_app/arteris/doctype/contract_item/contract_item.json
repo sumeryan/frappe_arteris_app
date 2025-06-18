@@ -26,15 +26,29 @@
   "fatorpagamento",
   "is_planting",
   "codigopep",
-  "codigodescricao",
+  "cidade",
   "listapedidossap",
   "tablepedidossap",
-  "cidades_section",
-  "tabcidades",
   "m\u00e3o_de_obra_section",
   "tablemaodeobra",
+  "horas_equipe",
+  "dom_hora",
+  "column_break_ough",
+  "seg_hora",
+  "column_break_sxju",
+  "ter_hora",
+  "column_break_ibmc",
+  "qua_hora",
+  "column_break_vbxf",
+  "qui_hora",
+  "column_break_ypqg",
+  "sex_hora",
+  "column_break_butq",
+  "sab_hora",
   "maquinas_equipamentos_e_ve\u00edculos_section",
   "tableassets",
+  "cidades_section",
+  "tabcidades",
   "rodovias_section",
   "rodovias",
   "configura\u00e7\u00f5es_tab",
@@ -218,13 +232,6 @@
    "precision": "2"
   },
   {
-   "fieldname": "saldo",
-   "fieldtype": "Currency",
-   "label": "Saldo atual",
-   "non_negative": 1,
-   "precision": "2"
-  },
-  {
    "default": "0",
    "fieldname": "fatorpagamento",
    "fieldtype": "Float",
@@ -245,18 +252,88 @@
    "label": "Fator de plantio"
   },
   {
-   "fieldname": "codigodescricao",
-   "fieldtype": "Data",
-   "is_virtual": 1,
-   "label": "C\u00f3digo+Descri\u00e7\u00e3o",
-   "options": "f\"{doc.codigo} - {doc.descricao}\""
+   "fieldname": "cidade",
+   "fieldtype": "Link",
+   "label": "Cidade base da equipe (P/ c\u00e1lculo de m\u00e3o de obra)",
+   "options": "City"
+  },
+  {
+   "fieldname": "saldo",
+   "fieldtype": "Currency",
+   "label": "Saldo atual",
+   "non_negative": 1,
+   "precision": "2"
+  },
+  {
+   "fieldname": "horas_equipe",
+   "fieldtype": "Section Break",
+   "label": "Caraga horaria da Equipe"
+  },
+  {
+   "fieldname": "dom_hora",
+   "fieldtype": "Int",
+   "label": "Dom Hora"
+  },
+  {
+   "fieldname": "column_break_ough",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "seg_hora",
+   "fieldtype": "Int",
+   "label": "Seg Hora"
+  },
+  {
+   "fieldname": "column_break_sxju",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "ter_hora",
+   "fieldtype": "Int",
+   "label": "Ter Hora"
+  },
+  {
+   "fieldname": "column_break_ibmc",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "qua_hora",
+   "fieldtype": "Int",
+   "label": "Qua Hora"
+  },
+  {
+   "fieldname": "column_break_vbxf",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "qui_hora",
+   "fieldtype": "Int",
+   "label": "Qui Hora"
+  },
+  {
+   "fieldname": "column_break_ypqg",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sex_hora",
+   "fieldtype": "Int",
+   "label": "Sex Hora"
+  },
+  {
+   "fieldname": "column_break_butq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sab_hora",
+   "fieldtype": "Int",
+   "label": "Sab Hora"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_tree": 1,
  "links": [],
- "modified": "2025-06-12 11:10:25.916855",
+ "modified": "2025-06-18 09:19:03.547068",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Item",

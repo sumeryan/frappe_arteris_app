@@ -10,7 +10,6 @@
   "numeropedido",
   "codigopep",
   "capexopex",
-  "tipo",
   "column_break_fuml",
   "valortotal",
   "valortotalmedido",
@@ -42,7 +41,7 @@
    "fieldtype": "Currency",
    "in_list_view": 1,
    "in_preview": 1,
-   "label": "Valor total para a linha do pedido",
+   "label": "Valor total do pedido",
    "non_negative": 1,
    "precision": "2",
    "reqd": 1
@@ -56,13 +55,6 @@
    "fieldtype": "Currency",
    "is_virtual": 1,
    "label": "Valor total medido",
-   "precision": "2"
-  },
-  {
-   "fieldname": "saldo",
-   "fieldtype": "Currency",
-   "is_virtual": 1,
-   "label": "Saldo",
    "precision": "2"
   },
   {
@@ -89,16 +81,10 @@
   {
    "default": "Capex",
    "fieldname": "capexopex",
-   "fieldtype": "Data",
+   "fieldtype": "Select",
    "label": "Investimento/Opera\u00e7\u00e3o",
    "length": 5,
    "options": "Capex\nOpex"
-  },
-  {
-   "fieldname": "tipo",
-   "fieldtype": "Data",
-   "label": "Tipo",
-   "length": 10
   },
   {
    "fieldname": "codigopep",
@@ -109,12 +95,19 @@
    "label": "C\u00f3digo PEP",
    "length": 30,
    "sticky": 1
+  },
+  {
+   "fieldname": "saldo",
+   "fieldtype": "Currency",
+   "is_virtual": 1,
+   "label": "Saldo",
+   "precision": "2"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-06 14:46:44.179922",
+ "modified": "2025-06-17 23:42:27.349882",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "SAP Order",

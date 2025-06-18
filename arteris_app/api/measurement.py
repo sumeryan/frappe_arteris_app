@@ -31,6 +31,8 @@ def open_measurement(measurement: str):
     """
     Open measurement.
     """
+    measurement = measurement.replace("\r","")
+
     # Get all measurements for the contract
     measurements = frappe.db.get_all("Contract Measurement", fields=["name","contrato"], filters={"name": measurement})
 
@@ -275,6 +277,70 @@ def create_measurement(month: int, year: int, ignore_current_measurement: bool =
     }
 
 @frappe.whitelist(methods=["POST"])
+def update_measurement_records(measurement: str):
+    """
+    Sum all measurement orders for a given measurement.
+    """
+    count_update = 0
+
+    # Get the measurement document
+    measurement_doc = frappe.get_doc("Contract Measurement", measurement)
+
+    # Get contract SAP orders
+    contract_itens = frappe.db.get_all("Contract Item", fields=["name","valorunitario","codigo"], filters={"contrato": measurement_doc.contrato})
+
+    # Update calculated value for measurement records
+    doctypes_records = [
+        "Contract Measurement Record Asset",
+        "Contract Measurement Record Material",
+        "Contract Measurement Record Resource",
+        "Contract Measurement Record Work Role"
+    ]
+    for doctype in doctypes_records:
+        if doctype == "Contract Measurement Record Resource":
+            str_quantity = "quantidade"
+        else:
+            str_quantity = "quantidademedida"
+        
+        for item in contract_itens:
+            measurement_records = frappe.db.get_all(doctype, fields=["name", "item" ,str_quantity, "valorcalculado"], filters={"item": item["name"]})
+            for record in measurement_records:
+                count_update += 1
+                record["valorcalculado"] = record[str_quantity] * item["valorunitario"]
+                # Set the value in the database
+                frappe.db.set_value(doctype, record.name, "valorcalculado", record["valorcalculado"])
+
+            # measurement_records = frappe.db.get_all(doctype, fields=["name", "item" ,str_quantity, "valorcalculado"], filters={"item": item["name"], "valorcalculado": 0.0})
+            # for record in measurement_records:
+            #     record["valorcalculado"] = record[str_quantity] * item["valorunitario"]
+            #     # Set the value in the database
+            #     frappe.db.set_value(doctype, record.name, "valorcalculado", record["valorcalculado"])
+            
+            # measurement_records = frappe.db.get_all(doctype, fields=["name", "item" ,str_quantity, "valorcalculado"], filters={"item": item["name"], "valorcalculado": None})
+            # for record in measurement_records:
+            #     record["valorcalculado"] = record[str_quantity] * item["valorunitario"]
+            #     # Set the value in the database
+            #     frappe.db.set_value(doctype, record.name, "valorcalculado", record["valorcalculado"])
+
+    return {"Processed": True, "message": "Records updated successfully.", "count": count_update}
+
+@frappe.whitelist(methods=["POST"])
+def update_contract_measurement_records(contract: str = None):
+    """
+    Get all open measurements for a given contract.
+    """
+    filters = {"medicaovigente": "Sim"}
+    if contract:
+        filters["contrato"] = contract
+
+    measurements = frappe.db.get_all("Contract Measurement", fields=["name"], filters=filters)
+
+    for measurement in measurements:
+        return_measurements = update_measurement_records(measurement.name)
+
+    return return_measurements
+
+@frappe.whitelist(methods=["POST"])
 def sumarize_measurements(contract: str = None):
     """
     Get all open measurements for a given contract.
@@ -300,10 +366,12 @@ def sum_measurement_orders(measurement: str):
 
     # Get contract SAP orders
     contract_item_sap_orders = []
-    contract_itens = frappe.db.get_all("Contract Item", fields=["name"], filters={"contrato": measurement_doc.contrato})
+    contract_itens = frappe.db.get_all("Contract Item", fields=["name","codigo"], filters={"contrato": measurement_doc.contrato})
 
     for item in contract_itens:
-        item_order = {"name": item.name, "total": 0.0, "sap_orders": []}
+
+        item_order = {"name": item.name, "code": item.codigo, "total": 0.0, "sap_orders": []}
+        
         # Get all SAP orders for the contract item
         sap_orders = frappe.db.get_all("Contract Item Order", fields=["name","valortotal","pedidosap"], filters={"parent": item.name})
         for item_sap_order in sap_orders:
@@ -320,6 +388,7 @@ def sum_measurement_orders(measurement: str):
             contract_item_sap_orders.append(
                 {
                     "name": item.name, 
+                    "code": item.codigo,
                     "total": 0.0, 
                     "sap_orders": [o for o in item_order["sap_orders"]]
                 })
