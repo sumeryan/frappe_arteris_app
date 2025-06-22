@@ -31,6 +31,9 @@
   "tablepedidossap",
   "m\u00e3o_de_obra_section",
   "tablemaodeobra",
+  "section_break_suxo",
+  "column_break_wcyc",
+  "percentualhe",
   "horas_equipe",
   "dom_hora",
   "column_break_ough",
@@ -163,7 +166,7 @@
   {
    "fieldname": "m\u00e3o_de_obra_section",
    "fieldtype": "Section Break",
-   "label": "M\u00e3o de obra (***Aplicar jornada 5x2, ...)"
+   "label": "M\u00e3o de obra"
   },
   {
    "fieldname": "tablemaodeobra",
@@ -266,8 +269,7 @@
   },
   {
    "fieldname": "horas_equipe",
-   "fieldtype": "Section Break",
-   "label": "Caraga horaria da Equipe"
+   "fieldtype": "Section Break"
   },
   {
    "fieldname": "dom_hora",
@@ -327,13 +329,29 @@
    "fieldname": "sab_hora",
    "fieldtype": "Int",
    "label": "Sab Hora"
+  },
+  {
+   "fieldname": "percentualhe",
+   "fieldtype": "Float",
+   "label": "Percentual padr\u00e3o para hora extra",
+   "non_negative": 1,
+   "precision": "3"
+  },
+  {
+   "fieldname": "section_break_suxo",
+   "fieldtype": "Section Break",
+   "label": "M\u00e3o de obra - Cfg. de horas e percentual de hora extra"
+  },
+  {
+   "fieldname": "column_break_wcyc",
+   "fieldtype": "Column Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_tree": 1,
  "links": [],
- "modified": "2025-06-18 09:19:03.547068",
+ "modified": "2025-06-22 15:38:54.877275",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Item",

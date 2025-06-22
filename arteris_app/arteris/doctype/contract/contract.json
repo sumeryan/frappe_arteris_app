@@ -56,14 +56,12 @@
    "columns": 1,
    "fieldname": "contrato",
    "fieldtype": "Data",
-   "in_filter": 1,
    "in_list_view": 1,
    "in_preview": 1,
    "in_standard_filter": 1,
    "label": "N\u00ba do Contrato",
    "length": 30,
-   "reqd": 1,
-   "sticky": 1
+   "reqd": 1
   },
   {
    "columns": 4,
@@ -299,7 +297,7 @@
    "link_fieldname": "contrato"
   }
  ],
- "modified": "2025-06-10 17:08:56.928567",
+ "modified": "2025-06-21 20:36:49.392614",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract",

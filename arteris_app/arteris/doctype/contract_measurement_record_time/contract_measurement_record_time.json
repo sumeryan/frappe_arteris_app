@@ -9,13 +9,13 @@
   "item",
   "funcao",
   "quantidade",
+  "horainicial",
+  "horafinal",
   "horanormal",
   "horanormalda",
   "compensacoes",
-  "horaextra60",
-  "horaextra100",
-  "quantidadeequivalente",
-  "valortotal"
+  "horaextra",
+  "horaextra100"
  ],
  "fields": [
   {
@@ -28,7 +28,7 @@
   },
   {
    "fieldname": "quantidade",
-   "fieldtype": "Int",
+   "fieldtype": "Float",
    "in_list_view": 1,
    "label": "Quantidade",
    "length": 4,
@@ -37,15 +37,17 @@
    "reqd": 1
   },
   {
+   "description": "Hora apresentada em formato num\u00e9rico ",
    "fieldname": "horanormal",
    "fieldtype": "Float",
    "in_list_view": 1,
-   "label": "Hora normal (Dias \u00fateis)",
+   "label": "Hora normal (Dias \u00fateis) ",
    "length": 8,
    "precision": "3",
    "reqd": 1
   },
   {
+   "description": "Hora apresentada em formato num\u00e9rico ",
    "fieldname": "horanormalda",
    "fieldtype": "Float",
    "in_list_view": 1,
@@ -54,6 +56,7 @@
    "reqd": 1
   },
   {
+   "description": "Hora apresentada em formato num\u00e9rico ",
    "fieldname": "compensacoes",
    "fieldtype": "Float",
    "label": "Compensa\u00e7\u00f5es",
@@ -62,36 +65,12 @@
    "reqd": 1
   },
   {
-   "fieldname": "horaextra60",
-   "fieldtype": "Float",
-   "label": "Hora extra 60% (S\u00e1b. e dias \u00fateis)",
-   "non_negative": 1,
-   "precision": "3",
-   "reqd": 1
-  },
-  {
+   "description": "Hora apresentada em formato num\u00e9rico ",
    "fieldname": "horaextra100",
    "fieldtype": "Float",
    "label": "Hora extra 100% (Dom. e feriados)",
    "non_negative": 1,
    "precision": "3",
-   "reqd": 1
-  },
-  {
-   "fieldname": "quantidadeequivalente",
-   "fieldtype": "Float",
-   "label": "Quantidade equivalente",
-   "non_negative": 1,
-   "precision": "3",
-   "reqd": 1
-  },
-  {
-   "fieldname": "valortotal",
-   "fieldtype": "Float",
-   "in_list_view": 1,
-   "label": "Valor total",
-   "non_negative": 1,
-   "precision": "2",
    "reqd": 1
   },
   {
@@ -101,13 +80,35 @@
    "label": "Item",
    "options": "Contract Item",
    "reqd": 1
+  },
+  {
+   "description": "Hora apresentada em formato num\u00e9rico ",
+   "fieldname": "horaextra",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Hora extra (S\u00e1b. e dias \u00fateis)",
+   "non_negative": 1,
+   "precision": "3",
+   "reqd": 1
+  },
+  {
+   "fieldname": "horainicial",
+   "fieldtype": "Time",
+   "label": "Hora inicial",
+   "reqd": 1
+  },
+  {
+   "fieldname": "horafinal",
+   "fieldtype": "Time",
+   "label": "Hora final",
+   "reqd": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-05-24 14:46:02.894300",
+ "modified": "2025-06-22 15:15:32.598800",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Measurement Record Time",

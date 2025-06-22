@@ -1,5 +1,5 @@
 import frappe
-from measurement import update_measurement_records
+from datetime import date, datetime
 
 @frappe.whitelist(methods=["DELETE"])
 def clear_keys():
@@ -44,25 +44,6 @@ def get_work_roles():
         return data   
 
 @frappe.whitelist(methods=["GET"])
-def get_contract_items(contract_name: str):
-        """
-        Get all contract items from the database.
-        """
-        data = []
-        # Get all contract items from the database
-        get_result = frappe.db.get_all("Contract Item", fields=["name", "codigo"], filters={"contrato": contract_name})
-        data.extend([{"name": l["name"], "kartado": l["codigo"]} for l in get_result])
-
-        # Get all contract items kartado from the database
-        for l in get_result:
-            # Get kartado for each contract item
-            get_sub_result = frappe.db.get_all("Contract Item Config Kartado", fields=["codigo"], filters={"parent": l["name"]})
-            if get_sub_result:
-                data.extend([{"name": l["name"], "kartado": s["codigo"]} for s in get_sub_result])
-
-        return data
-
-@frappe.whitelist(methods=["GET"])
 def get_keys(contract_name: str, contract_processing_date: str):
         """
         Get all keys for contract and kartado.
@@ -96,6 +77,54 @@ def get_contract(contract: str, kartado_uuid: str):
             return {}
 
         return {"name": get_result[0].name, "kartado": get_result[0].uuidkartado} if get_result else {}
+
+@frappe.whitelist(methods=["GET"])
+def get_contract_items(contract_name: str):
+        """
+        Get all contract items from the database.
+        """
+        data = []
+        # Get all contract items from the database
+        get_result = frappe.db.get_all(
+            "Contract Item", 
+            fields=[
+                "name", 
+                "codigo", 
+                "cidade",
+                "dom_hora",
+                "seg_hora",
+                "ter_hora",
+                "qua_hora", 
+                "qui_hora",
+                "sex_hora",
+                "sab_hora",
+                "percentualhe"], 
+            filters={"contrato": contract_name})
+        data.extend(
+            [
+                {
+                    "name": l["name"], 
+                    "kartado": l["codigo"], 
+                    "cidade": l["cidade"],
+                    "dom_hora": l["dom_hora"],
+                    "seg_hora": l["seg_hora"],
+                    "ter_hora": l["ter_hora"],
+                    "qua_hora": l["qua_hora"],
+                    "qui_hora": l["qui_hora"],
+                    "sex_hora": l["sex_hora"],
+                    "sab_hora": l["sab_hora"],
+                    "percentualhe": l["percentualhe"]
+                 } for l in get_result
+            ])
+
+        # Get all contract items kartado from the database
+        for l in get_result:
+            # Get kartado for each contract item
+            get_sub_result = frappe.db.get_all("Contract Item Config Kartado", fields=["codigo"], filters={"parent": l["name"]})
+            if get_sub_result:
+                data.extend([{"name": l["name"], "kartado": s["codigo"]} for s in get_sub_result])
+
+        return data
 
 @frappe.whitelist(methods=["POST"])
 def update_contract(contract: str, kartado_uuid: str):
@@ -137,18 +166,6 @@ def update_measurements_main_item():
 
     return {"Processed": True, "message": "Measurement records updated with main item."}
 
-def get_items_code(items: list):
-    """
-    Get all contract items codes.
-    """
-    get_code = ""
-    # Get all contract items from the database
-    for i in items:
-        # Get kartado for each contract item
-        get_code += frappe.db.get_value("Contract Item", i, "codigo") + ", "
-
-    return get_code.rstrip(", ")
-
 @frappe.whitelist(methods=["POST"])
 def create_kartado_measurement_record():
     """
@@ -166,6 +183,65 @@ def create_kartado_measurement_record():
     data = frappe.form_dict.data
     relations = frappe.form_dict.relations
 
+    holidays = {}
+
+    def get_item(item: str) -> dict:
+        """
+        Get the city of a contract item.
+        """
+        # Get kartado for each contract item
+        for i in relations["contract_item"]:
+            if i['name'] == item:
+                return i
+        return None
+
+    # Function to check if a date is a holiday
+    def check_holiday(date: date, uf: str, city: str):
+
+        key = f"{date.strftime('%Y-%m-%d')}-{city}-{uf}"
+        if holidays.get(key, None) == None:
+            if not city == "all":
+                get_result = frappe.db.get_all("Holiday", fields=["data","descricao"], filters={"data": date, "cidade": city})
+            elif not uf == "all":
+                get_result = frappe.db.get_all("Holiday", fields=["data","descricao"], filters={"data": date, "uf": uf})
+            else:
+                get_result = frappe.db.get_all("Holiday", fields=["data","descricao"], filters={"data": date, "uf": "", "cidade": ""})
+            if get_result:
+                holidays[key] = {
+                     "isholiday": True,
+                     "uf": "" if uf == "all" else uf,
+                     "cidade": "" if city == "all" else city,
+                     "descricao": get_result[0].descricao
+                }
+            else:
+                holidays[key] = {
+                     "isholiday": False
+                }
+        return holidays[key]
+
+    def check_holidays(date: date, city: str = None):
+
+        # City and UF is a key of city
+        uf = "all"
+        if city:
+            s_sity = city.split("-")
+            uf = s_sity[1]
+            city = s_sity[0]
+        else:
+            city = "all"
+            uf = "all"
+
+        # Check if the date is a holiday
+        holiday = check_holiday(date, "all", "all")
+        if holiday['isholiday']:
+            return holiday
+        holiday = check_holiday(date,  uf, "all")
+        if check_holiday(date, uf, "all"):
+            return holiday
+        holiday = check_holiday(date, "all", city)
+        if check_holiday(date, "all", city):
+            return holiday
+
     def check_kartado_relation(kartado_description, r_type):
         """
         Check ralation between kartado description and kartado list.
@@ -178,6 +254,28 @@ def create_kartado_measurement_record():
                 return k["name"]
 
         return None
+    
+    def get_date_from_string(data_str: str, year: int = 0, month: int =1, day: int = 2) -> date:
+        """
+        Convert a date string to a date object.
+        :param date_str: The date string in the format 'YYYY-MM-DD'.
+        :return: A date object.
+        """
+        data_str = data_str.split('-')
+        year = int(data_str[year])
+        month = int(data_str[month]) 
+        day = int(data_str[day][:2])   
+        new_date = date(year, month, day)
+        return new_date
+    
+    def get_week_day(date: date):
+        """
+        Get the name of the week day.
+        :param date: The date object.
+        :return: The name of the week day.
+        """
+        dias_semana = ['Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado', 'Domingo']
+        return dias_semana[date.weekday()]
     
     # List to store inconsistent data
     inconsistent_data = []
@@ -246,8 +344,11 @@ def create_kartado_measurement_record():
             kartado_measurement_record.aprovador = d["aprovado_por"]
 
             if d["tipo_registro"] == "rdo": # or record_type == "rpt":
+                data_execucao = d["rdo_data"].split('-')
+                kartado_measurement_record.dataexecucao = f"{data_execucao[2]}-{data_execucao[1]}-{data_execucao[0]}"
                 kartado_measurement_record.origem_integracao = "Kartado RDO"
             elif d["tipo_registro"] == "log":
+                kartado_measurement_record.dataexecucao = d["log_data_execucao"] 
                 kartado_measurement_record.origem_integracao = "Kartado Apontamento"
             else:
                 kartado_measurement_record.origem_integracao = "Kartado Outros"
@@ -258,10 +359,8 @@ def create_kartado_measurement_record():
 
             # RDO contains data
             if d["rdo_chave"]:
-                data_execucao = d["rdo_data"].split('-')
-                kartado_measurement_record.dataexecucao = f"{data_execucao[2]}-{data_execucao[1]}-{data_execucao[0]}"
                 kartado_measurement_record.responsavel = d["rdo_responsavel"]
-                kartado_measurement_record.codigo = d["rdo_chave"]
+                kartado_measurement_record.codigo = d["rdo_serial"] #d["rdo_chave"]
                 kartado_measurement_record.climadamanha = d["rdo_clima_manha"]
                 kartado_measurement_record.condicoesdamanha = d["rdo_condicoes_manha"]
                 kartado_measurement_record.climadatarde = d["rdo_clima_tarde"]
@@ -269,14 +368,16 @@ def create_kartado_measurement_record():
                 kartado_measurement_record.climadanoite = d["rdo_clima_noite"]
                 kartado_measurement_record.condicoesdanoite = d["rdo_condicoes_noite"]
                 kartado_measurement_record.criadopor = d["rdo_criado_por"]
+                kartado_measurement_record.equipe = d["rdo_equipe"]
 
         has_inconsistent_data = False
 
         # Check if the kartado relation exists for asset, work role, and contract item
         d["chave_ativo"] = check_kartado_relation(d.get("recurso_item"), "asset")
         d["chave_funcao"] = check_kartado_relation(d.get("recurso_item"), "work_role")
-        d["chave_item_contrato"] = check_kartado_relation(d.get("codigo_item"), "contract_item")
-
+        d["chave_recurso"] = check_kartado_relation(d.get("codigo_item"), "contract_item")
+        record_contract_item = get_item(d["chave_recurso"])
+        
         # Check if is administrative record
         if d["tipo_administracao"]:
             if not d["chave_ativo"] and not d["chave_funcao"]:
@@ -286,7 +387,7 @@ def create_kartado_measurement_record():
                 has_inconsistent_data = True
 
         # Allways check if the item contract relation exists
-        if not d["chave_item_contrato"]:
+        if not d["chave_recurso"]:
             msg = f"Relação com item do contrato '{d.get('codigo_item')}' não localizada."
             if msg not in inconsistent_data:
                 inconsistent_data.append(msg)
@@ -304,15 +405,99 @@ def create_kartado_measurement_record():
                     kartado_uuids.append(d["chave_utilizacao"])
                     has_itens = True
                     kartado_measurement_work_role_record = kartado_measurement_record.append("tabworkrole")
-                    kartado_measurement_work_role_record.item = d["chave_item_contrato"]
+                    kartado_measurement_work_role_record.item = d["chave_recurso"]
                     kartado_measurement_work_role_record.funcao = d["chave_funcao"]
                     kartado_measurement_work_role_record.quantidademedida = d["quantidade"]
                     kartado_measurement_work_role_record.valortotal = d["valor_total"]
                     kartado_measurement_work_role_record.valorcalculado = 0.0
                     kartado_measurement_work_role_record.tipo = d["tipo_item"]
                     kartado_measurement_work_role_record.peso = d["peso"]
-                    if not d["chave_item_contrato"] in items:
-                        items.append(d["chave_item_contrato"])
+                    if not d["chave_recurso"] in items:
+                        items.append(d["chave_recurso"])
+
+                    if d["tipo_item"] == "administração":
+                        # if not exists work group, set for administration calculation
+                        if not kartado_measurement_record.equipe:
+                            kartado_measurement_record.equipe = "ADM"
+
+                        # Set the default date to process
+                        date_process = get_date_from_string(d["data_criacao"])
+                        #Date to process
+                        if d["tipo_registro"] == "rdo":
+                            date_process = get_date_from_string(d["rdo_data"], 2, 1, 0)
+                        if d["tipo_registro"] == "log":
+                            date_process = get_date_from_string(d["log_data_execucao"])
+                        if d["tipo_registro"] == "others":
+                            date_process = get_date_from_string(d["data_criacao"])
+                        # Timestamp strings
+                        ts_start = d["rdo_adm_hora_inicio"]
+                        ts_end = d["rdo_adm_hora_fim"]
+                        # Converter para datetime
+                        time_start = datetime.strptime(ts_start, '%Y-%m-%d %H:%M:%S.%f')
+                        time_end = datetime.strptime(ts_end, '%Y-%m-%d %H:%M:%S.%f')                        
+                        # Calculate the hours based on the day of the week
+                        total_hours_time =  time_end - time_start
+                        # Convert to decimal hours
+                        total_hours = total_hours_time.total_seconds() / 3600.0
+                        # Discount interval time
+                        if total_hours > 6:
+                            total_hours -= 1.0                        
+                        # Get work hours from contract item
+                        work_hours = 8.0
+                        if date_process.weekday() == 0:
+                            work_hours = record_contract_item.get("seg_hora", 8.0)
+                        if date_process.weekday() == 1:
+                            work_hours = record_contract_item.get("ter_hora", 8.0)
+                        if date_process.weekday() == 2:
+                            work_hours = record_contract_item.get("qua_hora", 8.0)
+                        if date_process.weekday() == 3:
+                            work_hours = record_contract_item.get("qui_hora", 8.0)
+                        if date_process.weekday() == 4:
+                            work_hours = record_contract_item.get("sex_hora", 8.0)
+                        if date_process.weekday() == 5:
+                            work_hours = record_contract_item.get("sab_hora", 5.0)
+                        # Check if has extra hours
+                        extra_hours = 0.0
+                        if total_hours > work_hours:
+                            # Calculate the extra hours
+                            extra_hours = total_hours - work_hours                            
+
+                        # Create hours record for administration, one for each work role
+                        # f_qtd = float(d["quantidade"])
+                        # i_qtd = int(f_qtd)
+                        # for q in range(i_qtd):
+
+                        # Hours record
+                        kartado_measurement_record_time = kartado_measurement_record.append("tabhoras")
+                        kartado_measurement_record_time.item = d["chave_recurso"]
+                        kartado_measurement_record_time.funcao = d["chave_funcao"]
+                        kartado_measurement_record_time.quantidade = d["quantidade"] # 1
+                        kartado_measurement_record_time.horainicial = time_start.strftime('%H:%M:%S')
+                        kartado_measurement_record_time.horafinal = time_end.strftime('%H:%M:%S')
+                        kartado_measurement_record_time.compensacoes = 0.0
+                        kartado_measurement_record_time.horaextra100 = 0.0
+                        kartado_measurement_record_time.horaextra = 0.0
+                        kartado_measurement_record_time.horanormal = 0.0
+                        kartado_measurement_record_time.horanormalda = 0.0
+                        kartado_measurement_record_time.valorcalculado = 0.0
+                        # Return the name of weekday
+                        kartado_measurement_record.diasemana = get_week_day(date_process)
+                            # Is it a holiday?
+                        holiday = check_holidays(date_process, record_contract_item["cidade"])
+                        if holiday['isholiday']:
+                            kartado_measurement_record_time.horaextra100 = total_hours
+                        else:                            
+                            # Is it a Sunday?
+                            if date_process.weekday() == 6:
+                                kartado_measurement_record_time.horaextra100 = total_hours
+                            else:
+                                # Check if has extra hours
+                                if extra_hours > 0:
+                                    # Calculate the extra hours
+                                    kartado_measurement_record_time.horanormal = work_hours
+                                    kartado_measurement_record_time.horaextra = extra_hours
+                                else:
+                                    kartado_measurement_record_time.horanormal = total_hours
 
             # Create asset measurement record
             if d["chave_ativo"]:
@@ -320,31 +505,31 @@ def create_kartado_measurement_record():
                     kartado_uuids.append(d["chave_utilizacao"])
                     has_itens = True
                     kartado_measurement_asset_record = kartado_measurement_record.append("tabasset")
-                    kartado_measurement_asset_record.item = d["chave_item_contrato"]
+                    kartado_measurement_asset_record.item = d["chave_recurso"]
                     kartado_measurement_asset_record.maquina_equipamento_ou_ferramenta = d["chave_ativo"]
                     kartado_measurement_asset_record.quantidademedida = d["quantidade"]
                     kartado_measurement_asset_record.valortotal = d["valor_total"]
                     kartado_measurement_asset_record.valorcalculado = 0.0
                     kartado_measurement_asset_record.tipo = d["tipo_item"]
                     kartado_measurement_asset_record.peso = d["peso"]                
-                    if not d["chave_item_contrato"] in items:
-                        items.append(d["chave_item_contrato"])
+                    if not d["chave_recurso"] in items:
+                        items.append(d["chave_recurso"])
 
             if not d["chave_ativo"] and not d["chave_funcao"]:
-                 if d["chave_item_contrato"]:
+                 if d["chave_recurso"]:
                     # Prevent duplicate kartado uuids
                     if not d["chave_utilizacao"] in kartado_uuids:
                         kartado_uuids.append(d["chave_utilizacao"])
                         has_itens = True
                         kartado_measurement_reseource_record = kartado_measurement_record.append("tabrecurso")
-                        kartado_measurement_reseource_record.item = d["chave_item_contrato"]
-                        kartado_measurement_reseource_record.quantidade = d["quantidade"]
+                        kartado_measurement_reseource_record.item = d["chave_recurso"]
+                        kartado_measurement_reseource_record.quantidademedida = d["quantidade"]
                         kartado_measurement_reseource_record.valortotal = d["valor_total"]
                         kartado_measurement_reseource_record.tipo = d["tipo_item"]
                         kartado_measurement_reseource_record.peso = d["peso"]      
                         kartado_measurement_reseource_record.valorcalculado = 0.0
-                        if not d["chave_item_contrato"] in items:
-                            items.append(d["chave_item_contrato"])
+                        if not d["chave_recurso"] in items:
+                            items.append(d["chave_recurso"])
 
             if d["log_codigo_relatorio"]:
                 if not d["log_codigo_relatorio"] in kartado_logs:
@@ -406,8 +591,6 @@ def create_kartado_measurement_record():
         kartado_inconsistent.observacoes = s_inconsistency
         kartado_inconsistent.save()
 
-    update_measurement_records(contract_meaesurement)
-
     if has_itens:
         return {
             "message": "Kartado Measurement Record created successfully.",
@@ -418,3 +601,15 @@ def create_kartado_measurement_record():
             "message": "No valid kartado items found to create a measurement record.",
             "inconsistent_data": inconsistent_data
         }
+
+def get_items_code(items: list):
+    """
+    Get all contract items codes.
+    """
+    get_code = ""
+    # Get all contract items from the database
+    for i in items:
+        # Get kartado for each contract item
+        get_code += frappe.db.get_value("Contract Item", i, "codigo") + ", "
+
+    return get_code.rstrip(", ")

@@ -1,5 +1,6 @@
 import frappe
 from frappe.utils import add_to_date
+from datetime import datetime, timedelta, date
 
 @frappe.whitelist(methods=["GET"])
 def close_measurements(contract: str):
@@ -59,6 +60,69 @@ def open_measurement(measurement: str):
 @frappe.whitelist(methods=["POST"])
 def create_measurement(month: int, year: int, ignore_current_measurement: bool = False, contract: str = None):
 
+    holidays = {}
+
+    # Function to check if a date is a holiday
+    def check_holiday(date: date, uf: str, city: str):
+
+        key = f"{date.strftime('%Y-%m-%d')}-{city}-{uf}"
+        if holidays.get(key, None) == None:
+            if not city == "all":
+                get_result = frappe.db.get_all("Holiday", fields=["data","descricao"], filters={"data": date, "cidade": city})
+            elif not uf == "all":
+                get_result = frappe.db.get_all("Holiday", fields=["data","descricao"], filters={"data": date, "uf": uf})
+            else:
+                get_result = frappe.db.get_all("Holiday", fields=["data","descricao"], filters={"data": date, "uf": "", "cidade": ""})
+            if get_result:
+                holidays[key] = {
+                     "isholiday": True,
+                     "uf": "" if uf == "all" else uf,
+                     "cidade": "" if city == "all" else city,
+                     "descricao": get_result[0].descricao
+                }
+            else:
+                holidays[key] = {
+                     "isholiday": False
+                }
+        return holidays[key]
+
+    def check_holidays(date: date, city: str = None):
+
+        # City and UF is a key of city
+        uf = "all"
+        if city:
+            s_sity = city.split("-")
+            uf = s_sity[1]
+            city = s_sity[0]
+        else:
+            city = "all"
+            uf = "all"
+
+        # Check if the date is a holiday
+        holiday = check_holiday(date, "all", "all")
+        if holiday['isholiday']:
+            return holiday
+        holiday = check_holiday(date,  uf, "all")
+        if check_holiday(date, uf, "all"):
+            return holiday
+        holiday = check_holiday(date, "all", city)
+        if check_holiday(date, "all", city):
+            return holiday
+
+    def get_busy_days(start_date: date, end_date: date, city: str = None) -> int:
+
+        busy_days = 0
+        
+        while start_date < end_date:
+            holiday = check_holidays(start_date, city)
+            if not holiday['isholiday']:
+                # 0-4 is business days (Monday to Friday)
+                if start_date.weekday() < 5:  
+                    busy_days += 1
+            start_date += timedelta(days=1)
+        
+        return busy_days
+
     # Get all contracts
     if contract:
         get_contracts = frappe.db.get_all("Contract", fields=["*"], filters={"contratoencerrado": None, "name": contract})
@@ -108,7 +172,7 @@ def create_measurement(month: int, year: int, ignore_current_measurement: bool =
                 last_contract_measurement = frappe.frappe.get_last_doc("Contract Measurement")
             except Exception as e:
                 last_contract_measurement = None
-                frappe.log_error(f"Error getting last contract measurement: {str(e)}", "Create Measurement Error")
+                # frappe.log_error(f"Error getting last contract measurement: {str(e)}", "Create Measurement Error")
 
             medicaoacumulada = 0.0
             caucaoacumulado = 0.0
@@ -123,7 +187,11 @@ def create_measurement(month: int, year: int, ignore_current_measurement: bool =
             # Close existing measurements if they are open
             close_measurements(contract.name)
 
+            s_first_day = first_day.split("-")
+            s_last_day = last_day.split("-")
+
             contract_measurement = frappe.new_doc("Contract Measurement")
+            contract_measurement.name = f"BM-{contract.contrato}-{s_first_day[2]}-{s_last_day[2]}-{s_last_day[1]}-{s_last_day[2]}"
             contract_measurement.contrato = contract.name
             contract_measurement.datainicialmedicao = first_day
             contract_measurement.datafinalmedicao = last_day
@@ -150,11 +218,15 @@ def create_measurement(month: int, year: int, ignore_current_measurement: bool =
             contract_measurement.caucaoacumuladoanterior = caucaoacumulado
             contract_measurement.ftdacumuladoanterior = ftdacumulado
             
-
             # Get Contract Items
-            get_contract_items = frappe.db.get_all("Contract Item", fields=["*"], filters={"contrato": contract.name})
+            get_contract_items = frappe.db.get_all("Contract Item", fields=["*"], filters={"contrato": contract.name, "is_group": False})
 
             for item in get_contract_items:
+
+                busy_days = get_busy_days(
+                    datetime.strptime(first_day, "%Y-%m-%d"), 
+                    datetime.strptime(last_day, "%Y-%m-%d"), 
+                    item.cidade)
 
                 # Set the value to valortotalvigente if it is 0.0
                 if item.valortotalvigente == 0.0:
@@ -197,6 +269,9 @@ def create_measurement(month: int, year: int, ignore_current_measurement: bool =
                 contract_measurement_item.quantidadeacumulada = 0.0
                 contract_measurement_item.fatorpagamento = 100.0
                 contract_measurement_item.valorfatorpagamento = item.valorunitario
+                contract_measurement_item.cidade = item.cidade
+                contract_measurement_item.diasuteis = busy_days
+                contract_measurement_item.valorunitario = item.valorunitario
 
                 # Get SAP Orders
                 item_sap_orders = frappe.db.get_all("Contract Item Order", fields=["*"], filters={"parent": item.name})
@@ -250,6 +325,7 @@ def create_measurement(month: int, year: int, ignore_current_measurement: bool =
                             contract_measurement_work_role.funcao = work_role.funcao
                             contract_measurement_work_role.quantidademedida = 0.0
                             contract_measurement_work_role.valormedido = 0.0
+                            contract_measurement_work_role.valorunitario = 0.0
 
 
                 # Get Asset
@@ -263,6 +339,7 @@ def create_measurement(month: int, year: int, ignore_current_measurement: bool =
                             contract_measurement_asset.maquina_equipamento_ou_ferramenta = asset.asset
                             contract_measurement_asset.quantidademedida = 0.0
                             contract_measurement_asset.valormedido = 0.0
+                            contract_measurement_asset.valorunitario = 0.0
 
             # Add the contract measurement to the database
             m = contract_measurement.save()
@@ -285,42 +362,80 @@ def update_measurement_records(measurement: str):
 
     # Get the measurement document
     measurement_doc = frappe.get_doc("Contract Measurement", measurement)
+    # Get contract items
+    contract_items = frappe.db.get_all("Contract Item", fields=["name","valorunitario","tipodoitem","codigo"], filters={"contrato": measurement_doc.contrato})
+    # Get item work roles
+    contract_item_work_roles = frappe.db.get_all("Contract Item Work Role", fields=["name","parent","funcao","pagamentohora","valorporhora", "valortotalmensal"], filters={"parent": ["in", [item.name for item in contract_items]]})
+    # Get item assets
+    contract_item_assets = frappe.db.get_all("Contract Item Asset", fields=["name","parent","asset","valormensal"], filters={"parent": ["in", [item.name for item in contract_items]]})
+    # Unir price list
+    price_list = {}
+    # Update measurement items only if the measurement is active
+    if measurement_doc.medicaovigente == "Sim":
+        # Get all contract items measurement
+        for item in contract_items:
+            # Update maesurement items
+            for item_measurement in measurement_doc.tabitenscontatrato:
+                if item_measurement.itemcontrato == item.name:
+                    # Update unit price
+                    price_list[f"{item.name}-{item.name}"] = item.valorunitario                    
+                    frappe.db.set_value("Contract Measurement Item", measurement_doc.name, "valorunitario", item.valorunitario)
+            # Update work roles
+            for work_role_measurement in measurement_doc.tablemaodeobra:
+                # if work_role_measurement.item == item.name
+                for work_role in contract_item_work_roles:
+                    # Check if the work role is in the item
+                    if work_role_measurement.item == item.name and work_role_measurement.funcao == work_role.funcao:
+                        # Update unit price
+                        if work_role.pagamentohora:
+                            price_list[f"{item.name}-{work_role.funcao}"] = work_role.valorporhora
+                        else:
+                            price_list[f"{item.name}-{work_role.funcao}"] = work_role.valortotalmensal
+                        frappe.db.set_value("Contract Measurement Work Role", work_role_measurement.name, "valorunitario", price_list[f"{item.name}-{work_role.funcao}"])
+            # Update assets
+            for asset_measurement in measurement_doc.tableativos:
+                # if asset_measurement.item == item.name
+                for asset in contract_item_assets:
+                    # Check if the asset is in the item
+                    if asset_measurement.item == item.name and asset_measurement.maquina_equipamento_ou_ferramenta == asset.asset:
+                        # Update unit price
+                        price_list[f"{item.name}-{asset.asset}"] = asset.valormensal
+                        frappe.db.set_value("Contract Measurement Asset", asset_measurement.name, "valorunitario", asset.valormensal)
+    else:
+        # Get maesurement items values
+        for item_measurement in measurement_doc.tabitenscontatrato:
+            price_list[f"{item_measurement.item}-{item_measurement.item}"] = item_measurement.valorunitario
+        # Get work roles values
+        for work_role_measurement in measurement_doc.tablemaodeobra:
+            price_list[f"{work_role_measurement.item}-{work_role_measurement.funcao}"] = work_role_measurement.valorunitario
+        # Get assets values
+        for asset_measurement in measurement_doc.tableativos:
+            price_list[f"{asset_measurement.item}-{asset_measurement.maquina_equipamento_ou_ferramenta}"] = asset_measurement.valorunitario
 
-    # Get contract SAP orders
-    contract_itens = frappe.db.get_all("Contract Item", fields=["name","valorunitario","codigo"], filters={"contrato": measurement_doc.contrato})
-
-    # Update calculated value for measurement records
-    doctypes_records = [
-        "Contract Measurement Record Asset",
-        "Contract Measurement Record Material",
-        "Contract Measurement Record Resource",
-        "Contract Measurement Record Work Role"
-    ]
-    for doctype in doctypes_records:
-        if doctype == "Contract Measurement Record Resource":
-            str_quantity = "quantidade"
-        else:
-            str_quantity = "quantidademedida"
-        
-        for item in contract_itens:
-            measurement_records = frappe.db.get_all(doctype, fields=["name", "item" ,str_quantity, "valorcalculado"], filters={"item": item["name"]})
-            for record in measurement_records:
-                count_update += 1
-                record["valorcalculado"] = record[str_quantity] * item["valorunitario"]
+    # Get all measurement records for the measurement
+    parent_records = frappe.db.get_all("Contract Measurement Record", fields=["name","equipe"], filters={"boletimmedicao": measurement})
+    for parent_record in parent_records:
+        # Count the number of updates
+        count_update += 1
+        # Update calculated value for measurement records
+        child_doctypes = [
+            { "doctype":"Contract Measurement Record Asset", "field": "maquina_equipamento_ou_ferramenta"},
+            { "doctype":"Contract Measurement Record Material", "field": "material"},
+            { "doctype":"Contract Measurement Record Work Role", "field": "funcao"},
+            { "doctype":"Contract Measurement Record Resource", "field": "item"},
+        ]
+        # Update calculated value for each measurement record type
+        for doctype in child_doctypes:
+            # Get all child records for the measurement record
+            child_records = frappe.db.get_all(doctype['doctype'], fields=["name", "item" ,"quantidademedida", "valorcalculado",doctype['field']], filters={"parent": parent_record.name})
+            for child_record in child_records:
+                # Check if the child record is in the price list
+                if f"{child_record.item}-{child_record[doctype['field']]}" in price_list:
+                    child_record["valorcalculado"] = child_record["quantidademedida"] * price_list[f"{child_record.item}-{child_record[doctype['field']]}"]
+                else:
+                    child_record["valorcalculado"] = 0.0
                 # Set the value in the database
-                frappe.db.set_value(doctype, record.name, "valorcalculado", record["valorcalculado"])
-
-            # measurement_records = frappe.db.get_all(doctype, fields=["name", "item" ,str_quantity, "valorcalculado"], filters={"item": item["name"], "valorcalculado": 0.0})
-            # for record in measurement_records:
-            #     record["valorcalculado"] = record[str_quantity] * item["valorunitario"]
-            #     # Set the value in the database
-            #     frappe.db.set_value(doctype, record.name, "valorcalculado", record["valorcalculado"])
-            
-            # measurement_records = frappe.db.get_all(doctype, fields=["name", "item" ,str_quantity, "valorcalculado"], filters={"item": item["name"], "valorcalculado": None})
-            # for record in measurement_records:
-            #     record["valorcalculado"] = record[str_quantity] * item["valorunitario"]
-            #     # Set the value in the database
-            #     frappe.db.set_value(doctype, record.name, "valorcalculado", record["valorcalculado"])
+                frappe.db.set_value(doctype['doctype'], child_record.name, "valorcalculado", child_record["valorcalculado"])
 
     return {"Processed": True, "message": "Records updated successfully.", "count": count_update}
 

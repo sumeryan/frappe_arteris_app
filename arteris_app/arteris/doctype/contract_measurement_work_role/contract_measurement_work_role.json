@@ -8,9 +8,19 @@
  "engine": "InnoDB",
  "field_order": [
   "item",
+  "tipodoitem",
   "funcao",
   "quantidademedida",
-  "valormedido"
+  "valorunitario",
+  "valormedido",
+  "section_break_ykpk",
+  "column_break_kicy",
+  "horanormal",
+  "horanormalda",
+  "compensacoes",
+  "horaextra",
+  "percentualhe",
+  "horaextra100"
  ],
  "fields": [
   {
@@ -45,13 +55,95 @@
    "label": "Quantidade medida",
    "non_negative": 1,
    "reqd": 1
+  },
+  {
+   "fieldname": "valorunitario",
+   "fieldtype": "Currency",
+   "label": "Valor unit\u00e1rio",
+   "non_negative": 1,
+   "precision": "2",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_kicy",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "description": "Hora apresentada em formato num\u00e9rico ",
+   "fieldname": "horanormal",
+   "fieldtype": "Float",
+   "label": "Total de horas normais (Dias \u00fateis) ",
+   "non_negative": 1,
+   "precision": "3",
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "description": "Hora apresentada em formato num\u00e9rico ",
+   "fieldname": "horanormalda",
+   "fieldtype": "Float",
+   "label": "Total horas normais desc. e acr\u00e9s.",
+   "non_negative": 1,
+   "precision": "3",
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "description": "Hora apresentada em formato num\u00e9rico ",
+   "fieldname": "compensacoes",
+   "fieldtype": "Float",
+   "label": "Total de compensa\u00e7\u00f5es",
+   "non_negative": 1,
+   "precision": "3",
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "description": "Hora apresentada em formato num\u00e9rico ",
+   "fieldname": "horaextra",
+   "fieldtype": "Float",
+   "label": "Total de horas extras (S\u00e1b. e dias \u00fateis)",
+   "non_negative": 1,
+   "precision": "3",
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "description": "Hora apresentada em formato num\u00e9rico ",
+   "fieldname": "percentualhe",
+   "fieldtype": "Float",
+   "label": "Percentual para hora extra (S\u00e1b. e dias \u00fateis)",
+   "non_negative": 1,
+   "precision": "3",
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "description": "Hora apresentada em formato num\u00e9rico ",
+   "fieldname": "horaextra100",
+   "fieldtype": "Float",
+   "label": "Total horas extras 100% (Dom. e feriados)",
+   "non_negative": 1,
+   "precision": "3",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_ykpk",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "tipodoitem",
+   "fieldtype": "Link",
+   "label": "Tipo",
+   "options": "Contract Item Type"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-05-28 10:24:04.590383",
+ "modified": "2025-06-22 18:04:44.297121",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Measurement Work Role",

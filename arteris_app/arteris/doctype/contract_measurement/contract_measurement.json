@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "UUID",
+ "autoname": "prompt",
  "creation": "2025-05-13 06:10:27.754993",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -339,11 +339,11 @@
    "link_fieldname": "boletimmedicao"
   }
  ],
- "modified": "2025-06-04 20:43:38.334999",
+ "modified": "2025-06-21 20:35:38.675384",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Measurement",
- "naming_rule": "UUID",
+ "naming_rule": "Set by user",
  "owner": "Administrator",
  "permissions": [
   {
@@ -375,6 +375,5 @@
  "sort_field": "creation",
  "sort_order": "DESC",
  "states": [],
- "title_field": "contrato",
  "track_changes": 1
 }
