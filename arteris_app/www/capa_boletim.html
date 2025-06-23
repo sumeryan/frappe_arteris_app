@@ -1,0 +1,78 @@
+<div class="container">
+    <div class="header">
+        <div class="logo">
+            <img src="{{ doc.logoUrl or 'https://www.arteris.com.br/static/icons/arteris-logo.dc5c9168a8a3.svg' }}" alt="{{ doc.concessionaria }} Logo">
+        </div>
+        <div class="title">
+            <h1>CAPA DO BOLETIM DE MEDIÇÃO</h1>
+            <p>CONCESSIONÁRIA {{ doc.concessionaria }}</p>
+            <p>OBRA {{ doc.obra }}</p>
+        </div>
+        <div class="contract">
+            <p>CONTRATO:</p>
+            <p>{{ doc.contrato.contrato }}</p>
+        </div>
+    </div>
+
+    <div class="measurement-header">
+        <div class="measurement-phase">
+            <p><strong>FASE DA MEDIÇÃO</strong></p>
+            <p>{{ doc.faseMedicao }}</p>
+        </div>
+        <div class="measurement-month">
+            <p><strong>MÊS:</strong></p>
+            <p>{{ doc.datafinalmedicao | formatar_data }}</p>
+        </div>
+        <div class="measurement-period">
+            <p><strong>PERÍODO:</strong></p>
+            <p>{{ doc.datainicialmedicao | formatar_data }} a {{ doc.datafinalmedicao | formatar_data }}</p>
+        </div>
+    </div>
+
+    <!-- Seções seguem o mesmo padrão... -->
+
+    <div class="object-section">
+        <p>{{ doc.contrato.descricao }}</p>
+    </div>
+
+    <table class="measurement-table">
+        <thead>
+            <tr>
+                <th>Nº Pedido</th>
+                <th>Posição</th>
+                <th>Invest/Operação</th>
+                <th>Tipo</th>
+                <th>Centro de Custo</th>
+                <th>Valor Total Vigente</th>
+                <th>% Acum. Ant.</th>
+                <th>% Atual</th>
+                <th>% Acum. Atual</th>
+                <th>Acum. Ant. (R$)</th>
+                <th>Atual (R$)</th>
+                <th>Acum. Atual (R$)</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for pedido in doc.pedidosSap %}
+            <tr class="measurement-row">
+                <td>{{ pedido.numeropedido }}</td>
+                <td>{{ pedido.linhapedido }}</td>
+                <td>{{ pedido.capexopex }}</td>
+                <td>{{ pedido.tipo }}</td>
+                <td>{{ pedido.centrodecusto }}</td>
+                <td class="text-right">{{ pedido.valortotalvigente | formatar_moeda }}</td>
+                <td class="text-right">{{ pedido.medicaoacumantpercentual | formatar_percentual }}</td>
+                <td class="text-right">{{ pedido.medicaoatualpercentual | formatar_percentual }}</td>
+                <td class="text-right">{{ pedido.medicaoacumuladaatualpercentual | formatar_percentual }}</td>
+                <td class="text-right">{{ pedido.acumuladoanterior | formatar_moeda }}</td>
+                <td class="text-right">{{ pedido.valormedido | formatar_moeda }}</td>
+                <td class="text-right">{{ pedido.acumuladoatual | formatar_moeda }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="12">Sem pedidos</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

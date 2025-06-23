@@ -247,9 +247,21 @@ website_route_rules = [
 
 # Web Pages (se usando www)
 web_include_css = [
-    "/assets/arteris_app/css/custom-page.css"
+    "/assets/arteris_app/css/custom-page.css",
+	"/assets/arteris_app/css/boletim_medicao.css",
+	"/assets/arteris_app/css/capa_boletim.css"
 ]
 
 web_include_js = [
-    "/assets/arteris_app/js/custom-page.js"
+    "/assets/arteris_app/js/custom-page.js",
+	"/assets/arteris_app/js/boletim-medicao.js"
+	"/assets/arteris_app/js/capa_boletim.js"
 ]
+
+jenv = {
+    "filters": [
+        "arteris_app.utils.filters.formatar_moeda",
+        "arteris_app.utils.filters.formatar_percentual",
+        "arteris_app.utils.filters.formatar_data"
+    ]
+}

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boletim de Medição</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="/assets/css/frappe.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/assets/arteris_app/js/boletim-medicao.js"></script>
+    <style>
+        /* Add any additional styles here */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="document-header">
+            <div class="logo-container">
+                <img src="https://www.arteris.com.br/static/icons/arteris-logo.dc5c9168a8a3.svg" alt="Logo" class="logo">
+            </div>
+            <div class="header-title">
+                <h1>Boletim de Medição</h1>
+            </div>
+        </div>
+        <div class="info-boxes-container">
+            <div class="info-box">
+                <div class="info-box-title">Valor Total Vigente</div>
+                <div class="info-box-value" id="valor_total_contrato"></div>
+            </div>
+            <div class="info-box">
+                <div class="info-box-title">Medição Atual Acumulada</div>
+                <div class="info-box-value" id="medicao_acumulada"></div>
+            </div>
+            <div class="info-box">
+                <div class="info-box-title">Medição Atual Acumulada (%)</div>
+                <div class="info-box-value" id="medicao_atual_acumulada_percentual"></div>
+            </div>
+        </div>
+        <div class="table-container">
+            <div class="table-wrapper">
+                <div class="fixed-columns">
+                    <table class="fixed-table">
+                        <thead>
+                            <tr>
+                                <th rowspan="3">Item</th>
+                                <th rowspan="3">Descrição</th>
+                                <th rowspan="3">Und.</th>
+                                <th colspan="3" class="measurement-header">Planilha Contratual</th>
+                            </tr>
+                            <tr>
+                                <th colspan="3" class="sub-header">-</th>
+                            </tr>
+                            <tr>
+                                <th>Quant.</th>
+                                <th>Valor Unitário</th>
+                                <th>Valor Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="fixedTableBody">
+                            <!-- Contract items will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="scrollable-columns">
+                    <div id="scrollableTableContainer">
+                        <!-- Scrollable measurement data will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function() {
+            // Fetch data from the API and populate the page
+            $.ajax({
+                url: '/api/get_data', // Adjust the URL as needed
+                method: 'GET',
+                success: function(data) {
+                    $('#valor_total_contrato').text(data.valor_total_contrato);
+                    $('#medicao_acumulada').text(data.medicaoacumulada);
+                    $('#medicao_atual_acumulada_percentual').text(data.medicao_atual_acumulada_percentual + '%');
+                    // Populate contract items and measurements
+                    populateContractItems(data.contract_items_list);
+                    populateMeasurements(data.contract_measurement_list);
+                },
+                error: function(error) {
+                    console.error('Error fetching data:', error);
+                }
+            });
+
+            function populateContractItems(items) {
+                let rows = '';
+                items.forEach(item => {
+                    rows += `
+                        <tr class="level-${item.level}">
+                            <td class="item-code">${item.codigo}</td>
+                            <td class="item-desc" title="${item.descricao}">${item.descricao}</td>
+                            <td>${item.unidade || ''}</td>
+                            <td class="numeric">${item.quantidade || ''}</td>
+                            <td class="numeric">${item.valorunitario || ''}</td>
+                            <td class="numeric">${item.valortotalvigente || ''}</td>
+                        </tr>
+                    `;
+                });
+                $('#fixedTableBody').html(rows);
+            }
+
+            function populateMeasurements(measurements) {
+                let tables = '';
+                measurements.forEach(measurement => {
+                    let rows = '';
+                    measurement.tabitenscontatrato.forEach(item => {
+                        rows += `
+                            <tr class="level-${item.level}">
+                                <td>${item.quantidademedida || ''}</td>
+                                <td>${item.quantidadetotalvigente || ''}</td>
+                                <td>${item.valortotalmedido || ''}</td>
+                                <td>${item.valortotalvigente || ''}</td>
+                            </tr>
+                        `;
+                    });
+                    tables += `
+                        <table class="scrollable-table">
+                            <thead>
+                                <tr>
+                                    <th colspan="4" class="measurement-header">Período: ${measurement.datafinalmedicao}</th>
+                                </tr>
+                                <tr>
+                                    <th>Quantidades</th>
+                                    <th>Valores (R$)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${rows}
+                            </tbody>
+                        </table>
+                    `;
+                });
+                $('#scrollableTableContainer').html(tables);
+            }
+        });
+    </script>
+</body>
+</html>
