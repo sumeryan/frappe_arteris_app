@@ -441,27 +441,25 @@
         </div>
     </div>
 </div>
+<script type="application/json" id="contract-measurement-data">{{ contract_measurement_json or '{}' }}</script>
+<script type="application/json" id="contract-data">{{ contract_json or '{}' }}</script>
+<script type="application/json" id="concessionaria-data">{{ concessionaria_json or '{}' }}</script>
+<script type="application/json" id="contracted-company-data">{{ contracted_company_json or '{}' }}</script>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 // Mock data object for all fields used in the HTML
+const contract_measurement = JSON.parse(document.getElementById('contract-measurement-data').textContent);
+const contract = JSON.parse(document.getElementById('contract-data').textContent);
+const concessionaria = JSON.parse(document.getElementById('concessionaria-data').textContent);
+const contracted_company = JSON.parse(document.getElementById('contracted-company-data').textContent);
+// Use contract_measurement as the base for your data object
 const data = {
-    logoUrl: 'https://www.arteris.com.br/static/icons/arteris-logo.dc5c9168a8a3.svg',
+    logoUrl: contract_measurement.logoUrl,
     concessionaria: 'ViaPaulista',
     obra: 'Obra Teste',
-    contrato: {
-        contrato: 'CT-12345',
-        inicioservicosprevisto: '2025-01-01',
-        inicioservicos: '2025-01-10',
-        terminoservicosprevisto: '2025-12-31',
-        terminoservicos: '2025-12-20',
-        descricao: 'Execução de obras de infraestrutura',
-        percentualreidi: 3.65
-    },
-    fornecedor: {
-        razaosocial: 'Construtora Exemplo S.A.',
-        cnpj: '12.345.678/0001-99',
-        endereco: 'Rua Exemplo, 123, Centro, Cidade/UF'
-    },
+    contrato: contract,
+    fornecedor: contracted_company,
     faseMedicao: 'Fase 1',
     datafinalmedicao: '2025-06-24',
     datainicialmedicao: '2025-06-01',
