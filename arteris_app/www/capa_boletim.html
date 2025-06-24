@@ -1,78 +1,652 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boletim de Medição - {data.get('concessionaria')}</title>
+<style>
+   body {
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+        margin: 0;
+        padding: 20px;
+        color: #333;
+    }
+    
+    .container {
+        max-width: 1000px;
+        margin: 0 auto;
+        border: 1px solid #000;
+    }
+    
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        border: 1px solid #000;
+        margin-bottom: 10px;
+    }
+    
+    th, td {
+        border: 1px solid #000;
+        padding: 5px;
+        vertical-align: top;
+    }
+    
+    th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+        text-align: center;
+    }
+    
+    .header {
+        display: flex;
+        border: 1px solid #000;
+        margin-bottom: 10px;
+    }
+    
+    .logo {
+        width: 20%;
+        padding: 10px;
+        border-right: 1px solid #000;
+    }
+    
+    .logo img {
+        max-width: 100%;
+    }
+    
+    .title {
+        width: 60%;
+        text-align: center;
+        padding: 10px;
+        border-right: 1px solid #000;
+    }
+    
+    .title h1 {
+        font-size: 16px;
+        margin: 0;
+        margin-bottom: 5px;
+    }
+    
+    .title p {
+        margin: 5px 0;
+    }
+    
+    .contract {
+        width: 20%;
+        padding: 10px;
+        text-align: right;
+    }
+    
+    .measurement-header {
+        display: flex;
+        border: 1px solid #000;
+        margin-bottom: 10px;
+    }
+    
+    .measurement-phase, .measurement-month, .measurement-period {
+        width: 33.33%;
+        text-align: center;
+        padding: 5px;
+        border-right: 1px solid #000;
+    }
+    
+    .measurement-period {
+        border-right: none;
+    }
+    
+    .section-title {
+        background-color: #f2f2f2;
+        font-weight: bold;
+        text-align: center;
+        padding: 5px;
+        border: 1px solid #000;
+        margin-bottom: 10px;
+    }
+    
+    .contract-data {
+        display: flex;
+        border: 1px solid #000;
+        margin-bottom: 10px;
+    }
+    
+    .contractor-data {
+        width: 50%;
+        padding: 10px;
+        border-right: 1px solid #000;
+    }
+    
+    .dates-data {
+        width: 30%;
+        padding: 10px;
+        border-right: 1px solid #000;
+    }
+    
+    .deviation-data {
+        width: 20%;
+        padding: 10px;
+    }
+    
+    .object-section {
+        border: 1px solid #000;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+    
+    .text-right {
+        text-align: right;
+    }
+    
+    .text-center {
+        text-align: center;
+    }
+    
+    .text-bold {
+        font-weight: bold;
+    }
+    
+    .measurement-table th, .measurement-table td {
+        font-size: 10px;
+        padding: 3px;
+    }
+    
+    .measurement-row:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+    
+    .totals-section {
+        display: flex;
+        margin-bottom: 10px;
+    }
+    
+    .measurement-total, .contract-total {
+        width: 50%;
+        border: 1px solid #000;
+    }
+    
+    .approval-section {
+        border: 1px solid #000;
+        margin-bottom: 10px;
+    }
+    
+    .approval-header {
+        background-color: #f2f2f2;
+        font-weight: bold;
+        text-align: center;
+        padding: 5px;
+        border-bottom: 1px solid #000;
+    }
+    
+    .approval-note {
+        padding: 10px;
+        text-align: center;
+        border-bottom: 1px solid #000;
+    }
+    
+    .signatures {
+        display: flex;
+        padding: 10px;
+    }
+    
+    .signature {
+        width: 25%;
+        text-align: center;
+        padding: 10px;
+    }
+    
+    .signature-line {
+        border-bottom: 1px solid #000;
+        margin: 30px 10px 5px 10px;
+    }
+</style>
+</head>
+<body>
 <div class="container">
+    <!-- Cabeçalho -->
     <div class="header">
         <div class="logo">
-            <img src="{{ doc.logoUrl or 'https://www.arteris.com.br/static/icons/arteris-logo.dc5c9168a8a3.svg' }}" alt="{{ doc.concessionaria }} Logo">
+            <img id="logoUrl" src="" alt="Logo">
         </div>
         <div class="title">
             <h1>CAPA DO BOLETIM DE MEDIÇÃO</h1>
-            <p>CONCESSIONÁRIA {{ doc.concessionaria }}</p>
-            <p>OBRA {{ doc.obra }}</p>
+            <p>CONCESSIONÁRIA <span id="concessionaria"></span></p>
+            <p>OBRA <span id="obra"></span></p>
         </div>
         <div class="contract">
             <p>CONTRATO:</p>
-            <p>{{ doc.contrato.contrato }}</p>
+            <p><span id="contrato"></span></p>
         </div>
     </div>
-
+    
+    <!-- Fase de medição -->
     <div class="measurement-header">
         <div class="measurement-phase">
             <p><strong>FASE DA MEDIÇÃO</strong></p>
-            <p>{{ doc.faseMedicao }}</p>
+            <p><span id="faseMedicao"></span></p>
         </div>
         <div class="measurement-month">
             <p><strong>MÊS:</strong></p>
-            <p>{{ doc.datafinalmedicao | formatar_data }}</p>
+            <p><span id="mesMedicao"></span></p>
         </div>
         <div class="measurement-period">
             <p><strong>PERÍODO:</strong></p>
-            <p>{{ doc.datainicialmedicao | formatar_data }} a {{ doc.datafinalmedicao | formatar_data }}</p>
+            <p><span id="periodoMedicao"></span></p>
         </div>
     </div>
-
-    <!-- Seções seguem o mesmo padrão... -->
-
-    <div class="object-section">
-        <p>{{ doc.contrato.descricao }}</p>
+    
+    <!-- Seção de contrato -->
+    <div class="section-title">CONTRATO</div>
+    
+    <div class="contract-data">
+        <div class="contractor-data">
+            <p><strong>RAZÃO SOCIAL DO FORNECEDOR:</strong></p>
+            <p><strong><span id="fornecedor_razaosocial"></span></strong></p>
+            <p><strong>CNPJ:</strong> <span id="fornecedor_cnpj"></span></p>
+            <p><strong>ENDEREÇO:</strong> <span id="fornecedor_endereco"></span></p>
+        </div>
+        <div class="dates-data">
+            <p>Data inicial do Contrato: <span id="data_ejak"></span><br>
+            Data final do Contrato: <span id="data_final_do_contrato"></span></p>
+            <p>Início das obras conf. Contrato: <span id="inicioservicosprevisto"></span><br>
+            Início real das obras: <span id="inicioservicos"></span></p>
+            <p>Término das obras conf. Contrato: <span id="terminoservicosprevisto"></span><br>
+            Término previsto das obras:<span id="terminoservicos"></span></p>
+        </div>
+        <div class="deviation-data">
+            <p><strong>Desvios</strong></p>
+            <p>Conforme Contratado: <span id="desvioContratado"></span></p>
+            <p>Conforme Medição Anterior: <span id="desvioMedicaoAnterior"></span></p>
+        </div>
     </div>
-
+    
+    <!-- Objeto -->
+    <div class="section-title">OBJETO</div>
+    <div class="object-section">
+        <p><span id="descricao_objeto"></span></p>
+    </div>
+    
+    <!-- Seção de medição -->
+    <div class="section-title">MEDIÇÃO</div>
+    
     <table class="measurement-table">
         <thead>
             <tr>
-                <th>Nº Pedido</th>
-                <th>Posição</th>
-                <th>Invest/Operação</th>
-                <th>Tipo</th>
-                <th>Centro de Custo</th>
-                <th>Valor Total Vigente</th>
-                <th>% Acum. Ant.</th>
-                <th>% Atual</th>
-                <th>% Acum. Atual</th>
-                <th>Acum. Ant. (R$)</th>
-                <th>Atual (R$)</th>
-                <th>Acum. Atual (R$)</th>
+                <th rowspan="2">Nº Pedido</th>
+                <th rowspan="2">Posição da linha no pedido</th>
+                <th rowspan="2">Investimento/Operação</th>
+                <th rowspan="2">Tipo</th>
+                <th rowspan="2">Código PEP / Centro de Custo</th>
+                <th rowspan="2">Valor Total Vigente</th>
+                <th colspan="3">Percentual (%)</th>
+                <th colspan="3">Valores Medidos (R$)</th>
+            </tr>
+            <tr>
+                <th>Medição Acum. Ant.</th>
+                <th>Medição Atual (mês)</th>
+                <th>Medição Acum. Atual</th>
+                <th>Medição Acum. Anterior</th>
+                <th>Medição Atual (mês)</th>
+                <th>Medição Acum. Atual</th>
             </tr>
         </thead>
         <tbody>
-        {% for pedido in doc.pedidosSap %}
-            <tr class="measurement-row">
-                <td>{{ pedido.numeropedido }}</td>
-                <td>{{ pedido.linhapedido }}</td>
-                <td>{{ pedido.capexopex }}</td>
-                <td>{{ pedido.tipo }}</td>
-                <td>{{ pedido.centrodecusto }}</td>
-                <td class="text-right">{{ pedido.valortotalvigente | formatar_moeda }}</td>
-                <td class="text-right">{{ pedido.medicaoacumantpercentual | formatar_percentual }}</td>
-                <td class="text-right">{{ pedido.medicaoatualpercentual | formatar_percentual }}</td>
-                <td class="text-right">{{ pedido.medicaoacumuladaatualpercentual | formatar_percentual }}</td>
-                <td class="text-right">{{ pedido.acumuladoanterior | formatar_moeda }}</td>
-                <td class="text-right">{{ pedido.valormedido | formatar_moeda }}</td>
-                <td class="text-right">{{ pedido.acumuladoatual | formatar_moeda }}</td>
+            <tr id="pedidosSap_rows"></tr>
+            <!-- Linha de total -->
+            <tr class="text-bold">
+                <td colspan="5">TOTAL</td>
+                <td class="text-right" id="valorcontrato_total"></td>
+                <td class="text-right" id="saldopercentual_total"></td>
+                <td class="text-right" id="percentualAtual_total"></td>
+                <td class="text-right" id="percentualAcumuladoAtual_total"></td>
+                <td class="text-right" id="medicaoacumulada_total"></td>
+                <td class="text-right" id="valorAtual_total"></td>
+                <td class="text-right" id="valorAcumuladoAtual_total"></td>
             </tr>
-        {% else %}
-            <tr>
-                <td colspan="12">Sem pedidos</td>
-            </tr>
-        {% endfor %}
         </tbody>
     </table>
+    
+    <!-- Totais -->
+    <div class="totals-section">
+        <div class="measurement-total">
+            <table>
+                <thead>
+                    <tr>
+                        <th colspan="2">TOTAL DA MEDIÇÃO</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Fator</strong></td>
+                        <td class="text-right"><strong>(R$)</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Medição Atual [A]:</td>
+                        <td class="text-right" id="medicaoatual"></td>
+                    </tr>
+                    <tr>
+                        <td>Faturamento Direto (FTD) na Fase Atual:</td>
+                        <td class="text-right" id="faturamentodireto"></td>
+                    </tr>
+                    <tr>
+                        <td>Medição Atual com Desconto de FTD (B):</td>
+                        <td class="text-right" id="medicaoatualdescontoftd"></td>
+                    </tr>
+                    <tr>
+                        <td>Desconto do REIDI [C] = -3,65% . [B]:</td>
+                        <td class="text-right" id="descontoreidi"></td>
+                    </tr>
+                    <tr>
+                        <td>Medição líquida do REIDI (vlr. bruto NF) [D] = [B]+[C]:</td>
+                        <td class="text-right" id="medicaoliquida"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>Medição Atual [A]:</td>
+                        <td class="text-right" id="medicaoatual"></td>
+                    </tr>
+                    <tr>
+                        <td>Desconto do REIDI [E] = -3,65% . [A]:</td>
+                        <td class="text-right" id="percentualreidi"></td>
+                    </tr>
+                    <tr>
+                        <td>Medição equivalente líquida do REIDI [F] = [A]+(E):</td>
+                        <td class="text-right" id="medicaoequivalente"></td>
+                    </tr>
+                    <tr>
+                        <td>Caução Contratual [G] = 5% . [F]</td>
+                        <td class="text-right" id="caucaocontratual"></td>
+                    </tr>
+                    <tr>
+                        <td>Liberação da Caução na Fase Atual:</td>
+                        <td class="text-right" id="liberacaoCaucao"></td>
+                    </tr>
+                    <tr>
+                        <td>Penalidades Revisadas:</td>
+                        <td class="text-right" id="penalidadesRevisadas"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="contract-total">
+            <table>
+                <thead>
+                    <tr>
+                        <th colspan="2">TOTAL CONTRATO</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td class="text-right"><strong>(R$)</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Valor Total Vigente:</td>
+                        <td class="text-right" id="valorcontrato"></td>
+                    </tr>
+                    <tr>
+                        <td>Faturamento Direto (FTD) Acumulado:</td>
+                        <td class="text-right" id="ftdacumulado"></td>
+                    </tr>
+                    <tr>
+                        <td>Valor Total Vigente com desconto de FTD:</td>
+                        <td class="text-right" id="totalvigentemenosftd"></td>
+                    </tr>
+                    <tr>
+                        <td>Medição Acumulada Atual</td>
+                        <td class="text-right" id="medicaoacumulada"></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>Saldo Contratual (R$):</td>
+                        <td class="text-right" id="saldo"></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>Saldo Contratual (%):</td>
+                        <td class="text-right" id="saldopercentual"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <!-- Aprovação -->
+    <div class="approval-section">
+        <div class="approval-header">APROVAÇÃO</div>
+        <div class="approval-note" id="notaAprovacao"></div>
+        <div class="signatures">
+            <div class="signature">
+                <div class="signature-line"></div>
+                <p id="assinatura_cargo1"></p>
+            </div>
+            <div class="signature">
+                <div class="signature-line"></div>
+                <p id="assinatura_cargo2"></p>
+            </div>
+            <div class="signature">
+                <div class="signature-line"></div>
+                <p id="assinatura_cargo3"></p>
+            </div>
+            <div class="signature">
+                <div class="signature-line"></div>
+                <p id="assinatura_cargo4"></p>
+            </div>
+        </div>
+    </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+// Mock data object for all fields used in the HTML
+const data = {
+    logoUrl: 'https://www.arteris.com.br/static/icons/arteris-logo.dc5c9168a8a3.svg',
+    concessionaria: 'ViaPaulista',
+    obra: 'Obra Teste',
+    contrato: {
+        contrato: 'CT-12345',
+        inicioservicosprevisto: '2025-01-01',
+        inicioservicos: '2025-01-10',
+        terminoservicosprevisto: '2025-12-31',
+        terminoservicos: '2025-12-20',
+        descricao: 'Execução de obras de infraestrutura',
+        percentualreidi: 3.65
+    },
+    fornecedor: {
+        razaosocial: 'Construtora Exemplo S.A.',
+        cnpj: '12.345.678/0001-99',
+        endereco: 'Rua Exemplo, 123, Centro, Cidade/UF'
+    },
+    faseMedicao: 'Fase 1',
+    datafinalmedicao: '2025-06-24',
+    datainicialmedicao: '2025-06-01',
+    data_ejak: '2025-01-01',
+    data_final_do_contrato: '2025-12-31',
+    desvioContratado: '0%',
+    desvioMedicaoAnterior: '0%',
+    pedidosSap: [
+        {
+            numeropedido: 'PED-001',
+            linhapedido: '1',
+            capexopex: 'Investimento',
+            tipo: 'Tipo A',
+            centrodecusto: 'PEP-001',
+            valortotalvigente: 100000,
+            medicaoacumantpercentual: 10,
+            medicaoatualpercentual: 5,
+            medicaoacumuladaatualpercentual: 15,
+            acumuladoanterior: 10000,
+            valormedido: 5000,
+            acumuladoatual: 15000
+        }
+    ],
+    valorcontrato: 1000000,
+    saldopercentual: 85,
+    totais: {
+        percentualAtual: 5,
+        percentualAcumuladoAtual: 15,
+        valorAtual: 5000,
+        valorAcumuladoAtual: 15000
+    },
+    medicaoacumulada: 15000,
+    medicaoatual: 5000,
+    faturamentodireto: 1000,
+    medicaoatualdescontoftd: 4000,
+    descontoreidi: -3.65,
+    medicaoliquida: 3860,
+    medicaoequivalente: 4825,
+    caucaocontratual: 5,
+    medicaoAtual: {
+        liberacaoCaucao: 200,
+        penalidadesRevisadas: 0
+    },
+    ftdacumulado: 2000,
+    totalvigentemenosftd: 998000,
+    saldo: 985000,
+    notaAprovacao: 'Para contratos acima de R$3 Milhões de reais a assinatura do Diretor/Superintendente se faz premente',
+    assinaturas: {
+        cargo1: 'Diretor/Sup',
+        cargo2: 'Gestor do Contrato',
+        cargo3: 'Gerente Implantação e Conserva',
+        cargo4: 'Responsável da Empreiteira'
+    }
+};
+
+// Helper to format dates
+function format_date(dateStr, onlyMonth) {
+    if (!dateStr) return '';
+    const date = new Date(dateStr);
+    if (onlyMonth) {
+        return date.toLocaleString('pt-BR', { month: 'long', year: 'numeric' });
+    }
+    return date.toLocaleDateString('pt-BR');
+}
+
+// Helper to format currency
+function formatar_moeda(valor) {
+    if (valor == null || isNaN(valor)) return '0,00';
+    return parseFloat(valor).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+// Helper to format percent
+function formatar_percentual(valor) {
+    if (valor == null || isNaN(valor)) return '0,00%';
+    return parseFloat(valor).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%';
+}
+
+// Populate HTML fields from data object
+$(function() {
+    // Logo
+    $('#logoUrl').attr('src', data.logoUrl);
+    $('#logoUrl').attr('alt', data.concessionaria + ' Logo');
+    // Concessionaria, obra, contrato
+    $('#concessionaria').text(data.concessionaria);
+    $('#obra').text(data.obra);
+    $('#contrato').text(data.contrato.contrato);
+    // Fase de medição
+    $('#faseMedicao').text(data.faseMedicao);
+    $('#mesMedicao').text(format_date(data.datafinalmedicao, true));
+    $('#periodoMedicao').text(format_date(data.datainicialmedicao) + ' a ' + format_date(data.datafinalmedicao));
+    // Fornecedor
+    $('#fornecedor_razaosocial').text(data.fornecedor.razaosocial);
+    $('#fornecedor_cnpj').text(data.fornecedor.cnpj);
+    $('#fornecedor_endereco').text(data.fornecedor.endereco);
+    // Datas contrato
+    $('#data_ejak').text(format_date(data.data_ejak));
+    $('#data_final_do_contrato').text(format_date(data.data_final_do_contrato));
+    $('#inicioservicosprevisto').text(format_date(data.contrato.inicioservicosprevisto));
+    $('#inicioservicos').text(format_date(data.contrato.inicioservicos));
+    $('#terminoservicosprevisto').text(format_date(data.contrato.terminoservicosprevisto));
+    $('#terminoservicos').text(format_date(data.contrato.terminoservicos));
+    // Desvios
+    $('#desvioContratado').text(data.desvioContratado);
+    $('#desvioMedicaoAnterior').text(data.desvioMedicaoAnterior);
+    // Objeto
+    $('#descricao_objeto').text(data.contrato.descricao);
+    // Aprovação
+    $('#notaAprovacao').text(data.notaAprovacao);
+    $('#assinatura_cargo1').text(data.assinaturas.cargo1);
+    $('#assinatura_cargo2').text(data.assinaturas.cargo2);
+    $('#assinatura_cargo3').text(data.assinaturas.cargo3);
+    $('#assinatura_cargo4').text(data.assinaturas.cargo4);
+    // Table totals and dynamic fields
+    $('#valorcontrato_total').text(formatar_moeda(data.valorcontrato));
+    $('#saldopercentual_total').text(formatar_percentual(100 - data.saldopercentual));
+    $('#percentualAtual_total').text(formatar_percentual(data.totais.percentualAtual));
+    $('#percentualAcumuladoAtual_total').text(formatar_percentual(data.totais.percentualAcumuladoAtual));
+    $('#medicaoacumulada_total').text(formatar_moeda(data.medicaoacumulada));
+    $('#valorAtual_total').text(formatar_moeda(data.totais.valorAtual));
+    $('#valorAcumuladoAtual_total').text(formatar_moeda(data.totais.valorAcumuladoAtual));
+
+    // Contract totals and measurement totals
+    $('#valorcontrato').text(formatar_moeda(data.valorcontrato));
+    $('#ftdacumulado').text(formatar_moeda(data.ftdacumulado));
+    $('#totalvigentemenosftd').text(formatar_moeda(data.totalvigentemenosftd));
+    $('#medicaoacumulada').text(formatar_moeda(data.medicaoacumulada));
+    $('#saldo').text(formatar_moeda(data.saldo));
+    $('#saldopercentual').text(formatar_percentual(data.saldopercentual));
+
+    $('#medicaoatual').text(formatar_moeda(data.medicaoatual));
+    $('#faturamentodireto').text(formatar_moeda(data.faturamentodireto));
+    $('#medicaoatualdescontoftd').text(formatar_moeda(data.medicaoatualdescontoftd));
+    $('#descontoreidi').text(formatar_percentual(data.descontoreidi));
+    $('#medicaoliquida').text(formatar_moeda(data.medicaoliquida));
+    $('#percentualreidi').text(formatar_percentual(data.contrato.percentualreidi));
+    $('#medicaoequivalente').text(formatar_moeda(data.medicaoequivalente));
+    $('#caucaocontratual').text(formatar_percentual(data.caucaocontratual));
+    $('#liberacaoCaucao').text(formatar_moeda(data.medicaoAtual.liberacaoCaucao));
+    $('#penalidadesRevisadas').text(formatar_moeda(data.medicaoAtual.penalidadesRevisadas));
+
+    // Render pedidosSap rows
+    var linhas = gerar_linhas_pedidos(data.pedidosSap);
+    $('#pedidosSap_rows').replaceWith(linhas);
+});
+
+// Update gerar_linhas_pedidos to return <tr> elements only
+function gerar_linhas_pedidos(pedidos) {
+    var linhas_html = '';
+    if (!pedidos || pedidos.length === 0) {
+        linhas_html += `<tr class="measurement-row">
+            <td>Sem pedidos</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td class="text-right">0,00</td>
+            <td class="text-right">0,00%</td>
+            <td class="text-right">0,00%</td>
+            <td class="text-right">0,00%</td>
+            <td class="text-right">0,00</td>
+            <td class="text-right">-</td>
+            <td class="text-right">0,00</td>
+        </tr>`;
+    } else {
+        $.each(pedidos, function(i, pedido) {
+            var valor_atual = pedido.valormedido;
+            var valor_atual_formatado = (valor_atual !== undefined && valor_atual !== null) ? formatar_moeda(valor_atual) : '-';
+            linhas_html += `<tr class="measurement-row">
+                <td>${pedido.numeropedido || ''}</td>
+                <td>${pedido.linhapedido || ''}</td>
+                <td>${pedido.capexopex || ''}</td>
+                <td>${pedido.tipo || ''}</td>
+                <td>${pedido.centrodecusto || ''}</td>
+                <td class="text-right">${formatar_moeda(pedido.valortotalvigente)}</td>
+                <td class="text-right">${formatar_percentual(pedido.medicaoacumantpercentual)}</td>
+                <td class="text-right">${formatar_percentual(pedido.medicaoatualpercentual)}</td>
+                <td class="text-right">${formatar_percentual(pedido.medicaoacumuladaatualpercentual)}</td>
+                <td class="text-right">${formatar_moeda(pedido.acumuladoanterior)}</td>
+                <td class="text-right">${valor_atual_formatado}</td>
+                <td class="text-right">${formatar_moeda(pedido.acumuladoatual)}</td>
+            </tr>`;
+        });
+    }
+    return linhas_html;
+}
+</script>
+</body>
+</html>

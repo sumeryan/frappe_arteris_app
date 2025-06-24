@@ -249,13 +249,13 @@ website_route_rules = [
 web_include_css = [
     "/assets/arteris_app/css/custom-page.css",
 	"/assets/arteris_app/css/boletim_medicao.css",
-	"/assets/arteris_app/css/capa_boletim.css"
+	"/assets/arteris_app/css/capa_do_boletim.css"
 ]
 
 web_include_js = [
     "/assets/arteris_app/js/custom-page.js",
 	"/assets/arteris_app/js/boletim-medicao.js"
-	"/assets/arteris_app/js/capa_boletim.js"
+	"/assets/arteris_app/js/capa_do_boletim.js"
 ]
 
 jenv = {
