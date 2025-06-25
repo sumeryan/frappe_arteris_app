@@ -1,0 +1,134 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Contract Item",
+  "enabled": 1,
+  "modified": "2025-04-25 21:50:14.462630",
+  "module": "Arteris",
+  "name": "Contract Item Expand",
+  "script": "frappe.ui.form.on('Contract Item', {\n    refresh: function(frm) {\n        // Espera o carregamento completo da página\n        setTimeout(function() {\n            // Se estivermos na visualização de lista (tree view)\n            if(cur_list && cur_list.meta && cur_list.meta.is_tree) {\n                // Expande todos os nós\n                $('.tree-children').removeClass('hidden');\n                \n                // Atualiza os ícones de expansão\n                $('.tree-node .fa-chevron-right')\n                    .removeClass('fa-chevron-right')\n                    .addClass('fa-chevron-down');\n            }\n        }, 1000); // Aguarda 1 segundo para garantir que a árvore foi renderizada\n    }\n});",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Contract",
+  "enabled": 1,
+  "modified": "2025-04-25 23:03:15.445552",
+  "module": "Arteris",
+  "name": "Hide ID Contract",
+  "script": "frappe.listview_settings['Contract'] = { hide_name_column: true };",
+  "view": "List"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "SAP Order",
+  "enabled": 1,
+  "modified": "2025-04-25 23:08:06.083732",
+  "module": "Arteris",
+  "name": "Hide ID SAP Order",
+  "script": "frappe.listview_settings['SAP Order'] = { hide_name_column: true };",
+  "view": "List"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Work Role",
+  "enabled": 1,
+  "modified": "2025-04-26 14:53:04.236518",
+  "module": "Arteris",
+  "name": "Hide ID Work Role",
+  "script": "frappe.listview_settings['Work Role'] = { hide_name_column: true };",
+  "view": "List"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Formula Template",
+  "enabled": 1,
+  "modified": "2025-04-26 16:15:49.128131",
+  "module": "Arteris",
+  "name": "Hide ID Formula Template",
+  "script": "frappe.listview_settings['Formula Template'] = { hide_name_column: true };",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Asset",
+  "enabled": 1,
+  "modified": "2025-04-26 16:16:26.373306",
+  "module": "Arteris",
+  "name": "Hide ID Asset",
+  "script": "frappe.listview_settings['Asset'] = { hide_name_column: true };",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Formula Template",
+  "enabled": 1,
+  "modified": "2025-04-28 11:23:13.876951",
+  "module": "Arteris",
+  "name": "Configurar",
+  "script": "frappe.ui.form.on(\"Formula Template\", {\r\n    configurar: async function(frm) {\r\n        try {\r\n            frappe.show_progress('Carregando', 10, 100, 'Aguarde...');\r\n            console.log('[Formula Template] Progress bar mostrado.');\r\n\r\n            const response = await fetch('https://arteris-editor.meb.services/api/open-editor', {\r\n                method: 'POST',\r\n                headers: {\r\n                    'Content-Type': 'application/json'\r\n                },\r\n                body: JSON.stringify({\r\n                    uuid: frm.doc.name,\r\n                    formula: frm.doc.formula\r\n                })\r\n            });\r\n\r\n            frappe.hide_progress();\r\n            console.log('[Formula Template] Progress bar escondido.');\r\n\r\n            const contentType = response.headers.get('content-type');\r\n            console.log('[Formula Template] Content-Type recebido:', contentType);\r\n\r\n            if (contentType && contentType.includes('application/json')) {\r\n                const resposta = await response.json();\r\n                console.log('[Formula Template] Resposta JSON recebida:', resposta);\r\n\r\n                if (resposta.success) {\r\n                    const uuid = resposta.uuid; // Obtendo o UUID da resposta\r\n                    const redirectUrl = `https://arteris-editor.meb.services/?uuid=${uuid}`; // Montando o URL de redirecionamento com o UUID\r\n                    console.log('[Formula Template] Sucesso, abrindo nova aba:', redirectUrl);\r\n                    window.open(redirectUrl, '_blank');\r\n                } else {\r\n                    console.warn('[Formula Template] Resposta sem sucesso:', resposta.message);\r\n                    frappe.msgprint(resposta.message || 'Resposta sem sucesso.');\r\n                }\r\n            } else {\r\n                const respostaTexto = await response.text();\r\n                console.warn('[Formula Template] Resposta não-JSON recebida:', respostaTexto);\r\n                frappe.msgprint('Resposta não JSON: ' + respostaTexto);\r\n            }\r\n        } catch (error) {\r\n            frappe.hide_progress();\r\n            console.error('[Formula Template] Erro no try/catch:', error);\r\n            frappe.msgprint('Erro: ' + error);\r\n        }\r\n    }\r\n});\r\n",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Formula Group",
+  "enabled": 1,
+  "modified": "2025-05-12 09:21:45.845736",
+  "module": "Arteris",
+  "name": "Call Formula Editor",
+  "script": "frappe.ui.form.on('Formula Group Field', {\n    \n    editarformula: async function(frm, cdt, cdn) {\n        \n        let row = frappe.get_doc(cdt, cdn);\n        if (row.name.substring(0,4) === 'new-') {\n            frappe.msgprint({\n                title: __('Atenção!'),\n                indicator: 'yellow',\n                message:'Salve o registro para poder editar a fórmula!'\n            });\n            \n        }\n        else\n        {\n            try {\n                //frappe.msgprint(row.formula);\n                //frappe.show_progress(10, 100, 'Aguarde...');\n                console.log('[Formula Template] Progress bar mostrado.');\n    \n                const response = await fetch('https://arteris-editor.meb.services/api/open-editor', {\n                    method: 'POST',\n                    headers: {\n                        'Content-Type': 'application/json'\n                    },\n                    body: JSON.stringify({\n                        uuid: row.name,\n                        formula: row.formula\n                    })\n                });\n    \n                frappe.hide_progress();\n                console.log('[Formula Template] Progress bar escondido.');\n    \n                const contentType = response.headers.get('content-type');\n                console.log('[Formula Template] Content-Type recebido:', contentType);\n    \n                if (contentType && contentType.includes('application/json')) {\n                    const resposta = await response.json();\n                    console.log('[Formula Template] Resposta JSON recebida:', resposta);\n    \n                    if (resposta.success) {\n                        const uuid = resposta.uuid; // Obtendo o UUID da resposta\n                        const redirectUrl = `https://arteris-editor.meb.services/?uuid=${uuid}`; // Montando o URL de redirecionamento com o UUID\n                        console.log('[Formula Template] Sucesso, abrindo nova aba:', redirectUrl);\n                        window.open(redirectUrl, '_blank');\n                    } else {\n                        console.warn('[Formula Template] Resposta sem sucesso:', resposta.message);\n                        frappe.msgprint(resposta.message || 'Resposta sem sucesso.');\n                    }\n                } else {\n                    const respostaTexto = await response.text();\n                    console.warn('[Formula Template] Resposta não-JSON recebida:', respostaTexto);\n                    frappe.msgprint('Resposta não JSON: ' + respostaTexto);\n                }\n            } catch (error) {\n                frappe.hide_progress();\n                console.error('[Formula Template] Erro no try/catch:', error);\n                frappe.msgprint('Erro: ' + error);\n            }\n        }\n    }\n})",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Contract Measurement",
+  "enabled": 1,
+  "modified": "2025-06-04 09:14:22.514917",
+  "module": "Arteris",
+  "name": "print_bm",
+  "script": "frappe.ui.form.on('Contract Measurement', {\n\timprimircapa: function(frm) {\n\t    var openlink = window.open('https://arteris-bm.meb.services/capa_boletim/'+frm.doc.name);\n\t}\n})",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Contract Measurement Record",
+  "enabled": 1,
+  "modified": "2025-06-04 14:37:28.331075",
+  "module": "Arteris",
+  "name": "Custom List Contract Measurement Record",
+  "script": "frappe.listview_settings['Contract Measurement Record'] = {\n    hide_name_column: true,\n// \trefresh: function(listview) {\n// \t    $(\".frappe-timestamp\").hide();\n// \t    $(\".list-row-like\").hide();\n// \t    $(\".level-high\").hide();\n// \t}       \n}\nfrappe.listview_settings['Contract Measurement Record'].formatters = {\n    codigo(value) {\n        const result = value?.length > 15 \n            ? `${value.slice(0, 5)}...${value.slice(-5)}` \n            : value;\n        return result\n        // if (value.lenght > 15) {\n        //     return `${value.slice(0, 5)}...${value.slice(-5)}`\n        // }\n        // else {\n        //     return value\n        // }\n    \n    }\n}",
+  "view": "List"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Contract Measurement",
+  "enabled": 1,
+  "modified": "2025-06-04 09:13:05.666121",
+  "module": "Arteris",
+  "name": "imprimirboletim",
+  "script": "frappe.ui.form.on('Contract Measurement', {\n\timprimirboletim: function(frm) {\n\t    var openlink = window.open('https://arteris-bm.meb.services/boletim_body/'+frm.doc.contrato);\n\t}\n})",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Holiday",
+  "enabled": 1,
+  "modified": "2025-06-20 17:32:44.834463",
+  "module": "Arteris",
+  "name": "Hide ID Holiday",
+  "script": "frappe.listview_settings['Holiday'] = { hide_name_column: true };",
+  "view": "List"
+ }
+]

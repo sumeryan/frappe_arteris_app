@@ -265,3 +265,7 @@ jenv = {
         "arteris_app.utils.filters.formatar_data"
     ]
 }
+
+fixtures = [
+    {"doctype": "Client Script", "filters": [["module", "in", ("Arteris")]]}
+]
