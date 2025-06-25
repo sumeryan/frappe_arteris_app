@@ -445,7 +445,7 @@
 <script type="application/json" id="contract-data">{{ contract_json or '{}' }}</script>
 <script type="application/json" id="concessionaria-data">{{ concessionaria_json or '{}' }}</script>
 <script type="application/json" id="contracted-company-data">{{ contracted_company_json or '{}' }}</script>
-
+<script type="application/json" id="pedidosSap-data">{{ pedidos_sap_json or '[]' }}</script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 // Mock data object for all fields used in the HTML
@@ -453,9 +453,10 @@ const contract_measurement = JSON.parse(document.getElementById('contract-measur
 const contract = JSON.parse(document.getElementById('contract-data').textContent);
 const concessionaria = JSON.parse(document.getElementById('concessionaria-data').textContent);
 const contracted_company = JSON.parse(document.getElementById('contracted-company-data').textContent);
+const pedidosSap = JSON.parse(document.getElementById('pedidosSap-data').textContent);
 // Use contract_measurement as the base for your data object
 const data = {
-    logoUrl: contract_measurement.logoUrl,
+    logoUrl: contract_measurement.logoUrl ?? 'https://www.arteris.com.br/static/icons/arteris-logo.dc5c9168a8a3.svg',
     concessionaria: 'ViaPaulista',
     obra: 'Obra Teste',
     contrato: contract,
@@ -467,22 +468,7 @@ const data = {
     data_final_do_contrato: '2025-12-31',
     desvioContratado: '0%',
     desvioMedicaoAnterior: '0%',
-    pedidosSap: [
-        {
-            numeropedido: 'PED-001',
-            linhapedido: '1',
-            capexopex: 'Investimento',
-            tipo: 'Tipo A',
-            centrodecusto: 'PEP-001',
-            valortotalvigente: 100000,
-            medicaoacumantpercentual: 10,
-            medicaoatualpercentual: 5,
-            medicaoacumuladaatualpercentual: 15,
-            acumuladoanterior: 10000,
-            valormedido: 5000,
-            acumuladoatual: 15000
-        }
-    ],
+    pedidosSap: pedidosSap,
     valorcontrato: 1000000,
     saldopercentual: 85,
     totais: {

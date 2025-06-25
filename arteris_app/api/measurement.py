@@ -257,6 +257,7 @@ def create_measurement(month: int, year: int, ignore_current_measurement: bool =
                 # Mount the contract item to the contract measurement
                 contract_measurement_item = contract_measurement.append("tabitenscontatrato")
                 contract_measurement_item.itemcontrato = item.name
+                contract_measurement_item.tipodoitem = item.tipodoitem
                 contract_measurement_item.valortotalvigente = item.valortotalvigente
                 contract_measurement_item.quantidadetotalvigente = item.quantidade
                 contract_measurement_item.saldoanterior = saldo
@@ -322,6 +323,7 @@ def create_measurement(month: int, year: int, ignore_current_measurement: bool =
                             # Mount the Work Role to the contract measurement
                             contract_measurement_work_role = contract_measurement.append("tablemaodeobra")
                             contract_measurement_work_role.item = item.name
+                            contract_measurement_work_role.tipoitem = item.tipoitem
                             contract_measurement_work_role.funcao = work_role.funcao
                             contract_measurement_work_role.quantidademedida = 0.0
                             contract_measurement_work_role.valormedido = 0.0
@@ -336,6 +338,7 @@ def create_measurement(month: int, year: int, ignore_current_measurement: bool =
                             # Mount the Asset to the contract measurement
                             contract_measurement_asset = contract_measurement.append("tableativos")
                             contract_measurement_asset.item = item.name
+                            contract_measurement_asset.tipoitem = item.tipoitem
                             contract_measurement_asset.maquina_equipamento_ou_ferramenta = asset.asset
                             contract_measurement_asset.quantidademedida = 0.0
                             contract_measurement_asset.valormedido = 0.0

@@ -24,14 +24,15 @@ def get_context(context):
 
             unique_pedidos = {}
             tabelaPedidos = doc.tablepedidossap
+            pedido_sap_ids = []
 
             # Filter unique pedidos by pedido_sap
             for pedido in tabelaPedidos:
-                sap_id = pedido['pedido_sap']
+                sap_id = pedido.pedido_sap
                 if sap_id not in unique_pedidos:
                     unique_pedidos[sap_id] = pedido
+                    pedido_sap_ids.append(sap_id)
 
-            pedido_sap_ids = set()
             sap_orders = frappe.get_all(
                 'SAP Order',
                 filters={'name': ['in', list(pedido_sap_ids)]},
@@ -41,6 +42,8 @@ def get_context(context):
             for sap_order in sap_orders:
                 detalhePedido = flatten_sap_order(sap_order)
                 pedidosSap.extend(detalhePedido)
+
+            context.pedidos_sap_json = frappe.as_json(pedidosSap)
 
         except frappe.DoesNotExistError:
             frappe.throw(_("Contract Measurement not found"), frappe.DoesNotExistError)
