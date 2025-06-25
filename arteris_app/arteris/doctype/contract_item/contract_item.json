@@ -3,7 +3,7 @@
  "allow_import": 1,
  "autoname": "UUID",
  "creation": "2025-04-25 20:38:39.262402",
- "default_view": "List",
+ "default_view": "Tree",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
@@ -88,12 +88,14 @@
   {
    "fieldname": "old_parent",
    "fieldtype": "Link",
+   "hidden": 1,
    "label": "Old Parent",
    "options": "Contract Item"
   },
   {
    "fieldname": "parent_contract_item",
    "fieldtype": "Link",
+   "hidden": 1,
    "ignore_user_permissions": 1,
    "label": "Parent Contract Item",
    "options": "Contract Item"
@@ -347,10 +349,12 @@
    "fieldtype": "Column Break"
   }
  ],
+ "force_re_route_to_default_view": 1,
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
+ "is_tree": 1,
  "links": [],
- "modified": "2025-06-25 01:58:19.724918",
+ "modified": "2025-06-25 08:27:22.231190",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Item",
