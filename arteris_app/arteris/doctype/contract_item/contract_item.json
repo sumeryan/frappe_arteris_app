@@ -3,7 +3,7 @@
  "allow_import": 1,
  "autoname": "UUID",
  "creation": "2025-04-25 20:38:39.262402",
- "default_view": "Tree",
+ "default_view": "List",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
@@ -118,7 +118,7 @@
    "fieldname": "descricao",
    "fieldtype": "Data",
    "label": "Descri\u00e7\u00e3o",
-   "length": 520,
+   "length": 800,
    "reqd": 1
   },
   {
@@ -351,7 +351,7 @@
  "index_web_pages_for_search": 1,
  "is_tree": 1,
  "links": [],
- "modified": "2025-06-22 15:38:54.877275",
+ "modified": "2025-06-25 01:50:00.593464",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Item",
