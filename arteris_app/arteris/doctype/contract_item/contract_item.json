@@ -354,11 +354,11 @@
  "index_web_pages_for_search": 1,
  "is_tree": 1,
  "links": [],
- "modified": "2025-06-25 08:27:22.231190",
+ "modified": "2025-06-26 00:06:58.809121",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Item",
- "naming_rule": "UUID",
+ "naming_rule": "UUID)",
  "nsm_parent_field": "parent_contract_item",
  "owner": "Administrator",
  "permissions": [
