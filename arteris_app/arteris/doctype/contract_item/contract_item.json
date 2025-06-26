@@ -1,6 +1,7 @@
 {
  "actions": [],
  "allow_import": 1,
+ "allow_rename": 1,
  "autoname": "UUID",
  "creation": "2025-04-25 20:38:39.262402",
  "default_view": "Tree",
@@ -354,7 +355,7 @@
  "index_web_pages_for_search": 1,
  "is_tree": 1,
  "links": [],
- "modified": "2025-06-26 00:06:58.8",
+ "modified": "2025-06-26 01:10:55.319135",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Item",
