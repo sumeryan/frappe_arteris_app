@@ -1,0 +1,58 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-06-25 21:06:12.018814",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "templateitem",
+  "volumeinicial",
+  "volumefinal",
+  "valor"
+ ],
+ "fields": [
+  {
+   "fieldname": "templateitem",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Template de item",
+   "options": "Item"
+  },
+  {
+   "fieldname": "volumeinicial",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Volume inicial (Qtd.)",
+   "precision": "3"
+  },
+  {
+   "fieldname": "volumefinal",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Volume final (Qtd.)",
+   "precision": "3"
+  },
+  {
+   "fieldname": "valor",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Valor",
+   "precision": "2"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-06-25 21:06:12.018814",
+ "modified_by": "Administrator",
+ "module": "Arteris",
+ "name": "Contract Price",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

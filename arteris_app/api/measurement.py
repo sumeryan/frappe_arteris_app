@@ -178,11 +178,16 @@ def create_measurement(month: int, year: int, ignore_current_measurement: bool =
             caucaoacumulado = 0.0
             ftdacumulado = 0.0
 
+            next_measurement = 0
+
             if last_contract_measurement:
                 # Get last measurement values
                 medicaoacumulada = last_contract_measurement.medicaoacumulada
                 caucaoacumulado = last_contract_measurement.caucaoacumulado
                 ftdacumulado = last_contract_measurement.ftdacumulado
+                next_measurement = int(last_contract_measurement.name[3:])
+
+            next_measurement += 1
 
             # Close existing measurements if they are open
             close_measurements(contract.name)
@@ -191,7 +196,7 @@ def create_measurement(month: int, year: int, ignore_current_measurement: bool =
             s_last_day = last_day.split("-")
 
             contract_measurement = frappe.new_doc("Contract Measurement")
-            contract_measurement.name = f"BM-{contract.contrato}-{s_first_day[2]}-{s_last_day[2]}-{s_last_day[1]}-{s_last_day[2]}"
+            contract_measurement.name = f"BM-{contract.contrato}-{next_measurement:03d}"
             contract_measurement.contrato = contract.name
             contract_measurement.datainicialmedicao = first_day
             contract_measurement.datafinalmedicao = last_day
