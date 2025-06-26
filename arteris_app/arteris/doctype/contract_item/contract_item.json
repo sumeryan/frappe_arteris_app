@@ -358,7 +358,7 @@
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Item",
- "naming_rule": "UUID)",
+ "naming_rule": "UUID",
  "nsm_parent_field": "parent_contract_item",
  "owner": "Administrator",
  "permissions": [
