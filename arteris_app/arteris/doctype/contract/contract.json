@@ -1,6 +1,7 @@
 {
  "actions": [],
  "allow_import": 1,
+ "allow_rename": 1,
  "autoname": "UUID",
  "creation": "2025-04-25 14:49:07.193437",
  "doctype": "DocType",
@@ -312,7 +313,7 @@
    "link_fieldname": "contrato"
   }
  ],
- "modified": "2025-06-25 21:07:44.276475",
+ "modified": "2025-06-26 02:26:20.933549",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract",

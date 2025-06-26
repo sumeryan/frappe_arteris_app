@@ -1,6 +1,7 @@
 {
  "actions": [],
  "allow_import": 1,
+ "allow_rename": 1,
  "autoname": "UUID",
  "creation": "2025-04-25 14:35:03.858372",
  "doctype": "DocType",
@@ -53,7 +54,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-05 10:45:12.726628",
+ "modified": "2025-06-26 02:26:48.225163",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contracted Company",
