@@ -757,14 +757,14 @@ def update_hours_measurement_record(meaesuremen: str):
 
         for t in items:
             wr = None
-            tm = None
             team_localized = False
             for m in contract_measurement.tablemaodeobra:
-                if m.item == t.item and m.funcao == t.funcao:
+                if m.item == t['item'] and m.funcao == t['funcao']:
                     wr = m
+                    break
 
             for e in contract_measurement.tablemaodeobraequipe:
-                if e.item == t.item and e.funcao == t.funcao and e.equipe == team:
+                if e.item == t['item'] and e.funcao == t['funcao'] and e.equipe == team:
                     e.valorunitario = wr.valorunitario
                     e.percentualhe = wr.percentualhe
                     team_localized = True
@@ -774,6 +774,7 @@ def update_hours_measurement_record(meaesuremen: str):
             if not team_localized:
                 new_team = contract_measurement.append("tablemaodeobraequipe")
                 new_team.item = wr.item
+                new_team.funcao = wr.funcao
                 new_team.tipodoitem = wr.tipodoitem
                 new_team.equipe = team
                 new_team.quantidademedida = 0.0
