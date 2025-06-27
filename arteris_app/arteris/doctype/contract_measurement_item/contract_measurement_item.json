@@ -58,7 +58,6 @@
    "fieldname": "saldoanterior",
    "fieldtype": "Currency",
    "label": "Saldo anterior",
-   "non_negative": 1,
    "precision": "2",
    "reqd": 1
   },
@@ -85,7 +84,6 @@
    "fieldtype": "Currency",
    "in_list_view": 1,
    "label": "Saldo atual",
-   "non_negative": 1,
    "precision": "2",
    "reqd": 1
   },
@@ -178,7 +176,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-06-22 18:03:14.783311",
+ "modified": "2025-06-26 22:46:53.226749",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Measurement Item",

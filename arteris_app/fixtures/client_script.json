@@ -90,17 +90,6 @@
  {
   "docstatus": 0,
   "doctype": "Client Script",
-  "dt": "Contract Measurement",
-  "enabled": 1,
-  "modified": "2025-06-04 09:14:22.514917",
-  "module": "Arteris",
-  "name": "print_bm",
-  "script": "frappe.ui.form.on('Contract Measurement', {\n\timprimircapa: function(frm) {\n\t    var openlink = window.open('https://arteris-bm.meb.services/capa_boletim/'+frm.doc.name);\n\t}\n})",
-  "view": "Form"
- },
- {
-  "docstatus": 0,
-  "doctype": "Client Script",
   "dt": "Contract Measurement Record",
   "enabled": 1,
   "modified": "2025-06-04 14:37:28.331075",
@@ -112,17 +101,6 @@
  {
   "docstatus": 0,
   "doctype": "Client Script",
-  "dt": "Contract Measurement",
-  "enabled": 1,
-  "modified": "2025-06-04 09:13:05.666121",
-  "module": "Arteris",
-  "name": "imprimirboletim",
-  "script": "frappe.ui.form.on('Contract Measurement', {\n\timprimirboletim: function(frm) {\n\t    var openlink = window.open('https://arteris-bm.meb.services/boletim_body/'+frm.doc.contrato);\n\t}\n})",
-  "view": "Form"
- },
- {
-  "docstatus": 0,
-  "doctype": "Client Script",
   "dt": "Holiday",
   "enabled": 1,
   "modified": "2025-06-20 17:32:44.834463",
@@ -130,5 +108,27 @@
   "name": "Hide ID Holiday",
   "script": "frappe.listview_settings['Holiday'] = { hide_name_column: true };",
   "view": "List"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Contract Measurement",
+  "enabled": 1,
+  "modified": "2025-06-26 18:22:29.716059",
+  "module": "Arteris",
+  "name": "Contract Measurement Print",
+  "script": "frappe.ui.form.on('Contract Measurement', {\n    refresh: function(frm) {\n\n        frm.add_custom_button('Capa do boletim', function() {\n            openlink = window.open('https://arteris-bm.meb.services/capa_boletim/'+frm.doc.name);\n        }, '🖨 Boletim');\n        \n\n        frm.add_custom_button('Boletim de medição', function() {\n            openlink = window.open('https://arteris-bm.meb.services/boletim_body/'+frm.doc.contrato);\n        }, '🖨 Boletim');\n        \n\n        frm.add_custom_button('Registros de tempo', function() {\n            let url = `/app/query-report/Contract%20Measurement%20Record%20-%20Time?medicao=${frm.doc.name}`;\n            window.open(url, '_blank');\n        }, '🖨️ Auditoria');\n        \n        frm.add_custom_button('Registros de funções', function() {\n            let url = let_url = `/app/query-report/Contract%20Measurement%20Record%20-%20Work%20Role?medicao=${frm.doc.name}`;\n            window.open(url, '_blank');\n        }, '🖨️ Auditoria');\n        \n        frm.add_custom_button('Registros de maq., equip. e veículos', function() {\n            let url = let_url = `/app/query-report/Contract%20Measurement%20Record%20-%20Asset?medicao=${frm.doc.name}`;\n            window.open(url, '_blank');\n        }, '🖨️ Auditoria');   \n \n         frm.add_custom_button('Registros de recursos', function() {\n            let url = let_url = `/app/query-report/Contract%20Measurement%20Record%20-%20Resource?medicao=${frm.doc.name}`;\n            window.open(url, '_blank');\n        }, '🖨️ Auditoria');   \n               \n    }\n});\n ",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Contract Measurement",
+  "enabled": 1,
+  "modified": "2025-06-26 18:19:39.595643",
+  "module": "Arteris",
+  "name": "Contract Measurement Hide Print",
+  "script": "frappe.ui.form.on('Contract Measurement', {\n\trefresh(frm) {\n\t\t$(\"button[data-original-title=Print]\").hide();\n\t}\n})",
+  "view": "Form"
  }
 ]
