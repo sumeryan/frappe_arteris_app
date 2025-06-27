@@ -254,7 +254,7 @@ web_include_css = [
 
 web_include_js = [
     "/assets/arteris_app/js/custom-page.js",
-	"/assets/arteris_app/js/boletim-medicao.js"
+	"/assets/arteris_app/js/boletim_medicao.js"
 	"/assets/arteris_app/js/capa_do_boletim.js"
 ]
 

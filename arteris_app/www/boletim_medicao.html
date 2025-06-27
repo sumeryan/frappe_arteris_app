@@ -1,22 +1,17 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Planilha de Medições Dinâmica</title>
+{% extends "templates/web.html" %}
+
+{% block head %}
     <style>
     * {
         box-sizing: border-box;
         margin: 0;
         padding: 0;
     }
-
     body {
         font-family: Calibri;
         background-color: #f5f5f5;
         padding: 20px;
     }
-
     .table-container {
         background: white;
         border-radius: 8px;
@@ -24,37 +19,30 @@
         overflow: hidden;
         max-width: 100%;
     }
-
     .table-wrapper {
         display: flex;
         overflow: hidden;
     }
-
     .fixed-columns {
         flex-shrink: 0;
         border-right: 2px solid #ddd;
         background: #fafafa;
     }
-
     .scrollable-columns {
         flex: 1;
         overflow-x: auto;
     }
-
     table {
         border-collapse: collapse;
         width: 100%;
         font-size: 12px;
     }
-
     .fixed-table {
         width: 800px;
     }
-
     .scrollable-table {
         min-width: max-content;
     }
-
     th,
     td {
         border: 1px solid #ddd;
@@ -62,7 +50,6 @@
         text-align: left;
         white-space: nowrap;
     }
-
     th {
         background-color: #A9B5B7;
         color: white;
@@ -71,48 +58,40 @@
         top: 0;
         z-index: 10;
     }
-
     .fixed-columns th {
         background-color: #002D47;
     }
-
     .measurement-header {
         background-color: #002D47;
         text-align: center;
         font-size: 11px;
         padding: 6px;
     }
-
     .sub-header {
         background-color: #002D47;
         opacity: 0.8;
         font-size: 10px;
         text-align: center;
     }
-
     .item-code {
         font-weight: bold;
         color: #002D47;
     }
-
     .item-desc {
         max-width: 300px;
         overflow: hidden;
         text-overflow: ellipsis;
     }
-
     .numeric {
         text-align: right;
         font-family: 'Calibri';
     }
-
     .total-row {
         background-color: #002D47;
         color: #fff;
         font-weight: bold;
         opacity: 0.8;
     }
-
     .level-1 {
         background-color: rgba(251, 72, 20, 0.2);
         color: #424156;
@@ -132,36 +111,29 @@
         background-color: rgba(0, 146, 101, 0.2);
         color: #38393D;
     }
-
     .scrollable-columns::-webkit-scrollbar {
         height: 8px;
     }
-
     .scrollable-columns::-webkit-scrollbar-track {
         background: #f1f1f1;
     }
-
     .scrollable-columns::-webkit-scrollbar-thumb {
         background: #888;
         border-radius: 4px;
     }
-
     .scrollable-columns::-webkit-scrollbar-thumb:hover {
         background: #555;
     }
-
     .scrollable-tables-wrapper {
         display: flex;
         gap: 8px;
         flex-wrap: nowrap;
         overflow-x: auto;
     }
-
     .scrollable-table-container {
         flex: 1;
         min-width: 450px;
     }
-
     .document-header {
         display: flex;
         flex-direction: column;
@@ -174,23 +146,19 @@
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         color: #38393D;
     }
-
     .logo-container {
         width: 100%;
         text-align: center; 
     }
-
     .logo {
         max-width: 200px;
         height: auto;
     }
-
     .header-title {
         width: 100%;
         text-align: center;
         color: #38393D;
     }
-
     .info-boxes-container {
         display: flex;
         justify-content: space-between;
@@ -198,7 +166,6 @@
         margin-bottom: 30px;
         width: 100%;
     }
-
     .info-box {
         flex: 1;
         background: white;
@@ -207,28 +174,26 @@
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         text-align: center;
     }
-
     .info-box-title {
         font-size: 14px;
         color: #002D47;
         margin-bottom: 8px;
         font-weight: bold;
     }
-
     .info-box-value {
         font-size: 18px;
         color: #002D47;
         font-weight: bold;
     }
-
     .loading {
         text-align: center;
         padding: 40px;
         color: #666;
     }
     </style>
-</head>
-<body>
+{% endblock %}
+
+{% block page_content %}
     <div id="loadingDiv" class="loading">
         <p>Carregando dados...</p>
     </div>
@@ -475,59 +440,68 @@
                             level: 1
                         }
                     ]
-                },
-                                {
-                    datafinalmedicao: "2024-01-31",
-                    pay_factor_exist: true,
-                    valor_total_periodo: 50000,
-                    valor_total_acumulado: 50000,
-                    tabitenscontatrato: [
-                        {
-                            quantidademedida: 100,
-                            quantidadetotalvigente: 100,
-                            valortotalmedido: 10000,
-                            valortotalvigente: 10000,
-                            valorfatorpagamento: 0.95,
-                            level: 1
-                        }
-                    ]
-                },
-                                {
-                    datafinalmedicao: "2024-01-31",
-                    pay_factor_exist: true,
-                    valor_total_periodo: 50000,
-                    valor_total_acumulado: 50000,
-                    tabitenscontatrato: [
-                        {
-                            quantidademedida: 100,
-                            quantidadetotalvigente: 100,
-                            valortotalmedido: 10000,
-                            valortotalvigente: 10000,
-                            valorfatorpagamento: 0.95,
-                            level: 1
-                        }
-                    ]
                 }
             ]
         };
 
-        // Initialize the report
-        document.addEventListener('DOMContentLoaded', function() {
-            // In a real Frappe implementation, you would call:
-            // frappe.call({
-            //     method: 'your_app.api.get_measurement_data',
-            //     callback: function(r) {
-            //         if (r.message) {
-            //             populateReport(r.message);
-            //         }
-            //     }
-            // });
+        // Get UUID from URL parameters
+        function getUrlParameter(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        // Wait for Frappe to be ready, then initialize
+        function initializeReport() {
+            const contractUuid = getUrlParameter('uuid') || getUrlParameter('contract_id');
             
-            // For now, using sample data
-            setTimeout(() => {
-                populateReport(sampleData);
-            }, 1000);
+            if (!contractUuid) {
+                document.getElementById('loadingDiv').innerHTML = '<p>Erro: UUID do contrato não fornecido na URL</p>';
+                return;
+            }
+
+            // Try Frappe call first, fallback to fetch
+            if (typeof frappe !== 'undefined' && frappe.call) {
+                frappe.call({
+                    method: 'arteris_app.api.api-boletim-medicoes.get_measurement_data',
+                    args: {
+                        uuid: contractUuid
+                    },
+                    callback: function(r) {
+                        if (r.message) {
+                            populateReport(r.message);
+                        } else {
+                            document.getElementById('loadingDiv').innerHTML = '<p>Erro ao carregar dados do relatório</p>';
+                        }
+                    },
+                    error: function(err) {
+                        console.error('Error loading measurement data:', err);
+                        document.getElementById('loadingDiv').innerHTML = '<p>Erro ao carregar dados: ' + (err.message || 'Erro desconhecido') + '</p>';
+                    }
+                });
+            } else {
+                console.log('faild frappe')
+                // Fallback to fetch API
+            }
+        }
+
+        // Initialize the report with multiple fallbacks
+        document.addEventListener('DOMContentLoaded', function() {
+            // Try to initialize immediately
+            if (typeof frappe !== 'undefined') {
+                initializeReport();
+            } else {
+                // Wait for frappe to load
+                let attempts = 0;
+                const maxAttempts = 50; // 5 seconds
+                
+                const waitForFrappe = setInterval(() => {
+                    attempts++;
+                    if (typeof frappe !== 'undefined' || attempts >= maxAttempts) {
+                        clearInterval(waitForFrappe);
+                        initializeReport();
+                    }
+                }, 100);
+            }
         });
     </script>
-</body>
-</html>
+{% endblock %}
