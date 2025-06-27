@@ -454,6 +454,8 @@ const contract = JSON.parse(document.getElementById('contract-data').textContent
 const concessionaria = JSON.parse(document.getElementById('concessionaria-data').textContent);
 const contracted_company = JSON.parse(document.getElementById('contracted-company-data').textContent);
 const pedidosSap = JSON.parse(document.getElementById('pedidosSap-data').textContent);
+    console.log(pedidosSap)
+
 // Use contract_measurement as the base for your data object
 const data = {
     logoUrl: contract_measurement.logoUrl ?? 'https://www.arteris.com.br/static/icons/arteris-logo.dc5c9168a8a3.svg',

@@ -10,7 +10,6 @@ def execute(filters: dict | None = None):
 	dictionary and should return columns and data. It is called by the framework
 	every time the report is refreshed or a filter is updated.
 	"""
-
 	contract_measuremnent_name = filters.medicao
 
 	columns = get_columns()
@@ -26,7 +25,7 @@ def get_columns() -> list[dict]:
 	"""
 	return [
 		{
-			"label": "...",#1
+			"label": "...",#
 			"fieldtype": "Html",
 			"width": 50
 		},
@@ -39,7 +38,11 @@ def get_columns() -> list[dict]:
 			"fieldtype": "Data",
 		},
 		{
-			"label": "Função",#
+			"label": "Maq., equip. e veículos",#
+			"fieldtype": "Data",
+		},
+		{
+			"label": "Descrição",#
 			"fieldtype": "Data",
 		},
 		{
@@ -47,11 +50,7 @@ def get_columns() -> list[dict]:
 			"fieldtype": "Data",
 		},
 		{
-			"label": "Pagamento por hora",#
-			"fieldtype": "Check",
-		},
-		{
-			"label": "Valor por hora",#
+			"label": "Valor unitário",#
 			"fieldtype": "Currency",
 		},
 		{
@@ -87,86 +86,6 @@ def get_columns() -> list[dict]:
 			"fieldtype": "Currency",
 		},
 		{
-			"label": "Percentual de hora extra",#
-			"fieldtype": "Float",
-		},
-		{
-			"label": "Horas domingo",#
-			"fieldtype": "Int",
-		},
-		{
-			"label": "Horas segunda",#
-			"fieldtype": "Int",
-		},
-		{
-			"label": "Horas terça",#
-			"fieldtype": "Int",			
-		},
-		{
-			"label": "Horas quarta",#
-			"fieldtype": "Int",
-		},
-		{
-			"label": "Horas quinta",#
-			"fieldtype": "Int",
-		},
-		{
-			"label": "Horas sexta",#
-			"fieldtype": "Int",
-		},
-		{
-			"label": "Horas sábado",#
-			"fieldtype": "Int",
-		},
-		{
-			"label": "Cidade",#
-			"fieldtype": "Data",
-		},
-		{
-			"label": "Dia da semana",#
-			"fieldtype": "Data",
-		},
-		{
-			"label": "Feriado",#
-			"fieldtype": "Data",
-		},
-		{
-			"label": "Quantidade",#
-			"fieldtype": "Float",
-		},	
-		{
-			"label": "Hora inicial",#
-			"fieldtype": "Time",
-		},	
-		{
-			"label": "Hora final",#
-			"fieldtype": "Time",
-		},
-		{
-			"label": "Hora normal",#
-			"fieldtype": "Float",
-		},
-		{
-			"label": "Hora normal D.A.",#
-			"fieldtype": "Float",
-		},
-		{
-			"label": "Compensações",#
-			"fieldtype": "Float",
-		},
-		{
-			"label": "Hora extra",#
-			"fieldtype": "Float",
-		},
-		{
-			"label": "Hora extra 100%",#
-			"fieldtype": "Float",
-		},
-		{
-			"label": "Descrição item",#
-			"fieldtype": "Data",
-		},
-		{
 			"label": "Tipo",#
 			"fieldtype": "Data",
 		},
@@ -174,8 +93,11 @@ def get_columns() -> list[dict]:
 			"label": "Peso",#
 			"fieldtype": "Data",
 		},
+		{
+			"label": "Descrição item",#
+			"fieldtype": "Data",
+		},
 	]
-
 
 
 def get_data(contract_measuremnent_name: str) -> list[list]:
@@ -183,10 +105,8 @@ def get_data(contract_measuremnent_name: str) -> list[list]:
 
 	The report data is a list of rows, with each row being a list of cell values.
 	"""
-
 	data = []
 	data_items = {}
-	work_roles = {}
 	assets = {}
 
 	def get_item(item_name: str):
@@ -201,37 +121,30 @@ def get_data(contract_measuremnent_name: str) -> list[list]:
 
 		return data_items[item_name]
 
-	def get_item_work_role(item_name: str, work_role_name: str):
+	def get_item_asset(item_name: str, asset_name: str):
 		"""Get work role details by name."""
 
 		item = get_item(item_name)
 
-		for i in item.tablemaodeobra:
-			if i.funcao != work_role_name:
-				work_roles[work_role_name]['pagamentohora'] = i.pagamentohora
-				work_roles[work_role_name]['valorporhora'] = i.valorporhora
-				work_roles[work_role_name]['valortotalmensal'] = i.valortotalmensal
+		for i in item.tableassets:
+			if i.asset != asset_name:
+				assets[asset_name]['descricao'] = i.descricao
+				assets[asset_name]['valorunitario'] = i.valorunitario
+				assets[asset_name]['valormensal'] = i.valormensal
 
-		return work_roles[work_role_name]
+		return assets[asset_name]
 
-	work_role = frappe.db.get_all(
-		"Work Role",
-		fields=["name", "funcao"]
-	)
-	for role in work_role:
-		work_roles[role.name] = { 
-			"funcao": role.funcao,
-			"pagamentohora": 0.0,
-			"valorporhora": 0.0,
-			"valortotalmensal": 0.0
-		}
-
-	asset = frappe.db.get_all(
+	get_asset = frappe.db.get_all(
 		"Asset",
 		fields=["name", "nomeativo"]
 	)
-	for a in asset:
-		assets[a.name] = a.nomeativo
+	for asset in get_asset:
+		assets[asset.name] = { 
+			"ativo": asset.nomeativo,
+			"descricao": "",
+			"valorunitario": 0.0,
+			"valormensal": 0.0
+		}
 
 	measurement_records = frappe.db.get_all(
 		"Contract Measurement Record", 
@@ -251,15 +164,10 @@ def get_data(contract_measuremnent_name: str) -> list[list]:
 	for record in measurement_records:
 		record_doc = frappe.get_doc("Contract Measurement Record", record.name)
 
-		for t in record_doc.tabhoras:
+		for t in record_doc.tabasset:
 
 			item = get_item(t.item)
-			work_role = get_item_work_role(t.item, t.funcao)
-
-			work_role_record = {}
-			for w in record_doc.tabworkrole:
-				if w.item == t.item and w.funcao == t.funcao:
-					work_role_record = w
+			asset = get_item_asset(t.item, t.maquina_equipamento_ou_ferramenta)
 
 			data.append(
 				[
@@ -269,47 +177,24 @@ def get_data(contract_measuremnent_name: str) -> list[list]:
 
 					item.codigo,
 
-					work_role['funcao'],
+					asset['ativo'],
+					asset['descricao'],
 
 					record.equipe,
 
-					work_role['pagamentohora'],
-					work_role['valorporhora'],
-					work_role['valortotalmensal'],
+					asset['valorunitario'],
+					asset['valormensal'],
 
 					record.dataexecucao,
 					record.codigo, # codigordo
 					record.relatorio,
 					record.rodovia,
 
-					work_role_record.quantidademedida,
-					work_role_record.valortotal,
-					work_role_record.valorcalculado,
-
-					item.percentualhe,
-					item.dom_hora,
-					item.seg_hora,
-					item.ter_hora,
-					item.qua_hora,
-					item.qui_hora,
-					item.sex_hora,
-					item.sab_hora,
-
-					item.cidade,
-					record.diasemana,
-					record.feriado,
-
-					t.quantidade,
-					t.horainicial,
-					t.horafinal,
-					t.horanormal,
-					t.horanormalda,
-					t.compensacoes,
-					t.horaextra,
-					t.horaextra100,
-
-					work_role_record.tipo,
-					work_role_record.peso,
+					t.quantidademedida,
+					t.valortotal,
+					t.valorcalculado,
+					t.tipo,
+					t.peso,
 
 					item.descricao
 				]

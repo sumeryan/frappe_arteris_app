@@ -9,6 +9,7 @@
  "field_order": [
   "sigla",
   "nome",
+  "sentido_rodovia",
   "cidades_section",
   "cidades"
  ],
@@ -39,12 +40,20 @@
    "fieldname": "cidades",
    "fieldtype": "Table",
    "options": "Highway City"
+  },
+  {
+   "fieldname": "sentido_rodovia",
+   "fieldtype": "Select",
+   "label": "Sentido (Norte/Sul/Leste/Oeste)",
+   "length": 5,
+   "options": "Norte\nSul\nLeste\nOeste",
+   "reqd": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-30 10:19:09.316137",
+ "modified": "2025-06-26 09:37:29.414083",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Highway",

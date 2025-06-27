@@ -35,7 +35,10 @@
   "relat\u00f3rios_section",
   "tablog",
   "m\u00e3o_de_obra_tab",
+  "fun\u00e7\u00f5es_section",
   "tabworkrole",
+  "equipes_section",
+  "tabworkroleteam",
   "maq_equip_e_ve\u00edculos_tab",
   "tabasset",
   "tabmaterial",
@@ -281,7 +284,7 @@
    "fieldtype": "Data",
    "is_virtual": 1,
    "label": "Data execu\u00e7\u00e3o",
-   "options": "f\"doc.dataexecucao\""
+   "options": "f\"{doc.dataexecucao}\""
   },
   {
    "fieldname": "_equipe",
@@ -310,12 +313,27 @@
   {
    "fieldname": "section_break_twjc",
    "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "fun\u00e7\u00f5es_section",
+   "fieldtype": "Section Break",
+   "label": "Fun\u00e7\u00f5es"
+  },
+  {
+   "fieldname": "equipes_section",
+   "fieldtype": "Section Break",
+   "label": "Equipes"
+  },
+  {
+   "fieldname": "tabworkroleteam",
+   "fieldtype": "Table",
+   "options": "Contract Measurement Team"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-21 20:32:19.221155",
+ "modified": "2025-06-26 21:00:53.697828",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Measurement Record",

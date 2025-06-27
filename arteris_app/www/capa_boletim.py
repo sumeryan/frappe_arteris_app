@@ -36,7 +36,7 @@ def get_context(context):
             sap_orders = frappe.get_all(
                 'SAP Order',
                 filters={'name': ['in', list(pedido_sap_ids)]},
-                fields=['*']
+                fields=['*','table_dscc']
             )
 
             for sap_order in sap_orders:

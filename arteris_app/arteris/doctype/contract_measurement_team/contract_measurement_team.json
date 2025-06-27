@@ -2,7 +2,7 @@
  "actions": [],
  "allow_rename": 1,
  "autoname": "UUID",
- "creation": "2025-04-27 16:09:17.078292",
+ "creation": "2025-06-26 20:55:21.547102",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
@@ -10,6 +10,7 @@
   "item",
   "tipodoitem",
   "funcao",
+  "equipe",
   "quantidademedida",
   "valorunitario",
   "valormedido",
@@ -35,18 +36,16 @@
    "reqd": 1
   },
   {
+   "fieldname": "tipodoitem",
+   "fieldtype": "Link",
+   "label": "Tipo",
+   "options": "Contract Item Type"
+  },
+  {
    "fieldname": "funcao",
    "fieldtype": "Link",
    "label": "Fun\u00e7\u00e3o",
    "options": "Work Role",
-   "reqd": 1
-  },
-  {
-   "fieldname": "valormedido",
-   "fieldtype": "Currency",
-   "label": "Valor medido",
-   "non_negative": 1,
-   "precision": "2",
    "reqd": 1
   },
   {
@@ -66,8 +65,28 @@
    "reqd": 1
   },
   {
+   "fieldname": "valormedido",
+   "fieldtype": "Currency",
+   "label": "Valor medido",
+   "non_negative": 1,
+   "precision": "2",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_ykpk",
+   "fieldtype": "Section Break"
+  },
+  {
    "fieldname": "column_break_kicy",
    "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "totaldias",
+   "fieldtype": "Int",
+   "label": "Total de dias uteis realizados",
+   "non_negative": 1,
+   "reqd": 1
   },
   {
    "default": "0",
@@ -130,21 +149,10 @@
    "reqd": 1
   },
   {
-   "fieldname": "section_break_ykpk",
-   "fieldtype": "Section Break"
-  },
-  {
-   "fieldname": "tipodoitem",
-   "fieldtype": "Link",
-   "label": "Tipo",
-   "options": "Contract Item Type"
-  },
-  {
-   "default": "0",
-   "fieldname": "totaldias",
-   "fieldtype": "Int",
-   "label": "Total de dias uteis realizados",
-   "non_negative": 1,
+   "fieldname": "equipe",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Equipe",
    "reqd": 1
   }
  ],
@@ -152,10 +160,10 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-06-26 20:50:09.191110",
+ "modified": "2025-06-26 20:59:21.510921",
  "modified_by": "Administrator",
  "module": "Arteris",
- "name": "Contract Measurement Work Role",
+ "name": "Contract Measurement Team",
  "naming_rule": "UUID",
  "owner": "Administrator",
  "permissions": [],
