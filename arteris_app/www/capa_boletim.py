@@ -1,6 +1,5 @@
 import frappe
 from frappe import _
-import json
 
 def get_context(context):
     context.no_cache = 1
