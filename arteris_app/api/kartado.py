@@ -195,53 +195,6 @@ def create_kartado_measurement_record():
                 return i
         return None
 
-    # Function to check if a date is a holiday
-    def check_holiday(date: date, uf: str, city: str):
-
-        key = f"{date.strftime('%Y-%m-%d')}-{city}-{uf}"
-        if holidays.get(key, None) == None:
-            if not city == "all":
-                get_result = frappe.db.get_all("Holiday", fields=["data","descricao"], filters={"data": date, "cidade": city})
-            elif not uf == "all":
-                get_result = frappe.db.get_all("Holiday", fields=["data","descricao"], filters={"data": date, "uf": uf})
-            else:
-                get_result = frappe.db.get_all("Holiday", fields=["data","descricao"], filters={"data": date, "uf": "", "cidade": ""})
-            if get_result:
-                holidays[key] = {
-                     "isholiday": True,
-                     "uf": "" if uf == "all" else uf,
-                     "cidade": "" if city == "all" else city,
-                     "descricao": get_result[0].descricao
-                }
-            else:
-                holidays[key] = {
-                     "isholiday": False
-                }
-        return holidays[key]
-
-    def check_holidays(date: date, city: str = None):
-
-        # City and UF is a key of city
-        uf = "all"
-        if city:
-            s_sity = city.split("-")
-            uf = s_sity[1]
-            city = s_sity[0]
-        else:
-            city = "all"
-            uf = "all"
-
-        # Check if the date is a holiday
-        holiday = check_holiday(date, "all", "all")
-        if holiday['isholiday']:
-            return holiday
-        holiday = check_holiday(date,  uf, "all")
-        if check_holiday(date, uf, "all"):
-            return holiday
-        holiday = check_holiday(date, "all", city)
-        if check_holiday(date, "all", city):
-            return holiday
-
     def check_kartado_relation(kartado_description, r_type):
         """
         Check ralation between kartado description and kartado list.
@@ -342,6 +295,7 @@ def create_kartado_measurement_record():
             kartado_measurement_record.kmfinal = 0
             kartado_measurement_record.medicaovigente = contract_meaesurement_current
             kartado_measurement_record.aprovador = d["aprovado_por"]
+            kartado_measurement_record.eh_feriado = False
 
             if d["tipo_registro"] == "rdo": # or record_type == "rpt":
                 data_execucao = d["rdo_data"].split('-')
@@ -416,10 +370,6 @@ def create_kartado_measurement_record():
                         items.append(d["chave_recurso"])
 
                     if d["tipo_item"] == "administração":
-                        # if not exists work group, set for administration calculation
-                        if not kartado_measurement_record.equipe:
-                            kartado_measurement_record.equipe = "ADM"
-
                         # Set the default date to process
                         date_process = get_date_from_string(d["data_criacao"])
                         #Date to process
@@ -435,37 +385,6 @@ def create_kartado_measurement_record():
                         # Converter para datetime
                         time_start = datetime.strptime(ts_start, '%Y-%m-%d %H:%M:%S.%f')
                         time_end = datetime.strptime(ts_end, '%Y-%m-%d %H:%M:%S.%f')                        
-                        # Calculate the hours based on the day of the week
-                        total_hours_time =  time_end - time_start
-                        # Convert to decimal hours
-                        total_hours = total_hours_time.total_seconds() / 3600.0
-                        # Discount interval time
-                        if total_hours > 6:
-                            total_hours -= 1.0                        
-                        # Get work hours from contract item
-                        work_hours = 8.0
-                        if date_process.weekday() == 0:
-                            work_hours = record_contract_item.get("seg_hora", 8.0)
-                        if date_process.weekday() == 1:
-                            work_hours = record_contract_item.get("ter_hora", 8.0)
-                        if date_process.weekday() == 2:
-                            work_hours = record_contract_item.get("qua_hora", 8.0)
-                        if date_process.weekday() == 3:
-                            work_hours = record_contract_item.get("qui_hora", 8.0)
-                        if date_process.weekday() == 4:
-                            work_hours = record_contract_item.get("sex_hora", 8.0)
-                        if date_process.weekday() == 5:
-                            work_hours = record_contract_item.get("sab_hora", 5.0)
-                        # Check if has extra hours
-                        extra_hours = 0.0
-                        if total_hours > work_hours:
-                            # Calculate the extra hours
-                            extra_hours = total_hours - work_hours                            
-
-                        # Create hours record for administration, one for each work role
-                        # f_qtd = float(d["quantidade"])
-                        # i_qtd = int(f_qtd)
-                        # for q in range(i_qtd):
 
                         # Hours record
                         kartado_measurement_record_time = kartado_measurement_record.append("tabhoras")
@@ -482,22 +401,6 @@ def create_kartado_measurement_record():
                         kartado_measurement_record_time.valorcalculado = 0.0
                         # Return the name of weekday
                         kartado_measurement_record.diasemana = get_week_day(date_process)
-                            # Is it a holiday?
-                        holiday = check_holidays(date_process, record_contract_item["cidade"])
-                        if holiday['isholiday']:
-                            kartado_measurement_record_time.horaextra100 = total_hours
-                        else:                            
-                            # Is it a Sunday?
-                            if date_process.weekday() == 6:
-                                kartado_measurement_record_time.horaextra100 = total_hours
-                            else:
-                                # Check if has extra hours
-                                if extra_hours > 0:
-                                    # Calculate the extra hours
-                                    kartado_measurement_record_time.horanormal = work_hours
-                                    kartado_measurement_record_time.horaextra = extra_hours
-                                else:
-                                    kartado_measurement_record_time.horanormal = total_hours
 
             # Create asset measurement record
             if d["chave_ativo"]:

@@ -554,3 +554,239 @@ def sum_measurement_orders(measurement: str):
                     sap_doc.save()
 
     return {"Processed": True, "message": "Measurement orders summed successfully."}
+
+@frappe.whitelist(methods=["POST"])
+def update_hours_measurement_record(meaesuremen: str):
+    """
+    Udate hours records
+    """
+
+    # get body data and relations from the request
+    # record_type = frappe.form_dict.type
+    items = {}
+
+    holidays = {}
+
+    def get_item(item: str) -> dict:
+        """
+        Get the city of a contract item.
+        """
+        # Get kartado for each contract item
+        if not item in items:
+            get_item = frappe.db.get_all(
+                "Contract Item", 
+                fields=[
+                    "name", 
+                    "codigo", 
+                    "cidade",
+                    "dom_hora",
+                    "seg_hora",
+                    "ter_hora",
+                    "qua_hora", 
+                    "qui_hora",
+                    "sex_hora",
+                    "sab_hora",
+                    "percentualhe"],
+                filters={"name": item})
+            if get_item:
+                items[item] = {
+                    "name": get_item[0].name,
+                    "codigo": get_item[0].codigo,
+                    "cidade": get_item[0].cidade,
+                    "dom_hora": get_item[0].dom_hora,
+                    "seg_hora": get_item[0].seg_hora,
+                    "ter_hora": get_item[0].ter_hora,
+                    "qua_hora": get_item[0].qua_hora,
+                    "qui_hora": get_item[0].qui_hora,
+                    "sex_hora": get_item[0].sex_hora,
+                    "sab_hora": get_item[0].sab_hora,
+                    "percentualhe": get_item[0].percentualhe
+                }
+
+        return items[item]
+
+    # Function to check if a date is a holiday
+    def check_holiday(date: date, uf: str, city: str):
+
+        key = f"{date.strftime('%Y-%m-%d')}-{city}-{uf}"
+        if holidays.get(key, None) == None:
+            if not city == "all":
+                get_result = frappe.db.get_all("Holiday", fields=["data","descricao"], filters={"data": date, "cidade": city})
+            elif not uf == "all":
+                get_result = frappe.db.get_all("Holiday", fields=["data","descricao"], filters={"data": date, "uf": uf})
+            else:
+                get_result = frappe.db.get_all("Holiday", fields=["data","descricao"], filters={"data": date, "uf": "", "cidade": ""})
+            if get_result:
+                holidays[key] = {
+                     "isholiday": True,
+                     "uf": "" if uf == "all" else uf,
+                     "cidade": "" if city == "all" else city,
+                     "descricao": get_result[0].descricao
+                }
+            else:
+                holidays[key] = {
+                     "isholiday": False
+                }
+        return holidays[key]
+
+    def check_holidays(date: date, city: str = None):
+
+        # City and UF is a key of city
+        uf = "all"
+        if city:
+            s_sity = city.split("-")
+            uf = s_sity[1]
+            city = s_sity[0]
+        else:
+            city = "all"
+            uf = "all"
+
+        # Check if the date is a holiday
+        holiday = check_holiday(date, "all", "all")
+        if holiday['isholiday']:
+            return holiday
+        holiday = check_holiday(date,  uf, "all")
+        if check_holiday(date, uf, "all"):
+            return holiday
+        holiday = check_holiday(date, "all", city)
+        if check_holiday(date, "all", city):
+            return holiday
+    
+    def get_week_day(date: date):
+        """
+        Get the name of the week day.
+        :param date: The date object.
+        :return: The name of the week day.
+        """
+        dias_semana = ['Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado', 'Domingo']
+        return dias_semana[date.weekday()]
+    
+    # Get all Contract Measurement Record
+    m_records = frappe.db.get_all("Contract Measurement Record", fields=["name"], filters={"boletimmedicao": meaesuremen})
+
+    teams = {}
+
+    # Parse the itens
+    for r in m_records:
+
+        kartado_measurement_record = frappe.get_doc("Contract Measurement Record", r.name)
+
+        for k_time in kartado_measurement_record.tabhoras:
+
+            record_contract_item = get_item(k_time.item)
+
+            # Create a team if it does not exist
+            if not kartado_measurement_record.equipe in teams:
+                # Get the team from the contract item
+                teams[kartado_measurement_record.equipe] = []
+
+            # Add funcao and item to the team
+            if k_time.funcao not in teams[kartado_measurement_record.equipe] and k_time.item not in teams[kartado_measurement_record.equipe]:
+                teams[kartado_measurement_record.equipe].append(
+                    {
+                        "funcao": k_time.funcao,
+                        "item": k_time.item
+                    })
+
+            # Set the default date to process
+            date_process = kartado_measurement_record.dataexecucao
+            # Timestamp strings
+            time_start = k_time.horainicial
+            time_end = k_time.horafinal                      
+            # Calculate the hours based on the day of the week
+            total_hours_time =  time_end - time_start
+            # Convert to decimal hours
+            total_hours = total_hours_time.total_seconds() / 3600.0
+            # Discount interval time
+            if total_hours > 6:
+                total_hours -= 1.0                        
+            # Get work hours from contract item
+            work_hours = 8.0
+            if date_process.weekday() == 0:
+                work_hours = record_contract_item.get("seg_hora", 8.0)
+            if date_process.weekday() == 1:
+                work_hours = record_contract_item.get("ter_hora", 8.0)
+            if date_process.weekday() == 2:
+                work_hours = record_contract_item.get("qua_hora", 8.0)
+            if date_process.weekday() == 3:
+                work_hours = record_contract_item.get("qui_hora", 8.0)
+            if date_process.weekday() == 4:
+                work_hours = record_contract_item.get("sex_hora", 8.0)
+            if date_process.weekday() == 5:
+                work_hours = record_contract_item.get("sab_hora", 5.0)
+            # Check if has extra hours
+            extra_hours = 0.0
+            if total_hours > work_hours:
+                # Calculate the extra hours
+                extra_hours = total_hours - work_hours                            
+
+            # Hours record
+            k_time.compensacoes = 0.0
+            k_time.horaextra100 = 0.0
+            k_time.horaextra = 0.0
+            k_time.horanormal = 0.0
+            k_time.horanormalda = 0.0
+            k_time.valorcalculado = 0.0
+            # Return the name of weekday
+            kartado_measurement_record.diasemana = get_week_day(date_process)
+                # Is it a holiday?
+            holiday = check_holidays(date_process, record_contract_item["cidade"])
+            if holiday['isholiday']:
+                k_time.horaextra100 = total_hours
+                kartado_measurement_record.feriado = holiday['descricao']
+                kartado_measurement_record.eh_feriado = True
+            else:                            
+                # Is it a Sunday?
+                if date_process.weekday() == 6:
+                    k_time.horaextra100 = total_hours
+                else:
+                    # Check if has extra hours
+                    if extra_hours > 0:
+                        # Calculate the extra hours
+                        k_time.horanormal = work_hours
+                        k_time.horaextra = extra_hours
+                    else:
+                        k_time.horanormal = total_hours
+
+        # Update the measurement record
+        kartado_measurement_record.save()
+
+    contract_measurement = frappe.get_doc("Contract Measurement", meaesuremen)
+
+    for team, items in teams.items():
+
+        for t in items:
+            wr = None
+            tm = None
+            team_localized = False
+            for m in contract_measurement.tablemaodeobra:
+                if m.item == t.item and m.funcao == t.funcao:
+                    wr = m
+
+            for e in contract_measurement.tablemaodeobraequipe:
+                if e.item == t.item and e.funcao == t.funcao and e.equipe == team:
+                    e.valorunitario = wr.valorunitario
+                    e.percentualhe = wr.percentualhe
+                    team_localized = True
+                    break
+            
+            # If the team is not localized, create a new one
+            if not team_localized:
+                new_team = contract_measurement.append("tablemaodeobraequipe")
+                new_team.item = wr.item
+                new_team.tipodoitem = wr.tipodoitem
+                new_team.equipe = team
+                new_team.quantidademedida = 0.0
+                new_team.valorunitario = wr.valorunitario
+                new_team.valormedido = 0.0
+                new_team.totaldias = 0
+                new_team.horanormal= 0.0
+                new_team.horanormalda= 0.0
+                new_team.compensacoes = 0.0
+                new_team.horaextra = 0.0
+                new_team.percentualhe = wr.percentualhe
+                new_team.horaextra100 = 0.0
+
+    contract_measurement.save()
+
+    return {"Processed": True, "message": "Hours records updated successfully."}

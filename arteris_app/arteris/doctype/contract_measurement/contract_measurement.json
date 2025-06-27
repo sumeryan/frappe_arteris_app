@@ -46,7 +46,11 @@
   "breakftp",
   "tableftp",
   "breakmaodeobra",
+  "fun\u00e7\u00f5es_section",
   "tablemaodeobra",
+  "equipes_section",
+  "tabmaodeobraequipes",
+  "tablemaodeobraequipe",
   "breakativos",
   "tableativos",
   "itens_tab",
@@ -304,6 +308,25 @@
    "fieldname": "nrcontrato",
    "fieldtype": "Data",
    "hidden": 1
+  },
+  {
+   "fieldname": "fun\u00e7\u00f5es_section",
+   "fieldtype": "Section Break",
+   "label": "Fun\u00e7\u00f5es"
+  },
+  {
+   "fieldname": "equipes_section",
+   "fieldtype": "Section Break",
+   "label": "Equipes"
+  },
+  {
+   "fieldname": "tabmaodeobraequipes",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "tablemaodeobraequipe",
+   "fieldtype": "Table",
+   "options": "Contract Measurement Team"
   }
  ],
  "grid_page_length": 50,
@@ -318,7 +341,7 @@
    "link_fieldname": "boletimmedicao"
   }
  ],
- "modified": "2025-06-26 16:36:30.120928",
+ "modified": "2025-06-26 22:15:46.467919",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Measurement",

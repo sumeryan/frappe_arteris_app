@@ -50,6 +50,7 @@
   "_equipe",
   "column_break_tqcs",
   "diasemana",
+  "eh_feriado",
   "feriado",
   "section_break_twjc",
   "tabhoras"
@@ -307,7 +308,6 @@
   {
    "fieldname": "feriado",
    "fieldtype": "Data",
-   "label": "Feriado",
    "read_only": 1
   },
   {
@@ -328,12 +328,18 @@
    "fieldname": "tabworkroleteam",
    "fieldtype": "Table",
    "options": "Contract Measurement Team"
+  },
+  {
+   "default": "False",
+   "fieldname": "eh_feriado",
+   "fieldtype": "Check",
+   "label": "Feriado"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-26 21:00:53.697828",
+ "modified": "2025-06-26 21:46:59.550817",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Measurement Record",

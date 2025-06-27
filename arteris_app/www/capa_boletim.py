@@ -36,11 +36,13 @@ def get_context(context):
             sap_orders = frappe.get_all(
                 'SAP Order',
                 filters={'name': ['in', list(pedido_sap_ids)]},
-                fields=['*','table_dscc']
+                fields=['*']  # Removed 'table_dscc' from fields
             )
 
-            for sap_order in sap_orders:
-                detalhePedido = flatten_sap_order(sap_order)
+            # Fetch full SAP Order docs to access child tables
+            for sap_order_meta in sap_orders:
+                sap_order_doc = frappe.get_doc('SAP Order', sap_order_meta['name'])
+                detalhePedido = flatten_sap_order(sap_order_doc.as_dict())
                 pedidosSap.extend(detalhePedido)
 
             context.pedidos_sap_json = frappe.as_json(pedidosSap)
