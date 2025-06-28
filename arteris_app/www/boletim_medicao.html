@@ -2,6 +2,10 @@
 
 {% block head %}
     <style>
+    /* Hide Frappe website header/navbar */
+    .web-header, #navbar, header {
+        display: none !important;
+    }
     * {
         box-sizing: border-box;
         margin: 0;
@@ -263,7 +267,7 @@
     <script>
         // Utility functions for formatting
         function formatCurrency(value) {
-            if (!value || value === 0) return 'R$ 0,00';
+            if (!value || value === 0) return '';
             return new Intl.NumberFormat('pt-BR', {
                 style: 'currency',
                 currency: 'BRL'
