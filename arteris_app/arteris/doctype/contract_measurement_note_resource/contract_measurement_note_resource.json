@@ -1,0 +1,61 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-06-28 16:35:21.758133",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "item",
+  "valorunitario",
+  "unidade",
+  "quantidademedida"
+ ],
+ "fields": [
+  {
+   "fieldname": "item",
+   "fieldtype": "Link",
+   "label": "Item",
+   "options": "Contract Item",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "item.valorunitario",
+   "fieldname": "valorunitario",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Valor unit\u00e1rio",
+   "read_only": 1
+  },
+  {
+   "fieldname": "quantidademedida",
+   "fieldtype": "Float",
+   "label": "Quantidade medida",
+   "non_negative": 1,
+   "precision": "3",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "item.unidade",
+   "fieldname": "unidade",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Unidade",
+   "read_only": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-06-28 16:41:08.996051",
+ "modified_by": "Administrator",
+ "module": "Arteris",
+ "name": "Contract Measurement Note Resource",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

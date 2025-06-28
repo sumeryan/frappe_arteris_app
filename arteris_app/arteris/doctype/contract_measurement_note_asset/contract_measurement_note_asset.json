@@ -1,0 +1,54 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-06-28 16:44:32.526310",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "ativo",
+  "valormensal",
+  "quantidade"
+ ],
+ "fields": [
+  {
+   "fieldname": "ativo",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Maq., equipamentos e ve\u00edculos",
+   "options": "Contract Item Asset",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "ativo.valormensal",
+   "fieldname": "valormensal",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Valor mensal",
+   "read_only": 1
+  },
+  {
+   "fieldname": "quantidade",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Quantidade",
+   "non_negative": 1,
+   "precision": "3",
+   "reqd": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-06-28 16:46:44.335157",
+ "modified_by": "Administrator",
+ "module": "Arteris",
+ "name": "Contract Measurement Note Asset",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

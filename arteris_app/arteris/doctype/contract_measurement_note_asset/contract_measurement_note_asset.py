@@ -5,5 +5,5 @@
 from frappe.model.document import Document
 
 
-class ContractItem(Document):
+class ContractMeasurementNoteAsset(Document):
 	pass

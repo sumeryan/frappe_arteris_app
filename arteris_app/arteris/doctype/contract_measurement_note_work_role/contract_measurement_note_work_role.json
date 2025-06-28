@@ -1,0 +1,62 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-06-28 16:39:49.287393",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "funcao",
+  "valorporhora",
+  "valormensal",
+  "quantidade"
+ ],
+ "fields": [
+  {
+   "fieldname": "funcao",
+   "fieldtype": "Link",
+   "label": "Fun\u00e7\u00e3o",
+   "options": "Contract Item Work Role",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "funcao.valorporhora",
+   "fieldname": "valorporhora",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Valor por hora",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "funcao.valortotalmensal",
+   "fieldname": "valormensal",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Valor mensal",
+   "read_only": 1
+  },
+  {
+   "fieldname": "quantidade",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Quantidade",
+   "non_negative": 1,
+   "precision": "3",
+   "reqd": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-06-28 16:44:04.014338",
+ "modified_by": "Administrator",
+ "module": "Arteris",
+ "name": "Contract Measurement Note Work Role",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

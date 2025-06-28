@@ -1,0 +1,35 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-06-28 16:38:05.738176",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "pedidosaplinha"
+ ],
+ "fields": [
+  {
+   "fieldname": "pedidosaplinha",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Linha de pedido SAP",
+   "options": "SAP Order Period",
+   "reqd": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-06-28 16:39:11.643666",
+ "modified_by": "Administrator",
+ "module": "Arteris",
+ "name": "Contract Measurement Note SAP Order",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}
