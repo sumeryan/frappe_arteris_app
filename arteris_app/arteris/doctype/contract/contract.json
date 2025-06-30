@@ -305,15 +305,15 @@
    "link_fieldname": "contrato"
   },
   {
-   "link_doctype": "Contract Item",
+   "link_doctype": "Integration Record",
    "link_fieldname": "contrato"
   },
   {
-   "link_doctype": "Integration Record",
+   "link_doctype": "Contract Item",
    "link_fieldname": "contrato"
   }
  ],
- "modified": "2025-06-26 02:26:20.933549",
+ "modified": "2025-06-28 20:04:38.206760",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract",

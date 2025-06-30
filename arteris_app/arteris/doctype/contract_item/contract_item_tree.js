@@ -1,118 +1,103 @@
-// frappe.treeview_settings['Contract Item'] = {
-//     title: __("Itens de Contrato"),
+frappe.treeview_settings['Contract Item'] = {
+    breadcrumb: 'Arteris',
+    title: __('Contract Items'),
     
-//     // Use o método padrão do Frappe primeiro para testar
-//     get_tree_nodes: 'frappe.desk.treeview.get_children',
+    // Configuração dos filtros
+    filters: [
+        {
+            fieldname: 'contrato',
+            fieldtype: 'Link',
+            options: 'Contract',
+            label: __('Contract'),
+            on_change: function() {
+                // Recarregar árvore quando contrato mudar
+                this.refresh();
+            }
+        }
+    ],
     
-//     // Configurações para o método padrão
-//     filters: [],
+    // Método para obter nós da árvore
+    get_tree_nodes: 'arteris_app.arteris.doctype.contract_item.contract_item.get_children',
     
-//     fields: [
-//         {fieldtype: 'Data', fieldname: 'codigo', label: __('Código'), reqd: 1},
-//         {fieldtype: 'Data', fieldname: 'descricao', label: __('Descrição'), reqd: 1},
-//         {fieldtype: 'Float', fieldname: 'quantidade', label: __('Quantidade')},
-//         {fieldtype: 'Currency', fieldname: 'valorunitario', label: __('Valor Unitário')},
-//         {fieldtype: 'Check', fieldname: 'is_group', label: __('É Grupo')}
-//     ],
+    // Método para adicionar nós
+    add_tree_node: 'arteris_app.arteris.doctype.contract_item.contract_item.add_node',
     
-//     // Campo pai para nested set
-//     parent_field: "parent_contract_item",
+    // Campos para novo nó (corrigidos para usar campos existentes)
+    fields: [
+        {
+            fieldtype: 'Data',
+            fieldname: 'codigo',
+            label: __('Code'),
+            reqd: true
+        },
+        {
+            fieldtype: 'Data',
+            fieldname: 'descricao',
+            label: __('Description'),
+            reqd: true
+        },
+        {
+            fieldtype: 'Link',
+            fieldname: 'contrato',
+            options: 'Contract',
+            label: __('Contract'),
+            reqd: true
+        },
+        {
+            fieldtype: 'Check',
+            fieldname: 'is_group',
+            label: __('Is Group')
+        }
+    ],
     
-//     // Campo de valor
-//     value_field: "name",
+    // Campos a ignorar
+    ignore_fields: ['parent_contract_item'],
     
-//     breadcrumb: __("Contratos"),
+    // Configuração adicional
+    root_label: 'All Contract Items',
+    get_tree_root: false,
     
-//     get_label: function(node) {
-//         if (node.data) {
-//             return (node.data.codigo || '') + " - " + (node.data.descricao || '');
-//         }
-//         return node.value;
-//     },
+    // Evento ao carregar
+    onload: function(treeview) {
+        // Customizações adicionais ao carregar
+        this.setup_dynamic_filtering(treeview);
+    },
     
-//     onload: function(treeview) {
-//         // Adiciona filtro de contrato
-//         const filter_wrapper = $('<div class="filter-wrapper">').appendTo(treeview.page.page_form);
+    // Função para configurar filtros dinâmicos (método simplificado)
+    setup_dynamic_filtering: function(treeview) {
+        var me = this;
         
-//         const filter_field = frappe.ui.form.make_control({
-//             parent: filter_wrapper,
-//             df: {
-//                 fieldtype: 'Link',
-//                 fieldname: 'contrato',
-//                 options: 'Contract',
-//                 label: __('Filtrar por Contrato'),
-//                 onchange: function() {
-//                     const value = this.get_value();
-//                     if (value) {
-//                         treeview.filters = {"contrato": value};
-//                     } else {
-//                         treeview.filters = {};
-//                     }
-//                     treeview.make_tree();
-//                 }
-//             },
-//             render_input: true
-//         });
+        // Sobrescrever o método get_children do treeview
+        var original_get_children = treeview.get_children;
         
-//         // Se veio com filtro na URL
-//         if (frappe.route_options && frappe.route_options.contrato) {
-//             filter_field.set_value(frappe.route_options.contrato);
-//             treeview.filters = {"contrato": frappe.route_options.contrato};
-//         }
-//     },
-    
-//     toolbar: [
-//         {
-//             label: __("Adicionar Item"),
-//             condition: function(node) {
-//                 return node.expandable || node.is_root;
-//             },
-//             click: function(node) {
-//                 let values = {
-//                     is_group: 0
-//                 };
-                
-//                 if (!node.is_root) {
-//                     values.parent_contract_item = node.data.value;
-                    
-//                     // Herdar contrato do pai
-//                     if (node.data && node.data.contrato) {
-//                         values.contrato = node.data.contrato;
-//                     }
-//                 }
-                
-//                 frappe.new_doc("Contract Item", values);
-//             }
-//         }
-//     ],
-    
-//     menu_items: [
-//         {
-//             label: __("Novo Item"),
-//             action: function(node) {
-//                 let values = {};
-                
-//                 if (node.data) {
-//                     values.parent_contract_item = node.data.value || node.value;
-//                     if (node.data.contrato) {
-//                         values.contrato = node.data.contrato;
-//                     }
-//                 }
-                
-//                 frappe.new_doc('Contract Item', values);
-//             },
-//             condition: function(node) {
-//                 return !node.is_root;
-//             }
-//         },
-//         {
-//             label: __('Editar'),
-//             action: function(node) {
-//                 frappe.set_route('Form', 'Contract Item', node.data.value || node.value);
-//             },
-//             condition: function(node) {
-//                 return !node.is_root;
-//             }
-//         }
-//     ]
-// };
+        treeview.get_children = function(node) {
+            // Obter valor do filtro de contrato
+            var contract_filter = null;
+            if (treeview.page && treeview.page.sidebar) {
+                var filter_field = treeview.page.sidebar.find('[data-fieldname="contrato"]');
+                if (filter_field.length) {
+                    contract_filter = filter_field.val();
+                }
+            }
+            
+            return frappe.call({
+                method: me.get_tree_nodes,
+                args: {
+                    doctype: treeview.doctype,
+                    parent: node ? node.data.value : '',
+                    contrato: contract_filter || null,
+                    is_root: !node
+                },
+                callback: function(r) {
+                    if (r.message) {
+                        if (node) {
+                            node.load_children(r.message);
+                        } else {
+                            treeview.load_children(r.message);
+                        }
+                    }
+                }
+            });
+        };
+    }
+};
