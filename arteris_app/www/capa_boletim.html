@@ -455,6 +455,12 @@ const concessionaria = JSON.parse(document.getElementById('concessionaria-data')
 const contracted_company = JSON.parse(document.getElementById('contracted-company-data').textContent);
 const pedidosSap = JSON.parse(document.getElementById('pedidosSap-data').textContent);
 
+let valorAtual = 0
+let valorAcumuladoAtual = 0
+pedidosSap.forEach((pedido)=>{
+    valorAtual += pedido.valormedido
+    valorAcumuladoAtual += pedido.acumuladoatual
+})
 // Use contract_measurement as the base for your data object
 const data = {
     logoUrl: contract_measurement.logoUrl ?? 'https://www.arteris.com.br/static/icons/arteris-logo.dc5c9168a8a3.svg',
@@ -473,10 +479,10 @@ const data = {
     valorcontrato: contract_measurement.valorcontrato,
     saldopercentual: 100 - contract_measurement.saldopercentual,
     totais: {
-        percentualAtual: 5,
-        percentualAcumuladoAtual: 15,
-        valorAtual: 5000,
-        valorAcumuladoAtual: 15000
+        percentualAtual: contract_measurement.percentualAtual,
+        percentualAcumuladoAtual: contract_measurement.percentualAcumuladoAtual,
+        valorAtual,
+        valorAcumuladoAtual,
     },
     medicaoacumulada: contract_measurement.medicaoacumulada,
     medicaoatual: contract_measurement.medicaoAtual,
@@ -487,8 +493,8 @@ const data = {
     medicaoequivalente: contract_measurement.medicaoequivalente,
     caucaocontratual: contract_measurement.caucaocontratual,
     medicaoAtual: {
-        liberacaoCaucao: 200,
-        penalidadesRevisadas: 0
+        liberacaoCaucao: contract_measurement.liberacaoCaucao,
+        penalidadesRevisadas: contract_measurement.penalidadesRevisadas,
     },
     ftdacumulado: contract_measurement.ftdacumulado,
     totalvigentemenosftd: contract_measurement.totalvigentemenosftd,
