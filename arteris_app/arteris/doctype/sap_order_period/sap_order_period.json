@@ -11,14 +11,11 @@
   "datafinal",
   "linhapedido",
   "centrodecusto",
-  "codigopep",
   "column_break_uuby",
+  "reidi",
   "valor_para_o_periodo",
   "valormedido",
-  "saldo",
-  "column_break_hcwo",
-  "descricaoiss",
-  "column_break_iwcl"
+  "saldo"
  ],
  "fields": [
   {
@@ -79,35 +76,23 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "in_preview": 1,
-   "label": "Centro de custo",
+   "label": "C.C. ou PEP",
    "length": 30
   },
   {
-   "fieldname": "column_break_iwcl",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fetch_from": "codigoiss.descricao",
-   "fieldname": "descricaoiss",
-   "fieldtype": "Data",
-   "label": "Descri\u00e7\u00e3o",
-   "read_only": 1
-  },
-  {
-   "fieldname": "column_break_hcwo",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "codigopep",
-   "fieldtype": "Data",
-   "label": "C\u00f3digo PEP"
+   "fieldname": "reidi",
+   "fieldtype": "Percent",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "label": "REIDI %",
+   "precision": "2"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-06-27 12:48:58.773744",
+ "modified": "2025-07-03 14:56:28.418717",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "SAP Order Period",

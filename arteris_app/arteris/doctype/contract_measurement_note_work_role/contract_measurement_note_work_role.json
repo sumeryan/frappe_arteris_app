@@ -7,20 +7,22 @@
  "engine": "InnoDB",
  "field_order": [
   "funcao",
+  "item",
   "valorporhora",
   "valormensal",
-  "quantidade"
+  "quantidade",
+  "valortotal"
  ],
  "fields": [
   {
    "fieldname": "funcao",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Fun\u00e7\u00e3o",
-   "options": "Contract Item Work Role",
+   "options": "Work Role",
    "reqd": 1
   },
   {
-   "fetch_from": "funcao.valorporhora",
    "fieldname": "valorporhora",
    "fieldtype": "Currency",
    "in_list_view": 1,
@@ -28,11 +30,11 @@
    "read_only": 1
   },
   {
-   "fetch_from": "funcao.valortotalmensal",
    "fieldname": "valormensal",
-   "fieldtype": "Data",
+   "fieldtype": "Currency",
    "in_list_view": 1,
    "label": "Valor mensal",
+   "precision": "2",
    "read_only": 1
   },
   {
@@ -43,13 +45,30 @@
    "non_negative": 1,
    "precision": "3",
    "reqd": 1
+  },
+  {
+   "fieldname": "item",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Item",
+   "options": "Contract Item",
+   "reqd": 1
+  },
+  {
+   "fieldname": "valortotal",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Valor total",
+   "non_negative": 1,
+   "precision": "2",
+   "reqd": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-06-28 16:44:04.014338",
+ "modified": "2025-07-02 17:35:36.193851",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Measurement Note Work Role",

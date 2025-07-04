@@ -32,8 +32,19 @@
   "section_break_dted",
   "item",
   "column_break_zgam",
+  "apontamentodireto",
   "relat\u00f3rios_section",
   "tablog",
+  "osiris_section",
+  "mstart",
+  "mend",
+  "length",
+  "width",
+  "thickness",
+  "cidade",
+  "entitysystem",
+  "column_break_hkxd",
+  "laboratorystatus",
   "m\u00e3o_de_obra_tab",
   "fun\u00e7\u00f5es_section",
   "tabworkrole",
@@ -53,7 +64,9 @@
   "eh_feriado",
   "feriado",
   "section_break_twjc",
-  "tabhoras"
+  "tabhoras",
+  "pedido_sap_tab",
+  "taborder"
  ],
  "fields": [
   {
@@ -214,7 +227,7 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Origem",
-   "options": "Kartado RDO\nKartado Apontamento\nKartado Outros\nOsiris",
+   "options": "Kartado RDO\nKartado Apontamento\nKartado Outros\nOsiris\nApontamento direto",
    "reqd": 1
   },
   {
@@ -334,12 +347,85 @@
    "fieldname": "eh_feriado",
    "fieldtype": "Check",
    "label": "Feriado"
+  },
+  {
+   "fieldname": "pedido_sap_tab",
+   "fieldtype": "Tab Break",
+   "label": "Pedido SAP"
+  },
+  {
+   "fieldname": "apontamentodireto",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Apontamento direto",
+   "options": "Contract Measurement Note"
+  },
+  {
+   "fieldname": "taborder",
+   "fieldtype": "Table",
+   "options": "Contract Measurement Record SAP Order"
+  },
+  {
+   "fieldname": "osiris_section",
+   "fieldtype": "Section Break",
+   "label": "Osiris"
+  },
+  {
+   "fieldname": "mstart",
+   "fieldtype": "Float",
+   "label": "mstart",
+   "precision": "3"
+  },
+  {
+   "fieldname": "mend",
+   "fieldtype": "Float",
+   "label": "mend",
+   "precision": "3"
+  },
+  {
+   "fieldname": "length",
+   "fieldtype": "Float",
+   "label": "length",
+   "precision": "3"
+  },
+  {
+   "fieldname": "width",
+   "fieldtype": "Float",
+   "label": "width",
+   "precision": "3"
+  },
+  {
+   "fieldname": "thickness",
+   "fieldtype": "Float",
+   "label": "thickness",
+   "precision": "3"
+  },
+  {
+   "fieldname": "column_break_hkxd",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "cidade",
+   "fieldtype": "Data",
+   "label": "Cidade",
+   "length": 60,
+   "options": "City"
+  },
+  {
+   "fieldname": "entitysystem",
+   "fieldtype": "Data",
+   "label": "entitysystem"
+  },
+  {
+   "fieldname": "laboratorystatus",
+   "fieldtype": "Data",
+   "label": "Status do laborat\u00f3rio"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-26 21:46:59.550817",
+ "modified": "2025-07-04 16:05:26.649628",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Measurement Record",

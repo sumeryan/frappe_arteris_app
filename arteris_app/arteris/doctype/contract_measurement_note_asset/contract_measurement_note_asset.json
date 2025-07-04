@@ -7,8 +7,11 @@
  "engine": "InnoDB",
  "field_order": [
   "ativo",
+  "item",
+  "valorunitario",
   "valormensal",
-  "quantidade"
+  "quantidade",
+  "valortotal"
  ],
  "fields": [
   {
@@ -16,11 +19,10 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Maq., equipamentos e ve\u00edculos",
-   "options": "Contract Item Asset",
+   "options": "Asset",
    "reqd": 1
   },
   {
-   "fetch_from": "ativo.valormensal",
    "fieldname": "valormensal",
    "fieldtype": "Currency",
    "in_list_view": 1,
@@ -35,13 +37,37 @@
    "non_negative": 1,
    "precision": "3",
    "reqd": 1
+  },
+  {
+   "fieldname": "item",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Item",
+   "options": "Contract Item",
+   "reqd": 1
+  },
+  {
+   "fieldname": "valorunitario",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Valor unit\u00e1rio",
+   "read_only": 1
+  },
+  {
+   "fieldname": "valortotal",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Valor total",
+   "non_negative": 1,
+   "precision": "2",
+   "reqd": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-06-28 16:46:44.335157",
+ "modified": "2025-07-02 17:35:47.971704",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Measurement Note Asset",

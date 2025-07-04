@@ -1,25 +1,27 @@
 {
  "actions": [],
  "allow_rename": 1,
- "creation": "2025-07-03 10:19:28.110453",
+ "creation": "2025-07-01 17:02:25.289304",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "button_bqyb"
+  "campolink"
  ],
  "fields": [
   {
-   "fieldname": "button_bqyb",
-   "fieldtype": "Button"
+   "fieldname": "campolink",
+   "fieldtype": "Link",
+   "label": "Campo link",
+   "options": "SAP Order Period"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-03 10:19:37.548254",
+ "modified": "2025-07-01 17:03:34.017972",
  "modified_by": "Administrator",
  "module": "Arteris",
- "name": "Retention Type",
+ "name": "Teste",
  "owner": "Administrator",
  "permissions": [
   {

@@ -26,10 +26,10 @@
   "column_break_gnpt",
   "terminoservicosprevisto",
   "terminoservicos",
-  "reg_esp_de_incentivos_para_o_des_da_infraestrutura_reidi_section",
-  "percentualreidi",
+  "periodo_medicao",
   "column_break_rcsn",
   "medicaopormes",
+  "column_break_xsin",
   "medicaodiainicial",
   "medicaodiafinal",
   "cau\u00e7\u00e3o_section",
@@ -46,6 +46,8 @@
   "grupoformulas",
   "kartado",
   "uuidkartado",
+  "column_break_ufbt",
+  "uuidosiris",
   "tabela_de_pre\u00e7os_tab",
   "tabprecos"
  ],
@@ -154,17 +156,6 @@
    "label": "T\u00e9rmino previsto dos servi\u00e7os"
   },
   {
-   "fieldname": "reg_esp_de_incentivos_para_o_des_da_infraestrutura_reidi_section",
-   "fieldtype": "Section Break",
-   "label": "Reg. Esp. de Incentivos para o Des. da Infraestrutura (REIDI)"
-  },
-  {
-   "fieldname": "percentualreidi",
-   "fieldtype": "Float",
-   "label": "Percentual REIDI",
-   "non_negative": 1
-  },
-  {
    "fieldname": "column_break_rcsn",
    "fieldtype": "Column Break"
   },
@@ -195,6 +186,7 @@
   },
   {
    "default": "0",
+   "description": "<br>\nEm caso de medi\u00e7\u00e3o de m\u00eas cheio, o sistema ir\u00e1 considerar do primeiro dia do m\u00eas ao ultimo dia do m\u00eas, caso contrario preencher dia inicial e dia final, onde dia inicial ser\u00e1 o dia do m\u00eas em que se inicia a medi\u00e7\u00e3o e dia final o dia do pr\u00f3ximo m\u00eas em que ser\u00e1 encerrada a medi\u00e7\u00e3o.",
    "fieldname": "medicaopormes",
    "fieldtype": "Check",
    "label": "Medi\u00e7\u00e3o m\u00eas cheio"
@@ -206,14 +198,14 @@
   },
   {
    "fieldname": "kartado",
-   "fieldtype": "Section Break",
-   "label": "Kartado"
+   "fieldtype": "Section Break"
   },
   {
    "fieldname": "uuidkartado",
    "fieldtype": "Data",
-   "label": "Chave",
-   "length": 36
+   "label": "Chave Kartado",
+   "length": 36,
+   "read_only": 1
   },
   {
    "fieldname": "grupo_de_f\u00f3rmulas_section",
@@ -272,7 +264,8 @@
   },
   {
    "fieldname": "column_break_kkyj",
-   "fieldtype": "Column Break"
+   "fieldtype": "Column Break",
+   "hidden": 1
   },
   {
    "fieldname": "imprimir",
@@ -295,6 +288,26 @@
    "fieldname": "tabprecos",
    "fieldtype": "Table",
    "options": "Contract Price"
+  },
+  {
+   "fieldname": "column_break_ufbt",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "uuidosiris",
+   "fieldtype": "Data",
+   "label": "Chave Osiris",
+   "length": 36,
+   "read_only": 1
+  },
+  {
+   "fieldname": "periodo_medicao",
+   "fieldtype": "Section Break",
+   "label": "Per\u00edodo Medi\u00e7\u00e3o"
+  },
+  {
+   "fieldname": "column_break_xsin",
+   "fieldtype": "Column Break"
   }
  ],
  "grid_page_length": 50,
@@ -313,7 +326,7 @@
    "link_fieldname": "contrato"
   }
  ],
- "modified": "2025-06-28 20:04:38.206760",
+ "modified": "2025-07-04 12:33:23.989070",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract",

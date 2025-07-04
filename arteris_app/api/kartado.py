@@ -263,6 +263,9 @@ def create_kartado_measurement_record():
         if kartado_rdo_check != rdo_check:
             if kartado_measurement_record and has_itens:
                 # Save the previous measurement record
+                # Save the measurement record
+                if items:
+                    kartado_measurement_record.item = get_items_code(items)                
                 kartado_measurement_record.relatorio = str_logs[0:30]
                 kartado_measurement_record.rodovia = str_highways[0:30]
                 kartado_measurement_record.save()
@@ -279,6 +282,7 @@ def create_kartado_measurement_record():
             has_itens = False
             kartado_measurement_record = None
             kartado_logs = []
+            items = []
             str_logs = ""
             str_highways = ""
 
@@ -379,9 +383,27 @@ def create_kartado_measurement_record():
                             date_process = get_date_from_string(d["log_data_execucao"])
                         if d["tipo_registro"] == "others":
                             date_process = get_date_from_string(d["data_criacao"])
+                        
                         # Timestamp strings
-                        ts_start = d["rdo_adm_hora_inicio"]
-                        ts_end = d["rdo_adm_hora_fim"]
+                        ts_start = "2000-01-01 00:00:00.000"
+                        ts_end = "2000-01-01 00:00:00.000"
+
+                        # Get start hour
+                        if ts_start == ts_end and d["rdo_hora_inicio_manha"]:
+                            ts_start = f'2000-01-01 {d["rdo_hora_inicio_manha"]}:00.000'
+                        if ts_start == ts_end and d["rdo_hora_inicio_tarde"]:                            
+                            ts_start = f'2000-01-01 {d["rdo_hora_inicio_tarde"]}:00.000'
+                        if ts_start == ts_end and d["rdo_hora_inicio_noite"]:                            
+                            ts_start = f'2000-01-01 {d["rdo_hora_inicio_noite"]}:00.000'
+
+                        # Get last hour
+                        if d["rdo_hora_fim_manha"]:
+                            ts_end =  f'2000-01-01 {d["rdo_hora_fim_manha"]}:00.000'
+                        if d["rdo_hora_fim_tarde"]:
+                            ts_end =  f'2000-01-01 {d["rdo_hora_fim_tarde"]}:00.000'
+                        if d["rdo_hora_fim_noite"]:
+                            ts_end =  f'2000-01-01 {d["rdo_hora_fim_noite"]}:00.000'
+
                         # Converter para datetime
                         time_start = datetime.strptime(ts_start, '%Y-%m-%d %H:%M:%S.%f')
                         time_end = datetime.strptime(ts_end, '%Y-%m-%d %H:%M:%S.%f')                        
@@ -449,6 +471,8 @@ def create_kartado_measurement_record():
                     kartado_measurement_log_record.latitude = d["log_latitude"]
                     kartado_measurement_log_record.longitude = d["log_longitude"]
                     kartado_measurement_log_record.observacoes = d["log_notas_formulario_json"]
+                    kartado_measurement_log_record.sentido = d["log_sentido"]
+                    kartado_measurement_log_record.faixa = d["log_pista"]
                     if str_logs:
                         str_logs += ", "
                     str_logs += d["log_codigo_relatorio"]
@@ -464,7 +488,8 @@ def create_kartado_measurement_record():
         kartado_measurement_record.rodovia = str_highways[0:30]
         kartado_measurement_record.save()
 
-        # Add the kartado uuids 
+    # Add the kartado uuids 
+    if kartado_uuids:
         integration_record = frappe.new_doc("Integration Record")
         integration_record.contrato = contract_name
         integration_record.data = contract_processing_date

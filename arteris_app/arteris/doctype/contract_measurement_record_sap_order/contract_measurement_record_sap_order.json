@@ -1,18 +1,18 @@
 {
  "actions": [],
  "allow_rename": 1,
- "creation": "2025-06-28 16:38:05.738176",
+ "creation": "2025-07-02 17:42:23.497163",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "pedidolinha",
-  "codigocc",
+  "pedidosap",
+  "linhapedido",
   "valormedido"
  ],
  "fields": [
   {
-   "fieldname": "pedidolinha",
+   "fieldname": "linhapedido",
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Linha de pedido SAP",
@@ -29,21 +29,21 @@
    "reqd": 1
   },
   {
-   "fieldname": "codigocc",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "C.C. ou PEP",
-   "read_only": 1
+   "fieldname": "pedidosap",
+   "fieldtype": "Link",
+   "label": "Pedido SAP",
+   "options": "SAP Order",
+   "reqd": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-07-02 10:40:05.508214",
+ "modified": "2025-07-02 17:54:59.863097",
  "modified_by": "Administrator",
  "module": "Arteris",
- "name": "Contract Measurement Note SAP Order",
+ "name": "Contract Measurement Record SAP Order",
  "owner": "Administrator",
  "permissions": [],
  "row_format": "Dynamic",

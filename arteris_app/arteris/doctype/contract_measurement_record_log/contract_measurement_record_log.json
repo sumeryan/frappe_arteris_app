@@ -8,13 +8,20 @@
  "field_order": [
   "codigorelatorio",
   "dataexecucao",
+  "latitude",
+  "longitude",
   "observacoes",
   "column_break_zyxn",
   "rodovia",
+  "via",
+  "sentido",
+  "faixa",
   "kminicial",
   "kmfinal",
-  "latitude",
-  "longitude"
+  "section_break_prdt",
+  "chavedorodovia",
+  "column_break_esfn",
+  "cidade"
  ],
  "fields": [
   {
@@ -29,7 +36,7 @@
    "fieldname": "rodovia",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Rodovia",
+   "label": "Identifica\u00e7\u00e3o da rodovia",
    "length": 30
   },
   {
@@ -74,13 +81,51 @@
   {
    "fieldname": "column_break_zyxn",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "via",
+   "fieldtype": "Data",
+   "label": "Via",
+   "length": 60
+  },
+  {
+   "fieldname": "sentido",
+   "fieldtype": "Data",
+   "label": "Sentido",
+   "length": 60
+  },
+  {
+   "fieldname": "faixa",
+   "fieldtype": "Data",
+   "label": "Faixa",
+   "length": 60
+  },
+  {
+   "fieldname": "section_break_prdt",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "chavedorodovia",
+   "fieldtype": "Link",
+   "label": "Rodovia",
+   "options": "Highway"
+  },
+  {
+   "fieldname": "column_break_esfn",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "cidade",
+   "fieldtype": "Link",
+   "label": "Cidade",
+   "options": "City"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-06-03 10:26:49.177421",
+ "modified": "2025-07-03 14:54:34.452371",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Measurement Record Log",

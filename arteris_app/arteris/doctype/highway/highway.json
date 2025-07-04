@@ -10,6 +10,8 @@
   "sigla",
   "nome",
   "sentido_rodovia",
+  "column_break_pcak",
+  "tblkartado",
   "cidades_section",
   "cidades"
  ],
@@ -48,12 +50,23 @@
    "length": 5,
    "options": "Norte\nSul\nLeste\nOeste",
    "reqd": 1
+  },
+  {
+   "fieldname": "column_break_pcak",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Ser\u00e1 considerada a seguinte composi\u00e7\u00e3o:<br>\nOsiris = {sigla}-{uf}-{via}-{sentido}-{faixa}. Ex: \"BR381-MG-Tronco-Decrescente-2\"<br>Kartado = {sigla}-{uf}-{sentido}-{faixa}. Ex: \"SPA-348/334-0-22\"\n",
+   "fieldname": "tblkartado",
+   "fieldtype": "Table",
+   "label": "De para, integra\u00e7\u00f5es",
+   "options": "Highway Kartado"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-26 09:37:29.414083",
+ "modified": "2025-07-03 14:40:36.406341",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Highway",

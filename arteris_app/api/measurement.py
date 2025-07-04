@@ -151,12 +151,22 @@ def create_measurement(month: int, year: int, ignore_current_measurement: bool =
         
         # Check open measurement
         if not ignore_current_measurement:
-            existing_measurements = frappe.db.get_all("Contract Measurement", filters={
-                "medicaovigente": "Sim",
-                "contrato": contract.name
-            })        
+            existing_measurements = frappe.db.get_all(
+                "Contract Measurement", 
+                fields=["name","datainicialmedicao","datafinalmedicao","medicaovigente"],
+                filters={
+                    "medicaovigente": "Sim",
+                    "contrato": contract.name
+                })        
             if existing_measurements:
-                inconsistencies.append(f"Contract Measurement already exists for contract {contract.name}")
+                measurements.extend(
+                    [{
+                        "name": existing_measurements[0]['name'], 
+                        "contract": contract.name, 
+                        "start": existing_measurements[0]['datainicialmedicao'], 
+                        "end": existing_measurements[0]['datafinalmedicao'], 
+                        "current": existing_measurements[0]['medicaovigente']
+                    }])
                 continue
 
         # Check existing measurements for the month and year
@@ -169,7 +179,7 @@ def create_measurement(month: int, year: int, ignore_current_measurement: bool =
         if not existing_measurements:
 
             try:
-                last_contract_measurement = frappe.frappe.get_last_doc("Contract Measurement")
+                last_contract_measurement = frappe.frappe.get_last_doc("Contract Measurement", filters={"contrato": contract.name})
             except Exception as e:
                 last_contract_measurement = None
                 # frappe.log_error(f"Error getting last contract measurement: {str(e)}", "Create Measurement Error")
@@ -185,7 +195,7 @@ def create_measurement(month: int, year: int, ignore_current_measurement: bool =
                 medicaoacumulada = last_contract_measurement.medicaoacumulada
                 caucaoacumulado = last_contract_measurement.caucaoacumulado
                 ftdacumulado = last_contract_measurement.ftdacumulado
-                next_measurement = int(last_contract_measurement.name[3:])
+                next_measurement = int(last_contract_measurement.name[-3:])
 
             next_measurement += 1
 
@@ -319,6 +329,7 @@ def create_measurement(month: int, year: int, ignore_current_measurement: bool =
                                     contract_measurement_sap_order.acumuladoanterior = acumuladoanterior
                                     contract_measurement_sap_order.valormedido = 0.0
                                     contract_measurement_sap_order.acumuladoatual = 0.0
+                                    contract_measurement_sap_order.reidi = sap_order.reidi
 
                 # Get Work Role
                 item_work_roles = frappe.db.get_all("Contract Item Work Role", fields=["*"], filters={"parent": item.name})
@@ -692,7 +703,7 @@ def update_hours_measurement_record(meaesuremen: str):
             date_process = kartado_measurement_record.dataexecucao
             # Timestamp strings
             time_start = k_time.horainicial
-            time_end = k_time.horafinal                      
+            time_end = k_time.horafinal
             # Calculate the hours based on the day of the week
             total_hours_time =  time_end - time_start
             # Convert to decimal hours
