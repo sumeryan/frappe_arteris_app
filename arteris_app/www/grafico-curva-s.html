@@ -536,11 +536,8 @@
     function applyFilters() {
         const itemCheckboxes = document.querySelectorAll('.item-checkbox:checked');
         const selectedItems = Array.from(itemCheckboxes).map(cb => cb.value);
-        // Get selected contracts from checked contract checkboxes
         const contractCheckboxes = document.querySelectorAll('.contract-checkbox:checked');
         const selectedContracts = Array.from(contractCheckboxes).map(cb => cb.value);
-        console.log(selectedItems)
-
         const startDate = document.getElementById('start-date').value;
         const endDate = document.getElementById('end-date').value;
         if (!selectedContracts.length) {
@@ -549,36 +546,66 @@
         }
         document.getElementById('loading').style.display = 'block';
 
-        // Fetch planned data for selected contracts
-        fetchPlannedWorkloadCfgByContracts(selectedContracts, (rows) => {
-            // Filter by selected contract items
-            const filteredRows = rows.filter(r => selectedItems.includes(r.contract_item));
-            console.log(rows)
-            // Group by period (e.g. mes/ano or a string like 'YYYY-MM')
-            const periodMap = {};
-            filteredRows.forEach(row => {
-                // Compose a period string (e.g. '2024-01')
-                const period = `${row.ano}-${String(row.mes).padStart(2, '0')}`;
-                if (!periodMap[period]) {
-                    periodMap[period] = { period, planned_value: 0, actual_value: 0 };
-                }
-                // Optionally filter by date range if you have a date field
-                periodMap[period].planned_value += row.value || 0;
-            });
-            console.log(periodMap)
-            // Convert to array and sort by period
-            const periods = Object.keys(periodMap).sort().map(period => ({
-                period,
-                planned_value: periodMap[period].planned_value,
-                actual_value: 0 // Actuals will be filled later
-            }));
+        // Fetch planned and actuals in parallel, then merge and process
+        fetchPlannedWorkloadCfgByContracts(selectedContracts, (plannedRows) => {
+            fetchActualsByContracts(selectedContracts, (actualRows) => {
 
-            fetchActualsByContracts(selectedContracts, (rows)=>{
-                console.log(rows)
-            })
-            currentData = { periods };
-            updateChart();
-            document.getElementById('loading').style.display = 'none';
+                // Normalize plannedRows to {date, contract_item, value, type: 'planned'}
+                const planned = plannedRows.map(row => ({
+                    date: `${row.ano}-${String(row.mes).padStart(2, '0')}-01`, // Use first day of month
+                    contract_item: row.contract_item,
+                    value: row.value,
+                    type: 'planned'
+                }));
+                // Normalize actualRows to {date, contract_item, value, type: 'actual'}
+                const actual = actualRows.map(row => ({
+                    date: row.date,
+                    contract_item: row.contract_item,
+                    value: row.value,
+                    type: 'actual'
+                }));
+                // Merge arrays
+                let merged = [...planned, ...actual];
+                // Filter by contract item and date
+                console.log(merged)
+                if (selectedItems.length) {
+                    merged = merged.filter(r => selectedItems.includes(r.contract_item));
+                }
+
+                if (startDate) {
+                    const start = new Date(startDate);
+                    merged = merged.filter(r => new Date(r.date) >= start);
+                }
+                console.log(merged)
+
+                if (endDate) {
+                    const end = new Date(endDate);
+                    merged = merged.filter(r => new Date(r.date) <= end);
+                }
+                console.log(merged)
+
+                // Group by period (YYYY-MM) and sum planned/actual
+                const periodMap = {};
+                merged.forEach(row => {
+                    const period = row.date.slice(0, 7); // YYYY-MM
+                    if (!periodMap[period]) {
+                        periodMap[period] = { period, planned_value: 0, actual_value: 0 };
+                    }
+                    if (row.type === 'planned') {
+                        periodMap[period].planned_value += row.value || 0;
+                    } else {
+                        periodMap[period].actual_value += row.value || 0;
+                    }
+                });
+                const periods = Object.keys(periodMap).sort().map(period => ({
+                    period,
+                    planned_value: periodMap[period].planned_value,
+                    actual_value: periodMap[period].actual_value
+                }));
+                currentData = { periods };
+                updateChart();
+                document.getElementById('loading').style.display = 'none';
+            });
         });
     }
 function fetchPlannedWorkloadCfgByContracts(selectedContracts, callback) {
