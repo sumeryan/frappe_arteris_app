@@ -572,6 +572,10 @@
                 planned_value: periodMap[period].planned_value,
                 actual_value: 0 // Actuals will be filled later
             }));
+
+            fetchActualsByContracts(selectedContracts, (rows)=>{
+                console.log(rows)
+            })
             currentData = { periods };
             updateChart();
             document.getElementById('loading').style.display = 'none';
@@ -610,6 +614,44 @@ function fetchPlannedWorkloadCfgByContracts(selectedContracts, callback) {
                 });
             }));
             Promise.all(plannedPromises).then(results => {
+                const allRows = [].concat(...results);
+                callback(allRows);
+            });
+        }
+    });
+}
+function fetchActualsByContracts(selectedContracts, callback) {
+    frappe.call({
+        method: 'frappe.client.get_list',
+        args: {
+            doctype: 'Contract Measurement',
+            filters: { 'contrato': ['in', selectedContracts] },
+            fields: ['name', 'datafinalmedicao'],
+            limit_page_length: 100
+        },
+        callback: function(measureResponse) {
+            const measureDocs = measureResponse.message || [];
+            const actualPromises = measureDocs.map(measure => new Promise(resolve => {
+                frappe.call({
+                    method: 'frappe.client.get',
+                    args: { doctype: 'Contract Measurement', name: measure.name },
+                    callback: function(docResp) {
+                        const doc = docResp.message;
+                        if (doc && doc.tabitenscontatrato) {
+                            const rows = doc.tabitenscontatrato.map(it => ({
+                                date: doc.datafinalmedicao,
+                                contract_item: it.itemcontrato, // adjust field name if needed
+                                value: it.valortotalvigente // adjust field name if needed
+                            }));
+                            resolve(rows);
+                        } else {
+                            resolve([]);
+                        }
+                    },
+                    error: function() { resolve([]); }
+                });
+            }));
+            Promise.all(actualPromises).then(results => {
                 const allRows = [].concat(...results);
                 callback(allRows);
             });
