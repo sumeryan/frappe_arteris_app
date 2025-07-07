@@ -185,6 +185,13 @@
         padding: 20px !important;
         color: #6c757d !important;
     }
+    
+    #contract-checkbox-list label, #item-checkbox-list label {
+        display: flex !important;
+        align-items: center !important;
+        gap: 6px;
+        margin-bottom: 2px;
+    }
 </style>
 {% endblock %}
 
@@ -198,19 +205,17 @@
     <div class="custom-filters-section">
         <div class="custom-filters-row">
             <div class="custom-filter-group">
-                <label for="contract-select">Contract</label>
-                <select id="contract-select">
-                    <option value="">Select Contract</option>
-                    <!-- Options will be populated by Frappe -->
-                </select>
+                <label for="contract-select">Contracts</label>
+                <div id="contract-checkbox-list" style="max-height: 140px; overflow-y: auto; border: 1px solid #ced4da; border-radius: 4px; padding: 6px 8px; background: #fff;">
+                    <!-- Contract checkboxes will be populated by JS -->
+                </div>
             </div>
             
             <div class="custom-filter-group">
-                <label for="item-select">Contract Item</label>
-                <select id="item-select">
-                    <option value="">Select Item</option>
-                    <!-- Options will be populated by Frappe -->
-                </select>
+                <label for="item-select">Contract Items</label>
+                <div id="item-checkbox-list" style="max-height: 220px; overflow-y: auto; border: 1px solid #ced4da; border-radius: 4px; padding: 6px 8px; background: #fff;">
+                    <!-- Item checkboxes will be populated by JS -->
+                </div>
             </div>
             
             <div class="custom-filter-group">
@@ -433,115 +438,96 @@
         });
     }
 
-    function fetchContractData(contract, item, startDate, endDate) {
-        document.getElementById('loading').style.display = 'block';
-        
-        // Frappe API call to get contract data
-        frappe.call({
-            method: 'your_app.contract_analysis.get_contract_comparison_data',
-            args: {
-                contract: contract,
-                item: item,
-                start_date: startDate,
-                end_date: endDate
-            },
-            callback: function(response) {
-                document.getElementById('loading').style.display = 'none';
-                
-                if (response.message) {
-                    currentData = response.message;
-                    updateChart();
-                } else {
-                    // Fallback to mock data for development
-                    console.log('Using mock data - implement server method');
-                    currentData = mockData.contractItems[0];
-                    updateChart();
-                }
-            },
-            error: function(error) {
-                document.getElementById('loading').style.display = 'none';
-                console.error('Error fetching data:', error);
-                
-                // Fallback to mock data
-                currentData = mockData.contractItems[0];
-                updateChart();
-            }
-        });
-    }
-
     function loadContracts() {
-        // Load contract list from Frappe
         frappe.call({
             method: 'frappe.client.get_list',
             args: {
                 doctype: 'Contract',
-                fields: ['name', 'contrato', 'contratada', 'subsidiaria'],
+                fields: ['name', 'contrato'],
                 order_by: 'creation asc',
                 limit_page_length: 100,
             },
             callback: function(response) {
-                const select = document.getElementById('contract-select');
-                select.innerHTML = '<option value="">Select Contract</option>';
-                
+                const container = document.getElementById('contract-checkbox-list');
+                container.innerHTML = '';
                 if (response.message) {
                     response.message.forEach(contract => {
-                        const option = document.createElement('option');
-                        option.value = contract.name;
-                        option.textContent = contract.contrato;
-                        select.appendChild(option);
+                        const label = document.createElement('label');
+                        label.style.display = 'block';
+                        const checkbox = document.createElement('input');
+                        checkbox.type = 'checkbox';
+                        checkbox.value = contract.name;
+                        checkbox.className = 'contract-checkbox';
+                        label.appendChild(checkbox);
+                        label.appendChild(document.createTextNode(' ' + contract.contrato));
+                        container.appendChild(label);
                     });
                 }
             },
             error: function(error) {
                 console.error('Error loading contracts:', error);
-                // Add some default options for development
-                const select = document.getElementById('contract-select');
-                select.innerHTML = `
-                    <option value="">Select Contract</option>
-                `;
+                document.getElementById('contract-checkbox-list').innerHTML = '';
             }
         });
     }
 
-    function loadContractItems(contract) {
-        if (!contract) {
-            const select = document.getElementById('item-select');
-            select.innerHTML = '<option value="">Select Item</option>';
-            return;
-        }
-
-        // Load contract items from Frappe
+    function loadContractItems() {
+        const contractCheckboxes = document.querySelectorAll('.contract-checkbox:checked');
+        const selectedContracts = Array.from(contractCheckboxes).map(cb => cb.value);
+        console.log(selectedContracts)
+        const container = document.getElementById('item-checkbox-list');
+        container.innerHTML = '';
+        if (!selectedContracts.length) return;
         frappe.call({
             method: 'frappe.client.get_list',
             args: {
-                doctype: 'Contract Item', // Replace with your actual doctype
-                fields: ['name', 'item_code', 'description'],
-                filters: [['contract', '=', contract]],
+                doctype: 'Contract Measurement',
+                filters: { 'contrato': ["in", selectedContracts] },
+                fields: ['name','tabitenscontatrato'],
+                order_by: 'datafinalmedicao asc',
                 limit_page_length: 100
             },
             callback: function(response) {
-                const select = document.getElementById('item-select');
-                select.innerHTML = '<option value="">Select Item</option>';
-                
+                console.log(response)
+                const itemsSet = new Set();
                 if (response.message) {
-                    response.message.forEach(item => {
-                        const option = document.createElement('option');
-                        option.value = item.name;
-                        option.textContent = item.item_code + (item.description ? ' - ' + item.description : '');
-                        select.appendChild(option);
+                    let pending = response.message.length;
+                    if (!pending) return;
+                    response.message.forEach(measurement => {
+                        frappe.call({
+                            method: 'frappe.client.get',
+                            args: {
+                                doctype: 'Contract Measurement',
+                                name: measurement.name
+                            },
+                            callback: function(docResp) {
+                                console.log(docResp)
+                                if (docResp.message && Array.isArray(docResp.message.tabitenscontrato)) {
+                                    docResp.message.tabitenscontrato.forEach(item => {
+                                        if (!itemsSet.has(item.name)) {
+                                            itemsSet.add(item.name);
+                                            const label = document.createElement('label');
+                                            label.style.display = 'block';
+                                            const checkbox = document.createElement('input');
+                                            checkbox.type = 'checkbox';
+                                            checkbox.value = item.name;
+                                            checkbox.className = 'item-checkbox';
+                                            label.appendChild(checkbox);
+                                            label.appendChild(document.createTextNode(''));
+                                            container.appendChild(label);
+                                        }
+                                    });
+                                }
+                                pending--;
+                            },
+                            error: function() { pending--; }
+                        });
                     });
                 }
             },
             error: function(error) {
                 console.error('Error loading contract items:', error);
-                // Add some default options for development
-                const select = document.getElementById('item-select');
-                select.innerHTML = `
-                    <option value="">Select Item</option>
-                    <option value="ITEM-001">Software Licenses</option>
-                    <option value="ITEM-002">Hardware Components</option>
-                    <option value="ITEM-003">Professional Services</option>
-                `;
+                container.innerHTML = '';
             }
         });
     }
@@ -556,19 +542,14 @@
         updateChart();
         
         // Add event listeners for filters
-        document.getElementById('contract-select').addEventListener('change', function() {
-            loadContractItems(this.value);
+        document.getElementById('contract-checkbox-list').addEventListener('change', function(e) {
+            if (e.target.classList.contains('contract-checkbox')) {
+                loadContractItems();
+            }
         });
         
-        document.getElementById('item-select').addEventListener('change', function() {
-            const contract = document.getElementById('contract-select').value;
-            const item = this.value;
-            const startDate = document.getElementById('start-date').value;
-            const endDate = document.getElementById('end-date').value;
-            
-            if (contract && item) {
-                fetchContractData(contract, item, startDate, endDate);
-            }
+        document.getElementById('item-checkbox-list').addEventListener('change', function(e) {
+            // You can handle item selection here if needed
         });
     });
 </script>
