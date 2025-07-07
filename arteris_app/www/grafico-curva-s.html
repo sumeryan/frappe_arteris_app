@@ -238,7 +238,7 @@
             </div>
         </div>
         
-        <button class="custom-btn" onclick="updateChart()">Apply Filters</button>
+        <button class="custom-btn" onclick="applyFilters()">Apply Filters</button>
     </div>
     
     <div class="custom-stats-grid">
@@ -397,8 +397,19 @@
     }
 
     function updateChart() {
-        if (!currentData || !currentData.periods) {
+        if (!currentData || !currentData.periods || !Array.isArray(currentData.periods) || currentData.periods.length === 0) {
             console.log('No data available');
+            // Clear chart and stats if needed
+            chart.data.labels = [];
+            chart.data.datasets[0].data = [];
+            chart.data.datasets[1].data = [];
+            chart.update();
+            document.getElementById('total-planned').textContent = '$0';
+            document.getElementById('total-actual').textContent = '$0';
+            document.getElementById('variance').textContent = '$0';
+            document.getElementById('variance').className = 'value currency';
+            document.getElementById('completion').textContent = '0%';
+            updateTable([]);
             return;
         }
 
@@ -491,7 +502,7 @@
             args: {
                 doctype: 'Contract Item',
                 filters: { 'contrato': ["in", selectedContracts] },
-                fields: ['name', 'descricao'], 
+                fields: ['name', 'descricao','contrato'], 
                 order_by: 'creation asc',
                 limit_page_length: 100
             },
@@ -522,14 +533,93 @@
         });
     }
 
+    function applyFilters() {
+        const itemCheckboxes = document.querySelectorAll('.item-checkbox:checked');
+        const selectedItems = Array.from(itemCheckboxes).map(cb => cb.value);
+        // Get selected contracts from checked contract checkboxes
+        const contractCheckboxes = document.querySelectorAll('.contract-checkbox:checked');
+        const selectedContracts = Array.from(contractCheckboxes).map(cb => cb.value);
+        console.log(selectedItems)
+
+        const startDate = document.getElementById('start-date').value;
+        const endDate = document.getElementById('end-date').value;
+        if (!selectedContracts.length) {
+            frappe.msgprint('Please select at least one contract.');
+            return;
+        }
+        document.getElementById('loading').style.display = 'block';
+
+        // Fetch planned data for selected contracts
+        fetchPlannedWorkloadCfgByContracts(selectedContracts, (rows) => {
+            // Filter by selected contract items
+            const filteredRows = rows.filter(r => selectedItems.includes(r.contract_item));
+            console.log(rows)
+            // Group by period (e.g. mes/ano or a string like 'YYYY-MM')
+            const periodMap = {};
+            filteredRows.forEach(row => {
+                // Compose a period string (e.g. '2024-01')
+                const period = `${row.ano}-${String(row.mes).padStart(2, '0')}`;
+                if (!periodMap[period]) {
+                    periodMap[period] = { period, planned_value: 0, actual_value: 0 };
+                }
+                // Optionally filter by date range if you have a date field
+                periodMap[period].planned_value += row.value || 0;
+            });
+            console.log(periodMap)
+            // Convert to array and sort by period
+            const periods = Object.keys(periodMap).sort().map(period => ({
+                period,
+                planned_value: periodMap[period].planned_value,
+                actual_value: 0 // Actuals will be filled later
+            }));
+            currentData = { periods };
+            updateChart();
+            document.getElementById('loading').style.display = 'none';
+        });
+    }
+function fetchPlannedWorkloadCfgByContracts(selectedContracts, callback) {
+    frappe.call({
+        method: 'frappe.client.get_list',
+        args: {
+            doctype: 'Contract Item Workload Cfg',
+            filters: { 'contrato': ['in', selectedContracts] },
+            fields: ['name', 'contrato'],
+            limit_page_length: 100
+        },
+        callback: function(cfgResponse) {
+            const cfgDocs = cfgResponse.message || [];
+            const plannedPromises = cfgDocs.map(cfg => new Promise(resolve => {
+                frappe.call({
+                    method: 'frappe.client.get',
+                    args: { doctype: 'Contract Item Workload Cfg', name: cfg.name },
+                    callback: function(docResp) {
+                        const doc = docResp.message;
+                        if (doc && doc.tabitens) {
+                            const rows = doc.tabitens.map(it => ({
+                                mes: doc.mes,
+                                ano: doc.ano,
+                                contract_item: it.item, // or doc.contract_item if needed
+                                value: it.valor
+                            }));
+                            resolve(rows);
+                        } else {
+                            resolve([]);
+                        }
+                    },
+                    error: function() { resolve([]); }
+                });
+            }));
+            Promise.all(plannedPromises).then(results => {
+                const allRows = [].concat(...results);
+                callback(allRows);
+            });
+        }
+    });
+}
     // Initialize the page when Frappe is ready
     frappe.ready(function() {
         initChart();
         loadContracts();
-        
-        // Load mock data initially
-        currentData = mockData.contractItems[0];
-        updateChart();
         
         // Add event listeners for filters
         document.getElementById('contract-checkbox-list').addEventListener('change', function(e) {
