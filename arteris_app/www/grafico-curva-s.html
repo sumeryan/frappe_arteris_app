@@ -474,54 +474,35 @@
     function loadContractItems() {
         const contractCheckboxes = document.querySelectorAll('.contract-checkbox:checked');
         const selectedContracts = Array.from(contractCheckboxes).map(cb => cb.value);
-        console.log(selectedContracts)
         const container = document.getElementById('item-checkbox-list');
         container.innerHTML = '';
         if (!selectedContracts.length) return;
         frappe.call({
             method: 'frappe.client.get_list',
             args: {
-                doctype: 'Contract Measurement',
+                doctype: 'Contract Item',
                 filters: { 'contrato': ["in", selectedContracts] },
-                fields: ['name','tabitenscontatrato'],
-                order_by: 'datafinalmedicao asc',
+                fields: ['name', 'descricao'], 
+                order_by: 'creation asc',
                 limit_page_length: 100
             },
             callback: function(response) {
                 console.log(response)
                 const itemsSet = new Set();
                 if (response.message) {
-                    let pending = response.message.length;
-                    if (!pending) return;
-                    response.message.forEach(measurement => {
-                        frappe.call({
-                            method: 'frappe.client.get',
-                            args: {
-                                doctype: 'Contract Measurement',
-                                name: measurement.name
-                            },
-                            callback: function(docResp) {
-                                console.log(docResp)
-                                if (docResp.message && Array.isArray(docResp.message.tabitenscontrato)) {
-                                    docResp.message.tabitenscontrato.forEach(item => {
-                                        if (!itemsSet.has(item.name)) {
-                                            itemsSet.add(item.name);
-                                            const label = document.createElement('label');
-                                            label.style.display = 'block';
-                                            const checkbox = document.createElement('input');
-                                            checkbox.type = 'checkbox';
-                                            checkbox.value = item.name;
-                                            checkbox.className = 'item-checkbox';
-                                            label.appendChild(checkbox);
-                                            label.appendChild(document.createTextNode(''));
-                                            container.appendChild(label);
-                                        }
-                                    });
-                                }
-                                pending--;
-                            },
-                            error: function() { pending--; }
-                        });
+                    response.message.forEach(item => {
+                        if (!itemsSet.has(item.name)) {
+                            itemsSet.add(item.name);
+                            const label = document.createElement('label');
+                            label.style.display = 'block';
+                            const checkbox = document.createElement('input');
+                            checkbox.type = 'checkbox';
+                            checkbox.value = item.name;
+                            checkbox.className = 'item-checkbox';
+                            label.appendChild(checkbox);
+                            label.appendChild(document.createTextNode(item.descricao));
+                            container.appendChild(label);
+                        }
                     });
                 }
             },
