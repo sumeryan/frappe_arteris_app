@@ -5,7 +5,6 @@
 {% block head_include %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
 <style>
-    /* Reset and override Frappe styles */
     .page-container, .container-fluid {
         padding: 0 !important;
         margin: 0 !important;
@@ -207,55 +206,55 @@
 {% block page_content %}
 <div class="custom-container">
     <div class="custom-header">
-        <h1>Contract Value Comparison</h1>
-        <p>Track planned vs actual spending for contract items over time</p>
+        <h1>Comparativo de Valores Contratuais</h1>
+        <p>Acompanhe o planejado vs realizado dos itens de contrato ao longo do tempo</p>
     </div>
     
     <div class="custom-filters-section">
         <div class="custom-filters-row">
             <div class="custom-filter-group">
-                <label for="contract-select">Contracts</label>
+                <label for="contract-select">Contratos</label>
                 <div id="contract-checkbox-list" style="max-height: 140px; overflow-y: auto; border: 1px solid #ced4da; border-radius: 4px; padding: 6px 8px; background: #fff;">
                     <!-- Contract checkboxes will be populated by JS -->
                 </div>
             </div>
             
             <div class="custom-filter-group">
-                <label for="item-select">Contract Items</label>
+                <label for="item-select">Itens do Contrato</label>
                 <div id="item-checkbox-list" style="max-height: 220px; overflow-y: auto; border: 1px solid #ced4da; border-radius: 4px; padding: 6px 8px; background: #fff;">
                     <!-- Item checkboxes will be populated by JS -->
                 </div>
             </div>
             
             <div class="custom-filter-group">
-                <label for="start-date">Start Date</label>
+                <label for="start-date">Data Inicial</label>
                 <input type="date" id="start-date" value="{{ frappe.utils.today() }}">
             </div>
             
             <div class="custom-filter-group">
-                <label for="end-date">End Date</label>
+                <label for="end-date">Data Final</label>
                 <input type="date" id="end-date" value="{{ frappe.utils.add_months(frappe.utils.today(), 12) }}">
             </div>
         </div>
         
-        <button class="custom-btn" onclick="applyFilters()">Apply Filters</button>
+        <button class="custom-btn" onclick="applyFilters()">Aplicar Filtros</button>
     </div>
     
     <div class="custom-stats-grid">
         <div class="custom-stat-card">
-            <h3>Total Planned</h3>
-            <div class="value currency" id="total-planned">$0</div>
+            <h3>Total Planejado</h3>
+            <div class="value currency" id="total-planned">R$0</div>
         </div>
         <div class="custom-stat-card">
-            <h3>Total Actual</h3>
-            <div class="value currency" id="total-actual">$0</div>
+            <h3>Total Realizado</h3>
+            <div class="value currency" id="total-actual">R$0</div>
         </div>
         <div class="custom-stat-card">
-            <h3>Variance</h3>
-            <div class="value currency" id="variance">$0</div>
+            <h3>Variação</h3>
+            <div class="value currency" id="variance">R$0</div>
         </div>
         <div class="custom-stat-card">
-            <h3>Completion %</h3>
+            <h3>% Concluído</h3>
             <div class="value" id="completion">0%</div>
         </div>
     </div>
@@ -265,18 +264,18 @@
     </div>
     
     <div class="custom-loading" id="loading" style="display: none;">
-        Loading data...
+        Carregando dados...
     </div>
     
     <table class="custom-data-table">
         <thead>
             <tr>
-                <th>Period</th>
-                <th>Planned Value</th>
-                <th>Actual Value</th>
-                <th>Cumulative Planned</th>
-                <th>Cumulative Actual</th>
-                <th>Variance</th>
+                <th>Período</th>
+                <th>Valor Planejado</th>
+                <th>Valor Realizado</th>
+                <th>Acumulado Planejado</th>
+                <th>Acumulado Realizado</th>
+                <th>Variação</th>
             </tr>
         </thead>
         <tbody id="data-table-body">
@@ -324,7 +323,7 @@
                 labels: [],
                 datasets: [
                     {
-                        label: 'Cumulative Planned',
+                        label: 'Acumulado Planejado',
                         data: [],
                         borderColor: '#007bff',
                         backgroundColor: 'rgba(0, 123, 255, 0.1)',
@@ -333,7 +332,7 @@
                         fill: false
                     },
                     {
-                        label: 'Cumulative Actual',
+                        label: 'Acumulado Realizado',
                         data: [],
                         borderColor: '#28a745',
                         backgroundColor: 'rgba(40, 167, 69, 0.1)',
@@ -351,14 +350,14 @@
                         beginAtZero: true,
                         ticks: {
                             callback: function(value) {
-                                return '$' + value.toLocaleString();
+                                return 'R$' + value.toLocaleString('pt-BR');
                             }
                         }
                     },
                     x: {
                         title: {
                             display: true,
-                            text: 'Period'
+                            text: 'Período'
                         }
                     }
                 },
@@ -370,7 +369,7 @@
                     tooltip: {
                         callbacks: {
                             label: function(context) {
-                                return context.dataset.label + ': $' + context.parsed.y.toLocaleString();
+                                return context.dataset.label + ': R$' + context.parsed.y.toLocaleString('pt-BR');
                             }
                         }
                     }
@@ -398,15 +397,15 @@
 
     function updateChart() {
         if (!currentData || !currentData.periods || !Array.isArray(currentData.periods) || currentData.periods.length === 0) {
-            console.log('No data available');
+            console.log('Sem dados disponíveis');
             // Clear chart and stats if needed
             chart.data.labels = [];
             chart.data.datasets[0].data = [];
             chart.data.datasets[1].data = [];
             chart.update();
-            document.getElementById('total-planned').textContent = '$0';
-            document.getElementById('total-actual').textContent = '$0';
-            document.getElementById('variance').textContent = '$0';
+            document.getElementById('total-planned').textContent = 'R$0';
+            document.getElementById('total-actual').textContent = 'R$0';
+            document.getElementById('variance').textContent = 'R$0';
             document.getElementById('variance').className = 'value currency';
             document.getElementById('completion').textContent = '0%';
             updateTable([]);
@@ -427,13 +426,12 @@
         const variance = totalActual - totalPlanned;
         const completion = ((totalActual / totalPlanned) * 100).toFixed(1);
         
-        document.getElementById('total-planned').textContent = '$' + totalPlanned.toLocaleString();
-        document.getElementById('total-actual').textContent = '$' + totalActual.toLocaleString();
-        document.getElementById('variance').textContent = '$' + variance.toLocaleString();
+        document.getElementById('total-planned').textContent = 'R$' + totalPlanned.toLocaleString('pt-BR');
+        document.getElementById('total-actual').textContent = 'R$' + totalActual.toLocaleString('pt-BR');
+        document.getElementById('variance').textContent = 'R$' + variance.toLocaleString('pt-BR');
         document.getElementById('variance').className = 'value currency ' + (variance >= 0 ? 'positive' : 'negative');
         document.getElementById('completion').textContent = completion + '%';
         
-        // Update table
         updateTable(cumulativeData);
     }
 
@@ -447,11 +445,11 @@
             
             tr.innerHTML = `
                 <td>${row.period}</td>
-                <td class="currency">$${row.planned_value.toLocaleString()}</td>
-                <td class="currency">$${row.actual_value.toLocaleString()}</td>
-                <td class="currency">$${row.cumulative_planned.toLocaleString()}</td>
-                <td class="currency">$${row.cumulative_actual.toLocaleString()}</td>
-                <td class="currency ${variance >= 0 ? 'positive' : 'negative'}">$${variance.toLocaleString()}</td>
+                <td class="currency">R$${row.planned_value.toLocaleString('pt-BR')}</td>
+                <td class="currency">R$${row.actual_value.toLocaleString('pt-BR')}</td>
+                <td class="currency">R$${row.cumulative_planned.toLocaleString('pt-BR')}</td>
+                <td class="currency">R$${row.cumulative_actual.toLocaleString('pt-BR')}</td>
+                <td class="currency ${variance >= 0 ? 'positive' : 'negative'}">R$${variance.toLocaleString('pt-BR')}</td>
             `;
             
             tbody.appendChild(tr);
