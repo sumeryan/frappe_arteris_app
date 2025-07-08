@@ -505,7 +505,6 @@
                 limit_page_length: 100
             },
             callback: function(response) {
-                console.log(response)
                 const itemsSet = new Set();
                 if (response.message) {
                     response.message.forEach(item => {
@@ -565,7 +564,6 @@
                 // Merge arrays
                 let merged = [...planned, ...actual];
                 // Filter by contract item and date
-                console.log(merged)
                 if (selectedItems.length) {
                     merged = merged.filter(r => selectedItems.includes(r.contract_item));
                 }
@@ -574,13 +572,11 @@
                     const start = new Date(startDate);
                     merged = merged.filter(r => new Date(r.date) >= start);
                 }
-                console.log(merged)
 
                 if (endDate) {
                     const end = new Date(endDate);
                     merged = merged.filter(r => new Date(r.date) <= end);
                 }
-                console.log(merged)
 
                 // Group by period (YYYY-MM) and sum planned/actual
                 const periodMap = {};
