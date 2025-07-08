@@ -214,6 +214,7 @@
         <div class="custom-filters-row">
             <div class="custom-filter-group">
                 <label for="contract-select">Contratos</label>
+                <input type="text" id="contract-search" placeholder="Buscar contrato..." style="margin-bottom: 6px; width: 100%; padding: 6px 8px; border-radius: 4px; border: 1px solid #ced4da;">
                 <div id="contract-checkbox-list" style="max-height: 140px; overflow-y: auto; border: 1px solid #ced4da; border-radius: 4px; padding: 6px 8px; background: #fff;">
                     <!-- Contract checkboxes will be populated by JS -->
                 </div>
@@ -221,6 +222,7 @@
             
             <div class="custom-filter-group">
                 <label for="item-select">Itens do Contrato</label>
+                <input type="text" id="item-search" placeholder="Buscar item..." style="margin-bottom: 6px; width: 100%; padding: 6px 8px; border-radius: 4px; border: 1px solid #ced4da;">
                 <div id="item-checkbox-list" style="max-height: 220px; overflow-y: auto; border: 1px solid #ced4da; border-radius: 4px; padding: 6px 8px; background: #fff;">
                     <!-- Item checkboxes will be populated by JS -->
                 </div>
@@ -608,74 +610,51 @@ function fetchPlannedWorkloadCfgByContracts(selectedContracts, callback) {
         args: {
             doctype: 'Contract Item Workload Cfg',
             filters: { 'contrato': ['in', selectedContracts] },
-            fields: ['name', 'contrato'],
-            limit_page_length: 100
+            fields: [
+                'name', 'contrato', 'mes', 'ano',
+                'tabitens.item', 'tabitens.valor'
+            ],
+            limit_page_length: 1000
         },
         callback: function(cfgResponse) {
             const cfgDocs = cfgResponse.message || [];
-            const plannedPromises = cfgDocs.map(cfg => new Promise(resolve => {
-                frappe.call({
-                    method: 'frappe.client.get',
-                    args: { doctype: 'Contract Item Workload Cfg', name: cfg.name },
-                    callback: function(docResp) {
-                        const doc = docResp.message;
-                        if (doc && doc.tabitens) {
-                            const rows = doc.tabitens.map(it => ({
-                                mes: doc.mes,
-                                ano: doc.ano,
-                                contract_item: it.item, // or doc.contract_item if needed
-                                value: it.valor
-                            }));
-                            resolve(rows);
-                        } else {
-                            resolve([]);
-                        }
-                    },
-                    error: function() { resolve([]); }
-                });
-            }));
-            Promise.all(plannedPromises).then(results => {
-                const allRows = [].concat(...results);
-                callback(allRows);
+
+            const allRows = cfgDocs.map(row => {
+                return {
+                    mes: row.mes,
+                    ano: row.ano,
+                    contract_item: row.item,
+                    value: row.valor,
+                };
             });
+            callback(allRows);
         }
     });
 }
+
 function fetchActualsByContracts(selectedContracts, callback) {
     frappe.call({
         method: 'frappe.client.get_list',
         args: {
             doctype: 'Contract Measurement',
             filters: { 'contrato': ['in', selectedContracts] },
-            fields: ['name', 'datafinalmedicao'],
-            limit_page_length: 100
+            fields: [
+                'name', 'datafinalmedicao',
+                'tabitenscontatrato.itemcontrato', 'tabitenscontatrato.valortotalvigente'
+            ],
+            limit_page_length: 1000
         },
         callback: function(measureResponse) {
             const measureDocs = measureResponse.message || [];
-            const actualPromises = measureDocs.map(measure => new Promise(resolve => {
-                frappe.call({
-                    method: 'frappe.client.get',
-                    args: { doctype: 'Contract Measurement', name: measure.name },
-                    callback: function(docResp) {
-                        const doc = docResp.message;
-                        if (doc && doc.tabitenscontatrato) {
-                            const rows = doc.tabitenscontatrato.map(it => ({
-                                date: doc.datafinalmedicao,
-                                contract_item: it.itemcontrato, // adjust field name if needed
-                                value: it.valortotalvigente // adjust field name if needed
-                            }));
-                            resolve(rows);
-                        } else {
-                            resolve([]);
-                        }
-                    },
-                    error: function() { resolve([]); }
-                });
-            }));
-            Promise.all(actualPromises).then(results => {
-                const allRows = [].concat(...results);
-                callback(allRows);
-            });
+            // Flatten child table rows
+            const allRows = measureDocs.map(doc => {
+                return {
+                    date: doc.datafinalmedicao,
+                    contract_item: doc.itemcontrato,
+                    value: doc.valortotalvigente
+                };
+            })
+            callback(allRows);
         }
     });
 }
@@ -683,6 +662,7 @@ function fetchActualsByContracts(selectedContracts, callback) {
     frappe.ready(function() {
         initChart();
         loadContracts();
+        addFilterSearchListeners();
         
         // Add event listeners for filters
         document.getElementById('contract-checkbox-list').addEventListener('change', function(e) {
@@ -695,5 +675,17 @@ function fetchActualsByContracts(selectedContracts, callback) {
             // You can handle item selection here if needed
         });
     });
+
+    // Add search filter logic for contract and item checkboxes
+    function addFilterSearchListeners() {
+        // Contratos
+        document.getElementById('contract-search').addEventListener('input', function(e) {
+
+        });
+        // Itens do Contrato
+        document.getElementById('item-search').addEventListener('input', function(e) {
+
+        });
+    }
 </script>
 {% endblock %}
