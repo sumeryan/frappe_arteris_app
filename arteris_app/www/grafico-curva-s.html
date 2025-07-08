@@ -200,6 +200,13 @@
         margin: 0 4px 0 0;
         accent-color: #007bff;
     }
+
+    .checkbox-row {
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        margin-bottom: 4px !important;
+    }
 </style>
 {% endblock %}
 
@@ -315,6 +322,8 @@
 
     let chart;
     let currentData = null;
+    let allContracts = [];
+    let allItems = [];
 
     function initChart() {
         const ctx = document.getElementById('comparisonChart').getContext('2d');
@@ -468,21 +477,8 @@
                 limit_page_length: 100,
             },
             callback: function(response) {
-                const container = document.getElementById('contract-checkbox-list');
-                container.innerHTML = '';
-                if (response.message) {
-                    response.message.forEach(contract => {
-                        const label = document.createElement('label');
-                        label.style.display = 'block';
-                        const checkbox = document.createElement('input');
-                        checkbox.type = 'checkbox';
-                        checkbox.value = contract.name;
-                        checkbox.className = 'contract-checkbox';
-                        label.appendChild(checkbox);
-                        label.appendChild(document.createTextNode(' ' + contract.contrato));
-                        container.appendChild(label);
-                    });
-                }
+                allContracts = response.message || [];
+                renderContractOptions();
             },
             error: function(error) {
                 console.error('Error loading contracts:', error);
@@ -491,12 +487,38 @@
         });
     }
 
+    function renderContractOptions() {
+        const container = document.getElementById('contract-checkbox-list');
+        const search = document.getElementById('contract-search').value.toLowerCase();
+        const checked = new Set(Array.from(document.querySelectorAll('.contract-checkbox:checked')).map(cb => cb.value));
+        container.innerHTML = '';
+        allContracts.filter(contract => contract.contrato.toLowerCase().includes(search)).forEach(contract => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'checkbox-row';
+            const label = document.createElement('label');
+            label.style.display = 'block';
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.value = contract.name;
+            checkbox.className = 'contract-checkbox';
+            if (checked.has(contract.name)) checkbox.checked = true;
+            label.appendChild(checkbox);
+            label.appendChild(document.createTextNode(' ' + contract.contrato));
+            wrapper.appendChild(label);
+            container.appendChild(wrapper);
+        });
+    }
+
     function loadContractItems() {
         const contractCheckboxes = document.querySelectorAll('.contract-checkbox:checked');
         const selectedContracts = Array.from(contractCheckboxes).map(cb => cb.value);
         const container = document.getElementById('item-checkbox-list');
         container.innerHTML = '';
-        if (!selectedContracts.length) return;
+        if (!selectedContracts.length) {
+            allItems = [];
+            renderItemOptions();
+            return;
+        }
         frappe.call({
             method: 'frappe.client.get_list',
             args: {
@@ -508,27 +530,43 @@
             },
             callback: function(response) {
                 const itemsSet = new Set();
+                allItems = [];
                 if (response.message) {
                     response.message.forEach(item => {
                         if (!itemsSet.has(item.name)) {
                             itemsSet.add(item.name);
-                            const label = document.createElement('label');
-                            label.style.display = 'block';
-                            const checkbox = document.createElement('input');
-                            checkbox.type = 'checkbox';
-                            checkbox.value = item.name;
-                            checkbox.className = 'item-checkbox';
-                            label.appendChild(checkbox);
-                            label.appendChild(document.createTextNode(item.descricao));
-                            container.appendChild(label);
+                            allItems.push(item);
                         }
                     });
                 }
+                renderItemOptions();
             },
             error: function(error) {
                 console.error('Error loading contract items:', error);
                 container.innerHTML = '';
             }
+        });
+    }
+
+    function renderItemOptions() {
+        const container = document.getElementById('item-checkbox-list');
+        const search = document.getElementById('item-search').value.toLowerCase();
+        const checked = new Set(Array.from(document.querySelectorAll('.item-checkbox:checked')).map(cb => cb.value));
+        container.innerHTML = '';
+        allItems.filter(item => (item.descricao || '').toLowerCase().includes(search)).forEach(item => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'checkbox-row';
+            const label = document.createElement('label');
+            label.style.display = 'block';
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.value = item.name;
+            checkbox.className = 'item-checkbox';
+            if (checked.has(item.name)) checkbox.checked = true;
+            label.appendChild(checkbox);
+            label.appendChild(document.createTextNode(item.descricao));
+            wrapper.appendChild(label);
+            container.appendChild(wrapper);
         });
     }
 
@@ -678,14 +716,8 @@ function fetchActualsByContracts(selectedContracts, callback) {
 
     // Add search filter logic for contract and item checkboxes
     function addFilterSearchListeners() {
-        // Contratos
-        document.getElementById('contract-search').addEventListener('input', function(e) {
-
-        });
-        // Itens do Contrato
-        document.getElementById('item-search').addEventListener('input', function(e) {
-
-        });
+        document.getElementById('contract-search').addEventListener('input', renderContractOptions);
+        document.getElementById('item-search').addEventListener('input', renderItemOptions);
     }
 </script>
 {% endblock %}
