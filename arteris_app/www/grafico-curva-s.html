@@ -221,8 +221,8 @@
     <div class="custom-filters-section">
         <div class="custom-filters-row">
             <div class="custom-filter-group">
-                <label for="subsidiary-select">Subsidiárias</label>
-                <input type="text" id="subsidiary-search" placeholder="Buscar subsidiária..." style="margin-bottom: 6px; width: 100%; padding: 6px 8px; border-radius: 4px; border: 1px solid #ced4da;">
+                <label for="subsidiary-select">Concessionarias</label>
+                <input type="text" id="subsidiary-search" placeholder="Buscar concessionarias..." style="margin-bottom: 6px; width: 100%; padding: 6px 8px; border-radius: 4px; border: 1px solid #ced4da;">
                 <div id="subsidiary-checkbox-list" style="max-height: 140px; overflow-y: auto; border: 1px solid #ced4da; border-radius: 4px; padding: 6px 8px; background: #fff;"></div>
             </div>
             
@@ -532,7 +532,7 @@
         const selectedSubsidiaries = getSelectedSubsidiaries();
         let filters = {};
         if (selectedSubsidiaries.length) {
-            filters = { 'Concessionaria': ['in', selectedSubsidiaries] };
+            filters = { 'subsidiaria': ['in', selectedSubsidiaries] };
         }
         frappe.call({
             method: 'frappe.client.get_list',
