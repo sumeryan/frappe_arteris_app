@@ -208,6 +208,34 @@
         gap: 8px !important;
         margin-bottom: 4px !important;
     }
+
+    .checkbox-list-with-selectall {
+        position: relative;
+        padding-top: 0;
+        padding-bottom: 0;
+        display: flex;
+        flex-direction: column;
+    }
+    .checkbox-list-with-selectall .select-all-btn {
+        position: static;
+        align-self: flex-start;
+        margin-bottom: 6px;
+        margin-top: 2px;
+        font-size: 12px;
+        padding: 2px 10px;
+        background: #f1f3f4;
+        color: #007bff;
+        border: 1px solid #ced4da;
+        border-radius: 3px;
+        cursor: pointer;
+        box-shadow: none;
+        z-index: 2;
+        transition: background 0.2s;
+    }
+    .checkbox-list-with-selectall .select-all-btn:hover {
+        background: #e2e6ea;
+        color: #0056b3;
+    }
 </style>
 {% endblock %}
 
@@ -223,23 +251,19 @@
             <div class="custom-filter-group">
                 <label for="subsidiary-select">Concessionarias</label>
                 <input type="text" id="subsidiary-search" placeholder="Buscar concessionarias..." style="margin-bottom: 6px; width: 100%; padding: 6px 8px; border-radius: 4px; border: 1px solid #ced4da;">
-                <div id="subsidiary-checkbox-list" style="max-height: 140px; overflow-y: auto; border: 1px solid #ced4da; border-radius: 4px; padding: 6px 8px; background: #fff;"></div>
+                <div id="subsidiary-checkbox-list" class="checkbox-list-with-selectall" style="max-height: 140px; overflow-y: auto; border: 1px solid #ced4da; border-radius: 4px; padding: 6px 8px 28px 8px; background: #fff; position: relative;"></div>
             </div>
             
             <div class="custom-filter-group">
                 <label for="contract-select">Contratos</label>
                 <input type="text" id="contract-search" placeholder="Buscar contrato..." style="margin-bottom: 6px; width: 100%; padding: 6px 8px; border-radius: 4px; border: 1px solid #ced4da;">
-                <div id="contract-checkbox-list" style="max-height: 140px; overflow-y: auto; border: 1px solid #ced4da; border-radius: 4px; padding: 6px 8px; background: #fff;">
-                    <!-- Contract checkboxes will be populated by JS -->
-                </div>
+                <div id="contract-checkbox-list" class="checkbox-list-with-selectall" style="max-height: 140px; overflow-y: auto; border: 1px solid #ced4da; border-radius: 4px; padding: 6px 8px 28px 8px; background: #fff; position: relative;"></div>
             </div>
             
             <div class="custom-filter-group">
                 <label for="item-select">Itens do Contrato</label>
                 <input type="text" id="item-search" placeholder="Buscar item..." style="margin-bottom: 6px; width: 100%; padding: 6px 8px; border-radius: 4px; border: 1px solid #ced4da;">
-                <div id="item-checkbox-list" style="max-height: 220px; overflow-y: auto; border: 1px solid #ced4da; border-radius: 4px; padding: 6px 8px; background: #fff;">
-                    <!-- Item checkboxes will be populated by JS -->
-                </div>
+                <div id="item-checkbox-list" class="checkbox-list-with-selectall" style="max-height: 220px; overflow-y: auto; border: 1px solid #ced4da; border-radius: 4px; padding: 6px 8px 28px 8px; background: #fff; position: relative;"></div>
             </div>
             
             <div class="custom-filter-group">
@@ -522,6 +546,7 @@
             wrapper.appendChild(label);
             container.appendChild(wrapper);
         });
+        addSelectAllButton('subsidiary-checkbox-list', 'Selecionar Todas');
     }
 
     function getSelectedSubsidiaries() {
@@ -574,6 +599,7 @@
             wrapper.appendChild(label);
             container.appendChild(wrapper);
         });
+        addSelectAllButton('contract-checkbox-list', 'Selecionar Todos');
     }
 
     function loadContractItems() {
@@ -635,6 +661,7 @@
             wrapper.appendChild(label);
             container.appendChild(wrapper);
         });
+        addSelectAllButton('item-checkbox-list', 'Selecionar Todos');
     }
 
     function applyFilters() {
@@ -794,6 +821,37 @@ function fetchActualsByContracts(selectedContracts, callback) {
         document.getElementById('subsidiary-search').addEventListener('input', renderSubsidiaryOptions);
         document.getElementById('contract-search').addEventListener('input', renderContractOptions);
         document.getElementById('item-search').addEventListener('input', renderItemOptions);
+    }
+
+    function selectAllCheckboxes(listId) {
+        const container = document.getElementById(listId);
+        if (!container) return;
+        const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(cb => { cb.checked = true; });
+        // Trigger change event for downstream logic if needed
+        if (listId === 'contract-checkbox-list') {
+            loadContractItems();
+        }
+    }
+
+    function addSelectAllButton(listId, label) {
+        const container = document.getElementById(listId);
+        if (!container) return;
+        let btn = container.querySelector('.select-all-btn');
+        if (!btn) {
+            btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'select-all-btn';
+            btn.textContent = label || 'Selecionar Todos';
+            btn.onclick = function(e) {
+                e.stopPropagation();
+                selectAllCheckboxes(listId);
+            };
+            container.insertBefore(btn, container.firstChild);
+        }
+        btn.style.position = 'static';
+        btn.style.marginBottom = '6px';
+        btn.style.marginTop = '2px';
     }
 </script>
 {% endblock %}
