@@ -258,6 +258,11 @@
                 <label for="vertical-filter">Vertical</label>
                 <input type="text" id="vertical-filter" placeholder="Filtrar por vertical..." style="width: 100%; padding: 8px 12px; border: 1px solid #ced4da; border-radius: 4px; font-size: 14px;">
             </div>
+
+            <div class="custom-filter-group">
+                <label for="categoria-filter">Categoria</label>
+                <input type="text" id="categoria-filter" placeholder="Filtrar por categoria..." style="width: 100%; padding: 8px 12px; border: 1px solid #ced4da; border-radius: 4px; font-size: 14px;">
+            </div>
             
             <div class="custom-filter-group">
                 <label for="contract-select">Contratos</label>
@@ -558,37 +563,41 @@
         return Array.from(document.querySelectorAll('.subsidiary-checkbox:checked')).map(cb => cb.value);
     }
 
-    function loadContracts() {
-        const selectedSubsidiaries = getSelectedSubsidiaries();
-        const verticalFilter = document.getElementById('vertical-filter').value.trim();
-        
-        let filters = {};
-        if (selectedSubsidiaries.length) {
-            filters['subsidiaria'] = ['in', selectedSubsidiaries];
-        }
-        if (verticalFilter) {
-            filters['vertical'] = ['like', '%' + verticalFilter + '%'];
-        }
-        
-        frappe.call({
-            method: 'frappe.client.get_list',
-            args: {
-                doctype: 'Contract',
-                fields: ['name', 'contrato', 'subsidiaria', 'vertical'],
-                filters: filters,
-                order_by: 'creation asc',
-                limit_page_length: 100,
-            },
-            callback: function(response) {
-                allContracts = response.message || [];
-                renderContractOptions();
-            },
-            error: function(error) {
-                console.error('Error loading contracts:', error);
-                document.getElementById('contract-checkbox-list').innerHTML = '';
-            }
-        });
+function loadContracts() {
+    const selectedSubsidiaries = getSelectedSubsidiaries();
+    const verticalFilter = document.getElementById('vertical-filter').value.trim();
+    const categoriaFilter = document.getElementById('categoria-filter').value.trim();
+
+    let filters = {};
+    if (selectedSubsidiaries.length) {
+        filters['subsidiaria'] = ['in', selectedSubsidiaries];
     }
+    if (verticalFilter) {
+        filters['vertical'] = ['like', '%' + verticalFilter + '%'];
+    }
+    if (categoriaFilter) {
+        filters['categoria'] = ['like', '%' + categoriaFilter + '%'];
+    }
+
+    frappe.call({
+        method: 'frappe.client.get_list',
+        args: {
+            doctype: 'Contract',
+            fields: ['name', 'contrato', 'subsidiaria', 'vertical', 'categoria'],
+            filters: filters,
+            order_by: 'creation asc',
+            limit_page_length: 100,
+        },
+        callback: function(response) {
+            allContracts = response.message || [];
+            renderContractOptions();
+        },
+        error: function(error) {
+            console.error('Error loading contracts:', error);
+            document.getElementById('contract-checkbox-list').innerHTML = '';
+        }
+    });
+}
 
     function renderContractOptions() {
         const container = document.getElementById('contract-checkbox-list');
@@ -838,6 +847,12 @@ function fetchActualsByContracts(selectedContracts, callback) {
                 loadContracts();
             }
         });
+        document.getElementById('categoria-filter').addEventListener('input', function(e) {
+        const value = e.target.value.trim();
+        if (value.length >= 3 || value.length === 0) {
+            loadContracts();
+        }
+    });
     }
 
     function selectAllCheckboxes(listId) {
