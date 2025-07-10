@@ -3,7 +3,7 @@ from datetime import date, datetime
 
 @frappe.whitelist(methods=["GET"])
 def get_contract_to_process(start_date: str):
-    return []
+    return [start_date]
 
 @frappe.whitelist(methods=["DELETE"])
 def clear_keys():
