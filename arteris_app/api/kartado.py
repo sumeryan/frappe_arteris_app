@@ -173,8 +173,7 @@ def create_kartado_measurement_record(
     contract_meaesurement_current = None,
     contract_processing_date = None,
     data = None,
-    relations = None
-):
+    relations = None):
     """
     Create a Kartado Measurement Record.
     """

@@ -1,5 +1,5 @@
 import frappe
-from . import kartado_athena_client
+from . import osiris_client
 from datetime import date, datetime
 
 @frappe.whitelist(methods=["POST"])
@@ -11,5 +11,5 @@ def get_measurement_records(start_date: str, end_date: str):
     date_start_date = datetime.combine(date(int(split_start_date[0]), int(split_start_date[1]), int(split_start_date[2])), datetime.min.time())
     date_end_date = datetime.combine(date(int(split_end_date[0]), int(split_end_date[1]), int(split_end_date[2])), datetime.min.time())
 
-    k = kartado_athena_client.KartadoAthenaClient(start_date=date_start_date, end_date=date_end_date)
-    k.get_measurement_records()
+    o = osiris_client.OsirisClient(start_date=date_start_date, end_date=date_end_date)
+    o.get_measurement_records()

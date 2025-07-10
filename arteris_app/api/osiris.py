@@ -167,21 +167,27 @@ def update_measurements_main_item():
     return {"Processed": True, "message": "Measurement records updated with main item."}
 
 @frappe.whitelist(methods=["POST"])
-def create_osiris_measurement_record():
+def create_osiris_measurement_record(
+    contract_name = None,
+    contract_meaesurement = None,
+    contract_meaesurement_current = None,
+    contract_processing_date = None,
+    data = None,
+    relations = None):
     """
     Create a Kartado Measurement Record.
     """
 
-    body = frappe.form_dict
-
-    # get body data and relations from the request
-    # record_type = frappe.form_dict.type
-    contract_name = frappe.form_dict.contract_name
-    contract_meaesurement = frappe.form_dict.contract_meaesurement
-    contract_meaesurement_current = frappe.form_dict.contract_meaesurement_current
-    contract_processing_date = frappe.form_dict.contract_processing_date
-    data = frappe.form_dict.data
-    relations = frappe.form_dict.relations
+    if not contract_name:
+        # get body data and relations from the request
+        # record_type = frappe.form_dict.type
+        body = frappe.form_dict
+        contract_name = frappe.form_dict.contract_name
+        contract_meaesurement = frappe.form_dict.contract_meaesurement
+        contract_meaesurement_current = frappe.form_dict.contract_meaesurement_current
+        contract_processing_date = frappe.form_dict.contract_processing_date
+        data = frappe.form_dict.data
+        relations = frappe.form_dict.relations
 
     def get_date_from_string(data_str: str, year: int = 0, month: int =1, day: int = 2) -> date:
         """
