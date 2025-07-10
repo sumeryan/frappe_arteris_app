@@ -255,6 +255,11 @@
             </div>
             
             <div class="custom-filter-group">
+                <label for="vertical-filter">Vertical</label>
+                <input type="text" id="vertical-filter" placeholder="Filtrar por vertical..." style="width: 100%; padding: 8px 12px; border: 1px solid #ced4da; border-radius: 4px; font-size: 14px;">
+            </div>
+            
+            <div class="custom-filter-group">
                 <label for="contract-select">Contratos</label>
                 <input type="text" id="contract-search" placeholder="Buscar contrato..." style="margin-bottom: 6px; width: 100%; padding: 6px 8px; border-radius: 4px; border: 1px solid #ced4da;">
                 <div id="contract-checkbox-list" class="checkbox-list-with-selectall" style="max-height: 140px; overflow-y: auto; border: 1px solid #ced4da; border-radius: 4px; padding: 6px 8px 28px 8px; background: #fff; position: relative;"></div>
@@ -555,15 +560,21 @@
 
     function loadContracts() {
         const selectedSubsidiaries = getSelectedSubsidiaries();
+        const verticalFilter = document.getElementById('vertical-filter').value.trim();
+        
         let filters = {};
         if (selectedSubsidiaries.length) {
-            filters = { 'subsidiaria': ['in', selectedSubsidiaries] };
+            filters['subsidiaria'] = ['in', selectedSubsidiaries];
         }
+        if (verticalFilter) {
+            filters['vertical'] = ['like', '%' + verticalFilter + '%'];
+        }
+        
         frappe.call({
             method: 'frappe.client.get_list',
             args: {
                 doctype: 'Contract',
-                fields: ['name', 'contrato', 'subsidiaria'],
+                fields: ['name', 'contrato', 'subsidiaria', 'vertical'],
                 filters: filters,
                 order_by: 'creation asc',
                 limit_page_length: 100,
@@ -809,7 +820,7 @@ function fetchActualsByContracts(selectedContracts, callback) {
                 loadContracts();
                 // Optionally clear contract and item selections here if needed
             }
-        });
+        });                
         
         document.getElementById('item-checkbox-list').addEventListener('change', function(e) {
             // You can handle item selection here if needed
@@ -821,6 +832,12 @@ function fetchActualsByContracts(selectedContracts, callback) {
         document.getElementById('subsidiary-search').addEventListener('input', renderSubsidiaryOptions);
         document.getElementById('contract-search').addEventListener('input', renderContractOptions);
         document.getElementById('item-search').addEventListener('input', renderItemOptions);
+        document.getElementById('vertical-filter').addEventListener('input', function(e) {
+            const value = e.target.value.trim();
+            if (value.length >= 3 || value.length === 0) {
+                loadContracts();
+            }
+        });
     }
 
     function selectAllCheckboxes(listId) {
