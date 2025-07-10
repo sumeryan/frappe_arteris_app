@@ -16,7 +16,7 @@ def get_contract_to_process(start_date: str):
     #     print("No contracts to process.")
     #     return None
 
-    return {"contract":"teste"}
+    return []
 
 @frappe.whitelist(methods=["DELETE"])
 def clear_keys():
