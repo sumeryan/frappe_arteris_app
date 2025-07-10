@@ -38,9 +38,9 @@
   "column_break_jwpm",
   "regracaucao",
   "dados_de_encerramento_do_contrato_section",
-  "contratoencerrado",
+  "datainiciomedicao",
   "column_break_kkyj",
-  "imprimir",
+  "contratoencerrado",
   "integrations_tab",
   "grupo_de_f\u00f3rmulas_section",
   "grupoformulas",
@@ -66,7 +66,8 @@
    "in_standard_filter": 1,
    "label": "N\u00ba do Contrato",
    "length": 30,
-   "reqd": 1
+   "reqd": 1,
+   "unique": 1
   },
   {
    "columns": 4,
@@ -268,11 +269,6 @@
    "hidden": 1
   },
   {
-   "fieldname": "imprimir",
-   "fieldtype": "Button",
-   "label": "Imprimir"
-  },
-  {
    "fieldname": "tabela_de_pre\u00e7os_tab",
    "fieldtype": "Tab Break",
    "label": "Tabela de pre\u00e7os"
@@ -308,6 +304,11 @@
   {
    "fieldname": "column_break_xsin",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "datainiciomedicao",
+   "fieldtype": "Date",
+   "label": "Data de inicio de medi\u00e7\u00e3o pelo MSI"
   }
  ],
  "grid_page_length": 50,
@@ -326,7 +327,7 @@
    "link_fieldname": "contrato"
   }
  ],
- "modified": "2025-07-04 12:33:23.989070",
+ "modified": "2025-07-10 10:39:51.458655",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract",

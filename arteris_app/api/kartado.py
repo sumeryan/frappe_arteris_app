@@ -1,6 +1,25 @@
 import frappe
 from datetime import date, datetime
 
+@frappe.whitelist(methods=["POST"])
+def get_contract_to_process(start_date: str):
+    contracts_to_process = frappe.db.get_list(
+        "Contract",
+        fields=["name"],
+        filters={
+            "datainiciomedicao": ["<=", start_date],
+            "contratoencerrado": ["is", "not set"]
+            }
+    )
+
+    if not contracts_to_process:
+        print("No contracts to process.")
+        return ""
+
+    str_contracts_to_process = ', '.join([f"'{c['name']}'" for c in contracts_to_process])
+
+    return str_contracts_to_process
+
 @frappe.whitelist(methods=["DELETE"])
 def clear_keys():
     """
@@ -547,4 +566,5 @@ def get_items_code(items: list):
         get_code += frappe.db.get_value("Contract Item", i, "codigo") + ", "
 
     return get_code.rstrip(", ")
+    
 

@@ -4,7 +4,7 @@ from .athena.queries import query_data
 from ..kartado import create_kartado_measurement_record, get_keys, get_contract, update_contract, get_contract_items, get_assets, get_work_roles
 from ..measurement import create_measurement
 
-class KartadoAthenaClient():
+class KartadoClient():
 
     def __init__(self, start_date: datetime, end_date: datetime = datetime.now()):
         """
@@ -69,6 +69,21 @@ class KartadoAthenaClient():
             args:
                 record_type (str): The type of kartado data to retrieve (e.g., 'adm', 'non_adm', 'rdo').
             """
+
+            contracts_to_process = frappe.db.get_list(
+                "Contract",
+                fields=["name"],
+                filters={
+                    "datainiciomedicao": ["<=", self.start_date],
+                    "contratoencerrado": ["is", "not set"]
+                    }
+            )
+        
+            if not contracts_to_process:
+                print("No contracts to process.")
+                return
+
+            str_contracts_to_process = ', '.join([f"'{c['name']}'" for c in contracts_to_process])
 
             # Contracts
             contracts ={}
@@ -152,9 +167,12 @@ class KartadoAthenaClient():
                                 inner join prd_gold_data.contratos c on c.uuid = ic.contrato_id
                                 inner join prd_gold_data.utilizacoes u on ic.uuid = u.item_contratual_id """
             
-            str_where = """ not c.status_nome = 'Encerrado' and
+            # str_where = """ not c.status_nome = 'Encerrado' and
+            #                 u.status_aprovacao = 'aprovado' and
+            #                 ic.contrato_id = '1f4d09f6-4ae1-411a-bd9a-5a623e926368' and """
+            str_where = f""" not c.status_nome = 'Encerrado' and
                             u.status_aprovacao = 'aprovado' and
-                            ic.contrato_id = '1f4d09f6-4ae1-411a-bd9a-5a623e926368' and """
+                            ic.contrato_id IN ({str_contracts_to_process}) and """            
             
             # While loop to iterate through each day
             while search_date <= self.end_date:
