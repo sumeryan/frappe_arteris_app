@@ -1,7 +1,7 @@
 import frappe
 from datetime import date, datetime
 
-@frappe.whitelist(methods=["GET"])
+@frappe.whitelist(allow_guest=True, methods=["GET"])
 def get_contract_to_process(start_date: str):
     return [start_date]
 
