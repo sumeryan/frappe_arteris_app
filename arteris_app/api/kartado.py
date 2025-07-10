@@ -1,7 +1,7 @@
 import frappe
 from datetime import date, datetime
 
-@frappe.whitelist(methods=["POST"])
+@frappe.whitelist(methods=["GET"])
 def get_contract_to_process(start_date: str):
     contracts_to_process = frappe.db.get_list(
         "Contract",
@@ -14,7 +14,7 @@ def get_contract_to_process(start_date: str):
 
     if not contracts_to_process:
         print("No contracts to process.")
-        return ""
+        return None
 
     return contracts_to_process
 
