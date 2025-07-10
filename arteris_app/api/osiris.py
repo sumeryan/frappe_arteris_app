@@ -1,6 +1,27 @@
 import frappe
 from datetime import date, datetime
 
+@frappe.whitelist(methods=["GET"])
+def get_process(start_date: str):
+
+    sql = f"""
+            SELECT 
+                name 
+            FROM 
+                `tabContract`
+            WHERE 
+                datainiciomedicao <= '{start_date}'
+                AND contratoencerrado IS NULL 
+            """
+
+    contracts_to_process = frappe.db.sql(sql, as_dict=True)
+
+    if not contracts_to_process:
+        print("No contracts to process.")
+        return
+
+    return contracts_to_process
+
 @frappe.whitelist(methods=["DELETE"])
 def clear_keys():
     """

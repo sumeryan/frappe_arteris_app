@@ -382,7 +382,7 @@ def update_measurement_records(measurement: str):
     # Get the measurement document
     measurement_doc = frappe.get_doc("Contract Measurement", measurement)
     # Get contract items
-    contract_items = frappe.db.get_all("Contract Item", fields=["name","valorunitario","tipodoitem","codigo"], filters={"contrato": measurement_doc.contrato})
+    contract_items = frappe.db.get_all("Contract Item", fields=["name","valorunitario","tipodoitem","codigo","valortotalvigente"], filters={"contrato": measurement_doc.contrato})
     # Get item work roles
     contract_item_work_roles = frappe.db.get_all("Contract Item Work Role", fields=["name","parent","funcao","pagamentohora","valorporhora", "valortotalmensal"], filters={"parent": ["in", [item.name for item in contract_items]]})
     # Get item assets
@@ -398,7 +398,8 @@ def update_measurement_records(measurement: str):
                 if item_measurement.itemcontrato == item.name:
                     # Update unit price
                     price_list[f"{item.name}-{item.name}"] = item.valorunitario                    
-                    frappe.db.set_value("Contract Measurement Item", measurement_doc.name, "valorunitario", item.valorunitario)
+                    frappe.db.set_value("Contract Measurement Item", item_measurement.name, "valorunitario", item.valorunitario)
+                    frappe.db.set_value("Contract Measurement Item", item_measurement.name, "valortotalvigente", item.valortotalvigente)
             # Update work roles
             for work_role_measurement in measurement_doc.tablemaodeobra:
                 # if work_role_measurement.item == item.name
