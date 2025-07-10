@@ -305,8 +305,6 @@ def create_osiris_measurement_record(
             osiris_measurement_record.origem_integracao = "Osiris"
             osiris_measurement_record.codigo =d["codigo"]
             osiris_measurement_record.equipe = d["equipe"]
-            osiris_measurement_record.mstart = d["mstart"]
-            osiris_measurement_record.mend = d["mend"]
             osiris_measurement_record.length = d["length"]
             osiris_measurement_record.width = d["width"]
             osiris_measurement_record.thickness = d["thickness"]

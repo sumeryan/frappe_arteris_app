@@ -36,8 +36,6 @@
   "relat\u00f3rios_section",
   "tablog",
   "osiris_section",
-  "mstart",
-  "mend",
   "length",
   "width",
   "thickness",
@@ -371,18 +369,6 @@
    "label": "Osiris"
   },
   {
-   "fieldname": "mstart",
-   "fieldtype": "Float",
-   "label": "mstart",
-   "precision": "3"
-  },
-  {
-   "fieldname": "mend",
-   "fieldtype": "Float",
-   "label": "mend",
-   "precision": "3"
-  },
-  {
    "fieldname": "length",
    "fieldtype": "Float",
    "label": "length",
@@ -425,7 +411,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-04 16:05:26.649628",
+ "modified": "2025-07-10 20:20:59.062761",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Measurement Record",
