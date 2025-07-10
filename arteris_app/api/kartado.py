@@ -3,19 +3,6 @@ from datetime import date, datetime
 
 @frappe.whitelist(methods=["GET"])
 def get_contract_to_process(start_date: str):
-    # contracts_to_process = frappe.db.get_list(
-    #     "Contract",
-    #     fields=["name"],
-    #     filters={
-    #         "datainiciomedicao": ["<=", start_date],
-    #         "contratoencerrado": ["is", "not set"]
-    #         }
-    # )
-
-    # if not contracts_to_process:
-    #     print("No contracts to process.")
-    #     return None
-
     return []
 
 @frappe.whitelist(methods=["DELETE"])
