@@ -1,0 +1,67 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-07-08 16:56:34.669931",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "producao_diaria",
+  "fresagem_m3",
+  "pitura_m2",
+  "ptura_m3",
+  "cbuq"
+ ],
+ "fields": [
+  {
+   "fieldname": "producao_diaria",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "PRODU\u00c7\u00c3O DI\u00c1RIA/EQUIPE  (m\u00b3)",
+   "reqd": 1
+  },
+  {
+   "fieldname": "fresagem_m3",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "FRESAGEM (m3)",
+   "precision": "2",
+   "reqd": 1
+  },
+  {
+   "fieldname": "pitura_m2",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "PINTURA DE LIGA\u00c7\u00c3O (*) m2",
+   "reqd": 1
+  },
+  {
+   "fieldname": "ptura_m3",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "PINTURA DE LIGA\u00c7\u00c3O (*) m3",
+   "reqd": 1
+  },
+  {
+   "fieldname": "cbuq",
+   "fieldtype": "Currency",
+   "label": "CBUQ",
+   "precision": "2",
+   "reqd": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-07-08 17:11:37.258653",
+ "modified_by": "Administrator",
+ "module": "Arteris",
+ "name": "produtividade_tabela",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

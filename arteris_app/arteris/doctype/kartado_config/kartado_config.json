@@ -1,0 +1,78 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-07-09 21:32:35.824607",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "configura\u00e7\u00f5es_aws_section",
+  "aws_region",
+  "aws_access_key_id",
+  "aws_secret_access_key",
+  "s3_output_location"
+ ],
+ "fields": [
+  {
+   "fieldname": "configura\u00e7\u00f5es_aws_section",
+   "fieldtype": "Section Break",
+   "label": "Configura\u00e7\u00f5es AWS"
+  },
+  {
+   "default": "us-east-1",
+   "fieldname": "aws_region",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Region",
+   "reqd": 1
+  },
+  {
+   "default": "AKIAQLVQQRYPV243MD2Q",
+   "fieldname": "aws_access_key_id",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Access Key ID",
+   "reqd": 1
+  },
+  {
+   "default": "VNR6+JlQ+kYZhYFxVhYoPwyCcRTswOKKKmqrEZib",
+   "fieldname": "aws_secret_access_key",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Secret Access Key",
+   "reqd": 1
+  },
+  {
+   "default": "s3://kartado-athena-results",
+   "fieldname": "s3_output_location",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "S3 Output Location",
+   "reqd": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2025-07-09 21:35:41.630841",
+ "modified_by": "Administrator",
+ "module": "Arteris",
+ "name": "Kartado Config",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

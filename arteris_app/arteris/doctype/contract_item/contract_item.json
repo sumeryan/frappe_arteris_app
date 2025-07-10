@@ -57,7 +57,9 @@
   "rodovias",
   "configura\u00e7\u00f5es_tab",
   "kartado_section",
-  "tabconfigkartado"
+  "tabconfigkartado",
+  "prod_comp_section",
+  "tabprodutividade_compensatoria"
  ],
  "fields": [
   {
@@ -348,6 +350,17 @@
   {
    "fieldname": "column_break_wcyc",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "prod_comp_section",
+   "fieldtype": "Section Break",
+   "label": "Produtividade Compensat\u00f3ria"
+  },
+  {
+   "fieldname": "tabprodutividade_compensatoria",
+   "fieldtype": "Table",
+   "label": "Produtividade compensat\u00f3ria",
+   "options": "Contract Item Prod Compensatory"
   }
  ],
  "force_re_route_to_default_view": 1,
@@ -355,7 +368,7 @@
  "index_web_pages_for_search": 1,
  "is_tree": 1,
  "links": [],
- "modified": "2025-06-26 01:10:55.319135",
+ "modified": "2025-07-08 17:36:08.677823",
  "modified_by": "Administrator",
  "module": "Arteris",
  "name": "Contract Item",
