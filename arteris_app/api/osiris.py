@@ -42,7 +42,7 @@ def get_assets():
         get_result = frappe.db.get_all("Asset", fields=["name", "nomeativo"])
         data.extend([{"name": l["name"], "osiris": l["nomeativo"]} for l in get_result])
 
-        # Get all assets kartado from the database
+        # Get all assets osiris from the database
         get_result = frappe.db.get_all("Asset Config Kartado", fields=["parent", "descricao"])
         data.extend([{"name": l["parent"], "osiris": l["descricao"]} for l in get_result])
 
@@ -58,7 +58,7 @@ def get_work_roles():
         get_result = frappe.db.get_all("Work Role", fields=["name", "funcao"])
         data.extend([{"name": l["name"], "osiris": l["funcao"]} for l in get_result])
 
-        # Get all assets kartado from the database
+        # Get all assets osiris from the database
         get_result = frappe.db.get_all("Work Role Config Kartado", fields=["parent", "descricaokartado"])
         data.extend([{"name": l["parent"], "osiris": l["descricaokartado"]} for l in get_result])
 
@@ -67,7 +67,7 @@ def get_work_roles():
 @frappe.whitelist(methods=["GET"])
 def get_keys(contract_name: str, contract_processing_date: str):
         """
-        Get all keys for contract and kartado.
+        Get all keys for contract and osiris.
         """
         # Get all contract items from the database
         get_result = frappe.db.get_all("Integration Record", fields=["name"], filters={
@@ -84,13 +84,13 @@ def get_keys(contract_name: str, contract_processing_date: str):
 @frappe.whitelist(methods=["GET"])
 def get_contract(contract: str, osiris_uuid: str):
         """
-        Get contract name for kartado UUID.
+        Get contract name for osiris UUID.
         """
         # Get all contract items from the database
         get_result = frappe.db.get_all("Contract", fields=["name", "uuidosiris"], filters={"uuidosiris": osiris_uuid})
 
         if not get_result:
-            # If no contract found with the kartado UUID, check for the contract name
+            # If no contract found with the osiris UUID, check for the contract name
             get_result = frappe.db.get_all("Contract", fields=["name", "uuidosiris"], filters={"contrato": contract})
         
         if not get_result:
@@ -125,7 +125,7 @@ def get_contract_items(contract_name: str):
             [
                 {
                     "name": l["name"], 
-                    "kartado": l["codigo"], 
+                    "osiris": l["codigo"], 
                     "cidade": l["cidade"],
                     "dom_hora": l["dom_hora"],
                     "seg_hora": l["seg_hora"],
@@ -138,9 +138,9 @@ def get_contract_items(contract_name: str):
                  } for l in get_result
             ])
 
-        # Get all contract items kartado from the database
+        # Get all contract items osiris from the database
         for l in get_result:
-            # Get kartado for each contract item
+            # Get osiris for each contract item
             get_sub_result = frappe.db.get_all("Contract Item Config Kartado", fields=["codigo"], filters={"parent": l["name"]})
             if get_sub_result:
                 data.extend([{"name": l["name"], "osiris": s["codigo"]} for s in get_sub_result])
@@ -150,7 +150,7 @@ def get_contract_items(contract_name: str):
 @frappe.whitelist(methods=["POST"])
 def update_contract(contract: str, osiris_uuid: str):
         """
-        Update contract with kartado UUID.
+        Update contract with osiris UUID.
         """
         # Get all contract items from the database
         get_result = frappe.db.get_all("Contract", fields=["name"], filters={"name": contract})
@@ -196,7 +196,7 @@ def create_osiris_measurement_record(
     data = None,
     relations = None):
     """
-    Create a Kartado Measurement Record.
+    Create a osiris Measurement Record.
     """
 
     if not contract_name:
@@ -223,15 +223,15 @@ def create_osiris_measurement_record(
         new_date = date(year, month, day)
         return new_date    
 
-    def check_osiris_relation(kartado_description, r_type):
+    def check_osiris_relation(osiris_description, r_type):
         """
-        Check ralation between kartado description and kartado list.
-        :param kartado_description: The description of the kartado.
+        Check ralation between osiris description and osiris list.
+        :param osiris: The description of the osiris.
         :param type: The type of relation to check (e.g., "asset", "work_role", "contract_item").
-        :return: The name of the kartado relation if found, otherwise None.
+        :return: The name of the osiris relation if found, otherwise None.
         """
         for k in relations[r_type]:
-            if k['kartado'] == kartado_description:
+            if k['osiris'] == osiris_description:
                 return k["name"]
 
         return None
@@ -249,7 +249,7 @@ def create_osiris_measurement_record(
     inconsistent_data = []
     inconsistent_keys = []
 
-    # List of kartado uuids
+    # List of osiris uuids
     osiris_uuids = []
     items = []
 
@@ -367,13 +367,13 @@ def create_osiris_measurement_record(
                 if not d["id"] in osiris_uuids:
                     osiris_uuids.append(d["id"])
                     has_itens = True
-                    kartado_measurement_reseource_record = osiris_measurement_record.append("tabrecurso")
-                    kartado_measurement_reseource_record.item = d["chave_recurso"]
-                    kartado_measurement_reseource_record.quantidademedida = d["itemquantity"]
-                    kartado_measurement_reseource_record.valortotal = d["totalvalue"]
-                    kartado_measurement_reseource_record.tipo = None
-                    kartado_measurement_reseource_record.peso = None
-                    kartado_measurement_reseource_record.valorcalculado = d["totalvalue"]
+                    osiris_measurement_reseource_record = osiris_measurement_record.append("tabrecurso")
+                    osiris_measurement_reseource_record.item = d["chave_recurso"]
+                    osiris_measurement_reseource_record.quantidademedida = d["itemquantity"]
+                    osiris_measurement_reseource_record.valortotal = d["totalvalue"]
+                    osiris_measurement_reseource_record.tipo = None
+                    osiris_measurement_reseource_record.peso = None
+                    osiris_measurement_reseource_record.valorcalculado = d["totalvalue"]
                     if not d["chave_recurso"] in items:
                         items.append(d["chave_recurso"])
 
@@ -390,9 +390,9 @@ def create_osiris_measurement_record(
         integration_record.data = contract_processing_date
         integration_record.boletimmedicao = contract_meaesurement
         integration_record.tipo = "Osiris"
-        for kartado_uuid in osiris_uuids:
+        for osiris_uuid in osiris_uuids:
             integration_record_key = integration_record.append("tabchaves")
-            integration_record_key.uuid = kartado_uuid
+            integration_record_key.uuid = osiris_uuid
         integration_record.save()   
 
     # Write inconsistent data to the database
@@ -406,13 +406,13 @@ def create_osiris_measurement_record(
         for key in inconsistent_keys:
              s_inconsistency += f"{key}\n"
 
-        # Create a Kartado Inconsistency record
-        kartado_inconsistent = frappe.new_doc("Integration Inconsistency")
-        kartado_inconsistent.boletimmedicao = contract_meaesurement
-        kartado_inconsistent.tipo = "Osiris"
-        kartado_inconsistent.dataehora = frappe.utils.now()
-        kartado_inconsistent.observacoes = s_inconsistency
-        kartado_inconsistent.save()
+        # Create a osiris Inconsistency record
+        osiris_inconsistent = frappe.new_doc("Integration Inconsistency")
+        osiris_inconsistent.boletimmedicao = contract_meaesurement
+        osiris_inconsistent.tipo = "Osiris"
+        osiris_inconsistent.dataehora = frappe.utils.now()
+        osiris_inconsistent.observacoes = s_inconsistency
+        osiris_inconsistent.save()
 
     if has_itens:
         return {
@@ -432,7 +432,7 @@ def get_items_code(items: list):
     get_code = ""
     # Get all contract items from the database
     for i in items:
-        # Get kartado for each contract item
+        # Get osiris for each contract item
         get_code += frappe.db.get_value("Contract Item", i, "codigo") + ", "
 
     return get_code.rstrip(", ")
